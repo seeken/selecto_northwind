@@ -63,6 +63,8 @@ defmodule SelectoNorthwind.MixProject do
 
       {:selecto, github: "seeken/selecto", branch: "non-ecto", override: true},
       {:selecto_components, github: "seeken/selecto_components", branch: "no-ecto", override: true},
+      {:selecto_mix, github: "seeken/selecto_mix", branch: "non-ecto", only: [:dev, :test], runtime: false}
+
 
     ]
   end
