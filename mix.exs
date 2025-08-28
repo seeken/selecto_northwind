@@ -51,7 +51,8 @@ defmodule SelectoNorthwind.MixProject do
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.10", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.3", runtime: Mix.env() == :dev},
-      {:heroicons, "~> 0.5"},
+      #{:heroicons, "~> 0.5"},
+      {:heroicons, [env: :prod, git: "https://github.com/tailwindlabs/heroicons.git", tag: "v2.2.0", sparse: "optimized", app: false, compile: false, depth: 1, override: true]},
       {:swoosh, "~> 1.16"},
       {:req, "~> 0.5"},
       {:telemetry_metrics, "~> 1.0"},
@@ -61,9 +62,9 @@ defmodule SelectoNorthwind.MixProject do
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
 
-      {:selecto, github: "seeken/selecto", branch: "non-ecto", override: true},
-      {:selecto_components, github: "seeken/selecto_components", branch: "no-ecto", override: true},
-      {:selecto_mix, github: "seeken/selecto_mix", branch: "non-ecto", only: [:dev, :test], runtime: false}
+      {:selecto, path: "./vendor/selecto"},
+      {:selecto_components, path: "./vendor/selecto_components"},
+      {:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]}
 
 
     ]

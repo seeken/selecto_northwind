@@ -7,7 +7,12 @@
       "Read(/tmp/**)",
       "Read(/tmp/**)",
       "Read(/tmp/**)",
-      "Read(/tmp/**)"
+      "Read(/tmp/**)",
+      "Bash(rm:*)",
+      "Bash(git submodule add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git submodule:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
