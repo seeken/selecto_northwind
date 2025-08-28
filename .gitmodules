@@ -1,0 +1,9 @@
+[submodule "vendor/selecto"]
+	path = vendor/selecto
+	url = https://github.com/seeken/selecto.git
+[submodule "vendor/selecto_components"]
+	path = vendor/selecto_components
+	url = https://github.com/seeken/selecto_components.git
+[submodule "vendor/selecto_mix"]
+	path = vendor/selecto_mix
+	url = https://github.com/seeken/selecto_mix.git
