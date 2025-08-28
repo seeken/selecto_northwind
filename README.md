@@ -1,6 +1,6 @@
 # SelectoNorthwind
 
-A development sandbox for testing Selecto libraries with the Northwind database.
+A development sandbox specifically for **selecto_mix**, using the Northwind database as a realistic testing environment. This project serves as the primary development and testing ground for selecto_mix functionality, with the ability to make complementary changes to selecto and selecto_components as needed.
 
 ## Setup
 
@@ -25,18 +25,19 @@ This project uses git submodules for vendor dependencies. After cloning:
 
 ## Submodule Management
 
-This project includes three vendor dependencies as git submodules:
-- `vendor/selecto` - Core Selecto library
-- `vendor/selecto_components` - Phoenix LiveView components
-- `vendor/selecto_mix` - Mix tasks and generators
+This project includes three vendor dependencies as git submodules, with **selecto_mix being the primary focus**:
+- `vendor/selecto_mix` - **Main development target**: Mix tasks and generators
+- `vendor/selecto` - Core Selecto library (modified as needed to support selecto_mix)
+- `vendor/selecto_components` - Phoenix LiveView components (modified as needed to support selecto_mix)
 
 **Update all submodules to latest:**
 ```bash
 git submodule update --remote
 ```
 
-**Update specific submodule:**
+**Update specific submodule (especially selecto_mix):**
 ```bash
+git submodule update --remote vendor/selecto_mix
 git submodule update --remote vendor/selecto
 ```
 
