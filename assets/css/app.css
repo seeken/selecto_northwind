@@ -5,6 +5,8 @@
 @source "../css";
 @source "../js";
 @source "../../lib/selecto_northwind_web";
+@source "../../vendor/selecto_components/lib";
+@source "../../vendor/selecto/lib";
 
 /* A Tailwind plugin that makes "hero-#{ICON}" classes available.
    The heroicons installation itself is managed by your mix.exs */
