@@ -50,6 +50,32 @@ Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
+## Selecto Integration
+
+After running `mix selecto.gen.domain SelectoNorthwind.Catalog.Product --expand-schemas category,supplier --live --saved-views`, you'll see output with next steps like:
+
+### Add Route to Router
+
+Add this route to your `router.ex`:
+```elixir
+live "/product", SelectoNorthwindWeb.ProductLive, :index
+```
+
+### Next Steps
+
+1. **Run database migrations:**
+   ```bash
+   mix ecto.migrate
+   ```
+
+2. **Add SavedViewContext to domain modules:**
+   ```elixir
+   use SelectoNorthwind.SavedViewContext
+   ```
+
+3. **Set saved_view_context assign in LiveViews:**
+   Configure the `saved_view_context` assign in your LiveView modules to enable saved view functionality.
+
 ## Learn more
 
 * Official website: https://www.phoenixframework.org/
