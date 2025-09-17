@@ -5,21 +5,21 @@ defmodule SelectoNorthwindWeb.PageController do
     render(conn, :home)
   end
 
-  def customers(conn, _params) do
+  def customers_selecto(conn, _params) do
     conn
-    |> put_flash(:info, "Customers section is not available yet.")
+    |> put_flash(:info, "Customers Selecto section is not available yet.")
     |> render(:coming_soon, page_title: "Customers")
   end
 
-  def products(conn, _params) do
+  def products_selecto(conn, _params) do
     conn
-    |> put_flash(:info, "Products section is not available yet.")
+    |> put_flash(:info, "Products Selecto section is not available yet.")
     |> render(:coming_soon, page_title: "Products")
   end
 
-  def orders(conn, _params) do
+  def orders_selecto(conn, _params) do
     conn
-    |> put_flash(:info, "Orders section is not available yet.")
+    |> put_flash(:info, "Orders Selecto section is not available yet.")
     |> render(:coming_soon, page_title: "Orders")
   end
 

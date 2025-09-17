@@ -22,9 +22,9 @@ defmodule SelectoNorthwindWeb.Router do
 
     # Note: These placeholder routes will be replaced with LiveView routes
     # during the tutorial as you generate Selecto domains for each section
-    get "/customers", PageController, :customers
-    get "/products", PageController, :products
-    get "/orders", PageController, :orders
+    get "/customers_selecto", PageController, :customers_selecto
+    get "/products_selecto", PageController, :products_selecto
+    get "/orders_selecto", PageController, :orders_selecto
     get "/analytics", PageController, :analytics
   end
 

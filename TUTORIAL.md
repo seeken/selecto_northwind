@@ -206,8 +206,10 @@ Selecto domains provide a configuration layer on top of your existing Ecto schem
 Run the following Mix task:
 
 ```bash
-mix selecto.gen.domain SelectoNorthwind.Catalog.Product --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier --live --saved-views
+mix selecto.gen.domain SelectoNorthwind.Catalog.Product --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier --live --saved-views --path products_selecto
 ```
+
+Note: The `--path` option allows you to specify a custom route path. Here we use `products_selecto` to avoid conflicts with existing routes.
 
 When prompted about uncommitted changes and SelectoComponents integration, answer "Y" to proceed.
 
@@ -294,9 +296,11 @@ scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
   # Add this line for the Products domain
-  live "/products", ProductsLive, :index
+  live "/products_selecto", ProductLive, :index
 end
 ```
+
+Note: The route path matches what we specified with `--path` option, and the module name is `ProductLive` (singular).
 
 ### Build Assets
 
@@ -308,7 +312,7 @@ mix assets.build
 
 ### Verify the Setup
 
-Start your Phoenix server and navigate to `/products`:
+Start your Phoenix server and navigate to `/products_selecto`:
 
 ```bash
 mix phx.server
@@ -360,13 +364,33 @@ You can customize this configuration to:
 
 With the Product domain generated and migrated, you're ready to create LiveView interfaces that leverage these domain models. In Step 3, we'll generate a full-featured Product Catalog interface with filtering and search capabilities.
 
-## Step 3: Add Product Catalog with Filtering
+## Step 3: Generate Customers Domain
 
-*Coming soon - This step will demonstrate advanced filtering and search capabilities*
+Follow a similar process for the Customers domain:
 
-## Step 4: Create Order Dashboard
+```bash
+mix selecto.gen.domain SelectoNorthwind.Sales.Customer --live --saved-views --path customers_selecto
+```
 
-*Coming soon - This step will show how to build analytics dashboards with Selecto components*
+Then add the route:
+
+```elixir
+live "/customers_selecto", CustomerLive, :index
+```
+
+## Step 4: Generate Orders Domain
+
+For the Orders domain with expanded schemas:
+
+```bash
+mix selecto.gen.domain SelectoNorthwind.Sales.Order --expand-schemas SelectoNorthwind.Sales.OrderDetail SelectoNorthwind.Sales.Customer --live --saved-views --path orders_selecto
+```
+
+Add the route:
+
+```elixir
+live "/orders_selecto", OrderLive, :index
+```
 
 ## Step 5: Implement Cross-Domain Relationships
 
