@@ -19,6 +19,10 @@ defmodule SelectoNorthwindWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/customers", PageController, :customers
+    get "/products", PageController, :products
+    get "/orders", PageController, :orders
+    get "/analytics", PageController, :analytics
   end
 
   # Other scopes may use custom stacks.
