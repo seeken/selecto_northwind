@@ -11,10 +11,10 @@ defmodule SelectoNorthwindWeb.PageController do
     |> render(:coming_soon, page_title: "Customers")
   end
 
-  def products(conn, _params) do
+  def catalog(conn, _params) do
     conn
-    |> put_flash(:info, "Products section is not available yet.")
-    |> render(:coming_soon, page_title: "Products")
+    |> put_flash(:info, "Catalog section is not available yet.")
+    |> render(:coming_soon, page_title: "Catalog")
   end
 
   def orders(conn, _params) do
