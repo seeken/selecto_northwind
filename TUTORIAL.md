@@ -193,27 +193,27 @@ With the dependencies installed, you're ready to move on to Step 2, where we'll 
 
 ---
 
-## Step 2: Generate Catalog Domain with Selecto
+## Step 2: Generate Products Domain with Selecto
 
-In this step, we'll use the `mix selecto.gen.domain` task to generate Selecto domain configuration for the Catalog context, which includes Categories, Products, and Suppliers tables.
+In this step, we'll use the `mix selecto.gen.domain` task to generate Selecto domain configuration for the Product schema and its related schemas (Categories and Suppliers) from the Catalog context.
 
 ### Understanding Selecto Domains
 
 Selecto domains provide a configuration layer on top of your existing Ecto schemas. They define how tables relate to each other, what fields to display, and how to query the data efficiently.
 
-### Generate the Catalog Domain
+### Generate the Products Domain
 
 Run the following Mix task:
 
 ```bash
-mix selecto.gen.domain SelectoNorthwind.Catalog --live --saved-views
+mix selecto.gen.domain SelectoNorthwind.Catalog.Product --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier --live --saved-views
 ```
 
 When prompted about uncommitted changes and SelectoComponents integration, answer "Y" to proceed.
 
 This command will:
-1. **Analyze your existing Ecto schemas** in the Catalog context
-2. **Generate a Selecto domain configuration** that maps these schemas
+1. **Analyze your existing Ecto schema** for Product and the expanded schemas (Category, Supplier)
+2. **Generate a Selecto domain configuration** that maps these schemas and their relationships
 3. **Create LiveView modules** for interactive data exploration (with `--live`)
 4. **Generate saved views infrastructure** for persisting user-defined views (with `--saved-views`)
 5. **Integrate SelectoComponents assets** (Chart.js, Alpine.js, hooks, and styles)
@@ -225,10 +225,10 @@ The task creates several files:
 #### Selecto Domain Configuration
 ```
 lib/selecto_northwind/selecto_domains/
-  └── catalog_domain.ex  # Domain configuration with all schemas
+  └── products_domain.ex  # Domain configuration with Product and related schemas
 ```
 
-This file contains configurations for each schema (Category, Product, Supplier) defining:
+This file contains configurations for the Product schema and expanded schemas (Category, Supplier) defining:
 - Column definitions with types and labels
 - Association mappings
 - Default display settings
@@ -237,8 +237,8 @@ This file contains configurations for each schema (Category, Product, Supplier) 
 #### LiveView Files (with --live flag)
 ```
 lib/selecto_northwind_web/live/
-  ├── catalog_live.ex        # Main LiveView module
-  └── catalog_live.html.heex  # LiveView template
+  ├── products_live.ex        # Main LiveView module
+  └── products_live.html.heex  # LiveView template
 ```
 
 The LiveView module includes:
@@ -265,10 +265,10 @@ The command also updates:
 
 ### Add SavedView Support to Domain
 
-The generated domain module needs to use the SavedViewContext. Add this line to `lib/selecto_northwind/selecto_domains/catalog_domain.ex`:
+The generated domain module needs to use the SavedViewContext. Add this line to `lib/selecto_northwind/selecto_domains/products_domain.ex`:
 
 ```elixir
-defmodule SelectoNorthwind.SelectoDomains.CatalogDomain do
+defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do
   use SelectoNorthwind.SavedViewContext  # Add this line
 
   # ... rest of the domain configuration
@@ -293,8 +293,8 @@ Add the generated LiveView route to your `lib/selecto_northwind_web/router.ex`:
 scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
-  # Add this line for the Catalog domain
-  live "/catalog", CatalogLive, :index
+  # Add this line for the Products domain
+  live "/products", ProductsLive, :index
 end
 ```
 
@@ -308,13 +308,13 @@ mix assets.build
 
 ### Verify the Setup
 
-Start your Phoenix server and navigate to `/catalog`:
+Start your Phoenix server and navigate to `/products`:
 
 ```bash
 mix phx.server
 ```
 
-You should see the Catalog Explorer interface with:
+You should see the Products Explorer interface with:
 - A query builder form
 - Data results in table format
 - Options to switch between Table, Detail, and Graph views
@@ -344,7 +344,7 @@ mix run priv/repo/seeds/catalog_seeds.exs
 
 ### Configure Selecto for the Domain
 
-The generated domain configuration (`catalog_domain.ex`) sets up:
+The generated domain configuration (`products_domain.ex`) sets up:
 - Table relationships and foreign keys
 - Default display fields
 - Search and filter configurations
