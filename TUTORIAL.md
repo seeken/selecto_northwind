@@ -15,7 +15,118 @@ Before starting, ensure you have:
 - Elixir 1.14+ installed
 - Phoenix 1.8+ framework knowledge
 - PostgreSQL database running
-- The Northwind database schema and data loaded (see README.md)
+
+## Step 0: Set Up the Basic Phoenix Project
+
+Before integrating Selecto, you need to set up the basic Phoenix application with the Northwind database. This step ensures you have a working Phoenix app with the database schema and sample data loaded.
+
+### Clone the Repository
+
+```bash
+git clone <repository-url>
+cd selecto_northwind
+```
+
+### Initialize Git Submodules
+
+The project includes Selecto libraries as git submodules in the vendor directory:
+
+```bash
+git submodule update --init --recursive
+```
+
+### Install Dependencies
+
+Install all Phoenix and Elixir dependencies:
+
+```bash
+mix setup
+```
+
+This command runs:
+- `mix deps.get` - Fetches all dependencies
+- `mix ecto.create` - Creates the database
+- `mix ecto.migrate` - Runs database migrations
+- `mix run priv/repo/seeds.exs` - Seeds the Northwind sample data
+- `npm install` - Installs JavaScript dependencies
+
+### Alternative: Manual Setup
+
+If you prefer to run the commands individually:
+
+```bash
+# Install Elixir dependencies
+mix deps.get
+
+# Create the database
+mix ecto.create
+
+# Run migrations to create the Northwind schema
+mix ecto.migrate
+
+# Seed the database with Northwind sample data
+mix run priv/repo/seeds.exs
+
+# Install Node.js dependencies
+cd assets && npm install && cd ..
+
+# Build assets
+mix assets.build
+```
+
+### Verify the Setup
+
+Start the Phoenix server to ensure everything is working:
+
+```bash
+mix phx.server
+```
+
+Visit [http://localhost:4000](http://localhost:4000) and you should see the Northwind Demo landing page with navigation links to Customers, Catalog, Orders, and Analytics sections.
+
+### Check Database Connection
+
+Verify the database is properly seeded with data:
+
+```bash
+iex -S mix
+
+# In the IEx console:
+alias SelectoNorthwind.Repo
+import Ecto.Query
+
+# Check for data in the tables
+Repo.aggregate(from(p in "products"), :count)
+# Should return 77 (or similar number of products)
+
+Repo.aggregate(from(c in "customers"), :count)
+# Should return 91 (or similar number of customers)
+```
+
+### Development Commands Reference
+
+Common commands you'll use during development:
+
+```bash
+# Start Phoenix server
+mix phx.server
+
+# Start server with interactive Elixir shell
+iex -S mix phx.server
+
+# Run tests
+mix test
+
+# Run precommit checks
+mix precommit
+
+# Reset database (drop, create, migrate, seed)
+mix ecto.reset
+```
+
+### Next Step
+
+With the basic Phoenix application set up and the Northwind database loaded, you're ready to proceed to Step 1 where we'll add the Selecto dependencies.
 
 ## Step 1: Add Selecto Dependencies
 
