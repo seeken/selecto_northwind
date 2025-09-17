@@ -28,7 +28,9 @@
       "Bash(mix compile:*)",
       "WebFetch(domain:hexdocs.pm)",
       "Bash(mix:*)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)"
     ],
     "deny": [],
     "ask": []
