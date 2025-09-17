@@ -60,13 +60,7 @@ defmodule SelectoNorthwind.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-    {:tidewave, "~> 0.4", only: :dev},
-
-      {:selecto, path: "./vendor/selecto"},
-      {:selecto_components, path: "./vendor/selecto_components"},
-      {:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]}
-
-
+      {:tidewave, "~> 0.4", only: :dev}
     ]
   end
 
