@@ -265,7 +265,11 @@ The command also updates:
 - `assets/css/app.css` - Adds SelectoComponents styles source path
 - `assets/package.json` - Ensures Chart.js and Alpine.js are configured
 
-### Add SavedView Support to Domain
+### Configure SavedView Support
+
+There are two parts to enabling saved views:
+
+#### 1. Add SavedView Support to Domain
 
 The generated domain module needs to use the SavedViewContext. Add this line to `lib/selecto_northwind/selecto_domains/products_domain.ex`:
 
@@ -277,7 +281,28 @@ defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do
 end
 ```
 
-This enables the domain to save and load user-defined views.
+#### 2. Set saved_view_context in LiveView
+
+The generated LiveView (with `--saved-views` flag) automatically sets up the saved view context in the mount function. This looks like:
+
+```elixir
+# In lib/selecto_northwind_web/live/product_live.ex
+def mount(_params, _session, socket) do
+  # ... other setup code ...
+
+  socket =
+    assign(socket,
+      # ... other assigns ...
+      saved_view_module: SelectoNorthwind.SelectoDomains.ProductsDomain,
+      saved_view_context: "/products_selecto",  # Identifies this set of saved views
+      available_saved_views: saved_views
+    )
+
+  {:ok, socket}
+end
+```
+
+The `saved_view_context` assign is crucial - it identifies which saved views belong to this LiveView. Typically set to the path or a unique identifier for the domain.
 
 ### Run the Migration
 
