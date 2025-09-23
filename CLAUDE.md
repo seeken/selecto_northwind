@@ -133,3 +133,5 @@ query = from p in Catalog.Product,
   join: c in assoc(p, :category),
   select: {p.product_name, c.category_name}
 ```
+- never put reference to the main project in any of the vendored projects
+- when you are obsoleting code, delete it!
