@@ -437,6 +437,18 @@ $ mix deps.compile</code></pre>
   --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier \
   --live --saved-views --path products_selecto</code></pre>
                 </div>
+                
+                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
+                  <input type="checkbox" />
+                  <div class="collapse-title text-sm font-medium text-yellow-800">
+                    🤖 AI Agent Notes - Click to expand
+                  </div>
+                  <div class="collapse-content text-sm text-yellow-700">
+                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
+                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
+                  </div>
+                </div>
+                
                 <div class="alert alert-info mb-4">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -445,7 +457,12 @@ $ mix deps.compile</code></pre>
                     <strong>Note:</strong> The <code>--path</code> option allows you to specify a custom route path. Here we use <code>products_selecto</code> to avoid conflicts with existing routes.
                   </div>
                 </div>
-                <p class="text-base-content/70">When prompted about uncommitted changes and SelectoComponents integration, answer "Y" to proceed.</p>
+                
+                <p class="text-base-content/70">The command will ask you two questions:</p>
+                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
+                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                </ol>
               </div>
 
               <div>
