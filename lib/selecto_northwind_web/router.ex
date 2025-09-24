@@ -19,6 +19,7 @@ defmodule SelectoNorthwindWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/tutorial", TutorialController, :index
 
     # Note: These placeholder routes will be replaced with LiveView routes
     # during the tutorial as you generate Selecto domains for each section
