@@ -152,6 +152,30 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
   end
 
   # Private functions for seeding master data
+  
+  # Helper function to generate a deterministic but scattered timestamp
+  defp generate_scattered_timestamp(base_id, base_time \\ nil) do
+    base = base_time || DateTime.utc_now()
+    
+    # Use the ID as seed for deterministic but varied offsets
+    # This ensures the same ID always gets the same timestamp
+    seed_hash = :erlang.phash2(base_id, 1000000)
+    
+    # Generate offsets within the past 6 months (roughly 180 days)
+    day_offset = rem(seed_hash, 180) + 1  # 1 to 180 days ago
+    hour_offset = rem(div(seed_hash, 180), 24)  # 0 to 23 hours
+    minute_offset = rem(div(seed_hash, 4320), 60)  # 0 to 59 minutes
+    
+    scattered_datetime = base
+                        |> DateTime.add(-day_offset * 24 * 60 * 60, :second)  # Subtract days
+                        |> DateTime.add(-hour_offset * 60 * 60, :second)      # Subtract hours
+                        |> DateTime.add(-minute_offset * 60, :second)         # Subtract minutes
+    
+    # Convert to naive datetime for Ecto and truncate microseconds
+    scattered_datetime
+    |> DateTime.to_naive()
+    |> NaiveDateTime.truncate(:second)
+  end
 
   defp seed_categories do
     Logger.info("📊 Seeding Categories...")
@@ -167,7 +191,15 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
     SelectoNorthwind.Seeds.NorthwindData.customers_data()
     |> Enum.each(fn customer ->
-      Repo.insert!(Customer.changeset(%Customer{}, customer))
+      # Use a hash of the customer_id string for deterministic timestamps
+      id_hash = :erlang.phash2(customer.customer_id, 1000000)
+      scattered_time = generate_scattered_timestamp(id_hash)
+      
+      customer_data_with_timestamps = customer
+                                    |> Map.put(:inserted_at, scattered_time)
+                                    |> Map.put(:updated_at, scattered_time)
+      
+      Repo.insert!(Customer.changeset(%Customer{}, customer_data_with_timestamps))
     end)
   end
 
@@ -187,9 +219,17 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     employee_mappings = Enum.map(employees_data, fn employee_data ->
       # Remove reports_to from the data for initial insert
       employee_without_reports_to = Map.delete(employee_data, :reports_to)
-
+      
+      # Add scattered timestamps
+      scattered_time = generate_scattered_timestamp(employee_data.id)
+      employee_with_timestamps = employee_without_reports_to
+                               |> Map.put(:inserted_at, scattered_time)
+                               |> Map.put(:updated_at, scattered_time)
+      
       # Insert the employee and get the new ID
-      inserted_employee = insert_with_id(Employee, employee_without_reports_to)
+      changeset = Employee.changeset(%Employee{}, employee_with_timestamps)
+      changeset = Ecto.Changeset.put_change(changeset, :id, employee_data.id)
+      inserted_employee = Repo.insert!(changeset)
 
       # Return mapping of original ID to new database ID
       {employee_data.id, inserted_employee.id}
@@ -272,7 +312,15 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
     SelectoNorthwind.Seeds.NorthwindData.territories_data()
     |> Enum.each(fn territory ->
-      Repo.insert!(Territory.changeset(%Territory{}, territory))
+      # Use a hash of the territory_id string for deterministic timestamps
+      id_hash = :erlang.phash2(territory.territory_id, 1000000)
+      scattered_time = generate_scattered_timestamp(id_hash)
+      
+      territory_data_with_timestamps = territory
+                                     |> Map.put(:inserted_at, scattered_time)
+                                     |> Map.put(:updated_at, scattered_time)
+      
+      Repo.insert!(Territory.changeset(%Territory{}, territory_data_with_timestamps))
     end)
   end
 
@@ -281,21 +329,40 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
     SelectoNorthwind.Seeds.NorthwindData.employee_territories_data()
     |> Enum.each(fn et ->
-      Repo.insert!(EmployeeTerritory.changeset(%EmployeeTerritory{}, et))
+      # Use a combination of employee_id and territory_id for unique timestamps
+      id_hash = :erlang.phash2({et.employee_id, et.territory_id}, 1000000)
+      scattered_time = generate_scattered_timestamp(id_hash)
+      
+      et_data_with_timestamps = et
+                              |> Map.put(:inserted_at, scattered_time)
+                              |> Map.put(:updated_at, scattered_time)
+      
+      Repo.insert!(EmployeeTerritory.changeset(%EmployeeTerritory{}, et_data_with_timestamps))
     end)
   end
 
-  # Helper function to insert with explicit ID
+  # Helper function to insert with explicit ID and scattered timestamps
   defp insert_with_id(schema_module, changeset_data) do
-    # Create changeset and explicitly set the ID
+    base_time = DateTime.utc_now()
+    scattered_time = generate_scattered_timestamp(changeset_data.id, base_time)
+    
+    # Create changeset and explicitly set the ID and timestamps
     changeset = schema_module.changeset(struct(schema_module), changeset_data)
-    changeset = Ecto.Changeset.put_change(changeset, :id, changeset_data.id)
+    changeset = changeset
+                |> Ecto.Changeset.put_change(:id, changeset_data.id)
+                |> Ecto.Changeset.put_change(:inserted_at, scattered_time)
+                |> Ecto.Changeset.put_change(:updated_at, scattered_time)
+                
     Repo.insert!(changeset)
   end
 
   # Order generation functions
 
   defp generate_orders(num_orders, customers, employees, products) when is_list(customers) and is_list(employees) and is_map(products) do
+    # Calculate date ranges for the past 3 months
+    today = Date.utc_today()
+    three_months_ago = Date.add(today, -90)
+    
     Enum.map(1..num_orders, fn order_num ->
       order_id = 20000 + order_num
 
@@ -303,7 +370,8 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       employee_id = Enum.random(employees)
       shipper_id = :rand.uniform(3)
 
-      order_date = random_date_in_range(~D[2023-01-01], ~D[2024-12-31])
+      # Generate order date within past 3 months
+      order_date = random_date_in_range(three_months_ago, today)
       required_date = Date.add(order_date, :rand.uniform(28) + 7)
 
       shipped_date = if :rand.uniform(100) <= 85 do
@@ -359,13 +427,48 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
   defp insert_orders(orders_data) do
     Enum.map(orders_data, fn order_data ->
-      Repo.insert!(Order.changeset(%Order{}, order_data))
+      # Generate scattered timestamp based on order ID
+      # Use the order_date as a base to keep timestamps somewhat realistic
+      base_datetime = DateTime.new!(order_data.order_date, ~T[09:00:00])
+      
+      # Add some variation within a few hours of the order date
+      id_hash = :erlang.phash2(order_data.id, 1000)
+      hour_variation = rem(id_hash, 12)  # 0 to 12 hours
+      minute_variation = rem(div(id_hash, 12), 60)  # 0 to 59 minutes
+      
+      scattered_time = base_datetime
+                      |> DateTime.add(hour_variation * 60 * 60, :second)
+                      |> DateTime.add(minute_variation * 60, :second)
+                      |> DateTime.to_naive()
+                      |> NaiveDateTime.truncate(:second)
+      
+      order_data_with_timestamps = order_data
+                                 |> Map.put(:inserted_at, scattered_time)
+                                 |> Map.put(:updated_at, scattered_time)
+      
+      Repo.insert!(Order.changeset(%Order{}, order_data_with_timestamps))
     end)
   end
 
   defp insert_order_details(order_details_data) do
     Enum.each(order_details_data, fn detail_data ->
-      Repo.insert!(OrderDetail.changeset(%OrderDetail{}, detail_data))
+      # Generate timestamp based on order_id and product_id combination
+      id_hash = :erlang.phash2({detail_data.order_id, detail_data.product_id}, 1000)
+      
+      # Get the order's timestamp as base
+      order = Repo.get!(Order, detail_data.order_id)
+      base_time = order.inserted_at
+      
+      # Add small variation (within a few minutes of order creation)
+      minute_variation = rem(id_hash, 30)  # 0 to 30 minutes after order
+      
+      scattered_time = NaiveDateTime.add(base_time, minute_variation * 60, :second)
+      
+      detail_data_with_timestamps = detail_data
+                                  |> Map.put(:inserted_at, scattered_time)
+                                  |> Map.put(:updated_at, scattered_time)
+      
+      Repo.insert!(OrderDetail.changeset(%OrderDetail{}, detail_data_with_timestamps))
     end)
   end
 
