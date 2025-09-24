@@ -678,6 +678,780 @@ priv/repo/migrations/
           </div>
         </div>
 
+        <!-- Step 3: Generate Customers Domain -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-secondary to-secondary-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">3</div>
+              <div>
+                <h2 class="card-title text-2xl">Generate Customers Domain with Selecto</h2>
+                <p class="text-base-content/70">Add customer management capabilities</p>
+              </div>
+            </div>
+            <p class="text-base-content/80 mb-6">Now let's generate a Selecto domain for the Customer schema and its related schemas. This demonstrates how to integrate multiple business domains into your Selecto-powered application.</p>
+
+            <div class="alert alert-info mb-6">
+              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <strong>💡 For AI Agents:</strong> This step follows the same pattern as Step 2 but for the Customers domain. Pay attention to server restarts after asset builds.
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Generate the Customers Domain
+                </h3>
+                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Customers domain with expanded schemas for related entities:</p>
+                <div class="relative">
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Sales.Customer \
+  --expand-schemas SelectoNorthwind.Sales.Order SelectoNorthwind.Sales.CustomerDemographic \
+  --live --saved-views --path customers_selecto</code></pre>
+                </div>
+
+                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
+                  <input type="checkbox" />
+                  <div class="collapse-title text-sm font-medium text-yellow-800">
+                    🤖 AI Agent Notes - Click to expand
+                  </div>
+                  <div class="collapse-content text-sm text-yellow-700">
+                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
+                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mt-3">The command will prompt you for:</p>
+                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
+                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                </ol>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  What Gets Generated
+                </h3>
+                <div class="grid gap-3">
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
+                    <div><strong>Customer Domain Configuration:</strong> Maps Customer schema with Orders and CustomerDemographic relationships</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
+                    <div><strong>CustomerLive Module:</strong> LiveView for interactive customer data exploration</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
+                    <div><strong>Saved Views Support:</strong> Persistence layer for customer-specific saved views</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Configure the Generated Files
+                </h3>
+
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain</h4>
+                    <p class="text-base-content/70 mb-3">Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/customers_domain.ex</code>:</p>
+                    <div class="relative">
+                      <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.CustomersDomain do
+  use SelectoNorthwind.SavedViewContext  # Add this line
+
+  # ... rest of the domain configuration
+end</code></pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 class="font-semibold mb-2">2. Verify LiveView saved_view_context</h4>
+                    <p class="text-base-content/70 mb-3">The generated LiveView should already have the saved view context configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/customer_live.ex</code>:</p>
+                    <div class="relative">
+                      <pre><code class="language-elixir"># Should already be configured like this:
+socket =
+  assign(socket,
+    saved_view_module: SelectoNorthwind.SelectoDomains.CustomersDomain,
+    saved_view_context: "/customers_selecto",
+    available_saved_views: saved_views
+  )</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-7-7 7-7m5 14l7-7-7-7" />
+                  </svg>
+                  Add Route to Router
+                </h3>
+                <p class="text-base-content/70 mb-3">Add the Customers LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:</p>
+                <div class="relative">
+                  <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
+  pipe_through :browser
+
+  # ... existing routes ...
+  live "/products_selecto", ProductLive, :index
+
+  # Add this new route:
+  live "/customers_selecto", CustomerLive, :index
+end</code></pre>
+                </div>
+                <div class="alert alert-info">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> The module name is <code>CustomerLive</code> (singular) even though the path uses "customers" (plural).
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  Build Assets
+                </h3>
+                <p class="text-base-content/70 mb-3">Compile the updated assets:</p>
+                <div class="relative">
+                  <pre><code class="language-bash">$ mix assets.build</code></pre>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Test the Customers Interface
+                </h3>
+                <p class="text-base-content/70 mb-3">Start your Phoenix server and navigate to the new Customers interface:</p>
+                <div class="relative">
+                  <pre class="mb-4"><code class="language-bash">$ mix phx.server
+# Visit http://localhost:4000/customers_selecto</code></pre>
+                </div>
+                <div class="alert alert-success">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <div class="font-semibold">The Customers Explorer should now include:</div>
+                    <ul class="mt-2 space-y-1 text-sm">
+                      <li>• Customer data with company names and contact information</li>
+                      <li>• Ability to explore related Orders data</li>
+                      <li>• Customer demographics relationships</li>
+                      <li>• Full query builder and saved views functionality</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Try These Customer Queries
+                </h3>
+                <p class="text-base-content/70 mb-3">Once your Customers interface is running, try these example queries to explore the data:</p>
+                <div class="grid gap-3">
+                  <div class="p-3 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-1">Find customers from specific countries:</div>
+                    <div class="text-xs text-base-content/60">Add filter: Country equals "USA" or "Germany"</div>
+                  </div>
+                  <div class="p-3 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-1">Customers with recent orders:</div>
+                    <div class="text-xs text-base-content/60">Include Orders in the query, then filter by order date</div>
+                  </div>
+                  <div class="p-3 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-1">Top customers by order count:</div>
+                    <div class="text-xs text-base-content/60">Group by Customer, aggregate Orders count, sort descending</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                  Next Steps
+                </h3>
+                <p class="text-base-content/70">You now have two independent Selecto domains (Products and Customers) running in your application. Each domain:</p>
+                <ul class="list-disc list-inside text-sm text-base-content/70 ml-4 space-y-1 mt-2">
+                  <li>Has its own query builder and data explorer</li>
+                  <li>Maintains separate saved views</li>
+                  <li>Can explore related data through associations</li>
+                  <li>Provides table, detail, and graph visualization options</li>
+                </ul>
+                <p class="text-base-content/70 mt-3">Continue exploring by creating saved views, building complex queries, or proceed to generate additional domains for Orders, Employees, or other entities in the Northwind database.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Generate Orders Domain -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-warning to-warning-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">4</div>
+              <div>
+                <h2 class="card-title text-2xl">Generate Orders Domain with Complex Relationships</h2>
+                <p class="text-base-content/70">Connect sales data across multiple entities</p>
+              </div>
+            </div>
+            <p class="text-base-content/80 mb-6">The Orders domain is the heart of the sales system, connecting customers, products, employees, and shipping. This step demonstrates working with complex multi-table relationships in Selecto.</p>
+
+            <div class="alert alert-info mb-6">
+              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <strong>💡 For AI Agents:</strong> This command includes more expanded schemas than previous steps, demonstrating how Selecto handles complex business relationships.
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                  </svg>
+                  Generate the Orders Domain
+                </h3>
+                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Orders domain with its extensive relationships:</p>
+                <div class="relative">
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Sales.Order \
+  --expand-schemas SelectoNorthwind.Sales.OrderDetail \
+    SelectoNorthwind.Sales.Shipper \
+    SelectoNorthwind.Hr.Employee \
+    SelectoNorthwind.Sales.Customer \
+  --live --saved-views --path orders_selecto</code></pre>
+                </div>
+
+                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
+                  <input type="checkbox" />
+                  <div class="collapse-title text-sm font-medium text-yellow-800">
+                    🤖 AI Agent Notes - Click to expand
+                  </div>
+                  <div class="collapse-content text-sm text-yellow-700">
+                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
+                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mt-3">The command will prompt you for:</p>
+                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
+                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                </ol>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Understanding the Orders Relationships
+                </h3>
+                <div class="grid gap-3">
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                    <div><strong>Order → OrderDetails:</strong> One-to-many relationship showing line items for each order with products, quantities, and prices</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                    <div><strong>Order → Customer:</strong> Many-to-one relationship linking orders to the customer who placed them</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                    <div><strong>Order → Employee:</strong> Many-to-one relationship showing which employee processed the order</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
+                    <div><strong>Order → Shipper:</strong> Many-to-one relationship indicating the shipping company used</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Configure the Generated Files
+                </h3>
+
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain</h4>
+                    <p class="text-base-content/70 mb-3">Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/orders_domain.ex</code>:</p>
+                    <div class="relative">
+                      <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.OrdersDomain do
+  use SelectoNorthwind.SavedViewContext  # Add this line
+
+  # ... rest of the domain configuration
+end</code></pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 class="font-semibold mb-2">2. Verify LiveView Configuration</h4>
+                    <p class="text-base-content/70 mb-3">The generated LiveView should have the saved view context configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/order_live.ex</code>:</p>
+                    <div class="relative">
+                      <pre><code class="language-elixir"># Should already be configured like this:
+socket =
+  assign(socket,
+    saved_view_module: SelectoNorthwind.SelectoDomains.OrdersDomain,
+    saved_view_context: "/orders_selecto",
+    available_saved_views: saved_views
+  )</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-7-7 7-7m5 14l7-7-7-7" />
+                  </svg>
+                  Add Route to Router
+                </h3>
+                <p class="text-base-content/70 mb-3">Add the Orders LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:</p>
+                <div class="relative">
+                  <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
+  pipe_through :browser
+
+  # ... existing routes ...
+  live "/products_selecto", ProductLive, :index
+  live "/customers_selecto", CustomerLive, :index
+
+  # Add this new route:
+  live "/orders_selecto", OrderLive, :index
+end</code></pre>
+                </div>
+                <div class="alert alert-info">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> The module name is <code>OrderLive</code> (singular) matching the schema name.
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  Build Assets and Start Server
+                </h3>
+                <p class="text-base-content/70 mb-3">Compile the assets and start the server:</p>
+                <div class="relative">
+                  <pre><code class="language-bash">$ mix assets.build
+$ mix phx.server</code></pre>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Test the Orders Interface
+                </h3>
+                <p class="text-base-content/70 mb-3">Navigate to the Orders interface at <code class="bg-base-300 px-2 py-1 rounded text-sm">http://localhost:4000/orders_selecto</code></p>
+
+                <div class="alert alert-success">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <div class="font-semibold">The Orders Explorer provides comprehensive sales data access:</div>
+                    <ul class="mt-2 space-y-1 text-sm">
+                      <li>• Order headers with dates, status, and shipping information</li>
+                      <li>• Order details showing individual line items and products</li>
+                      <li>• Customer information for each order</li>
+                      <li>• Employee data showing who processed orders</li>
+                      <li>• Shipper information for delivery tracking</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  Powerful Order Analysis Queries
+                </h3>
+                <p class="text-base-content/70 mb-3">The Orders domain enables complex business intelligence queries. Try these examples:</p>
+
+                <div class="grid gap-3">
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">📊 Revenue by Customer</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Include OrderDetails in your query<br/>
+                      2. Group by Customer Company Name<br/>
+                      3. Aggregate: Sum of (Unit Price × Quantity)<br/>
+                      4. Sort by revenue descending
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">📈 Monthly Sales Trends</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Group by Order Date (month)<br/>
+                      2. Include OrderDetails<br/>
+                      3. Aggregate: Count orders and sum revenue<br/>
+                      4. View as Graph for visualization
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">👥 Employee Performance</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Include Employee and OrderDetails<br/>
+                      2. Group by Employee Name<br/>
+                      3. Aggregate: Count of orders, Sum of revenue<br/>
+                      4. Filter by date range for specific periods
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">🚚 Shipping Analysis</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Include Shipper information<br/>
+                      2. Group by Shipper Company Name<br/>
+                      3. Aggregate: Average shipping cost, delivery time<br/>
+                      4. Compare shipper performance metrics
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                  What You've Accomplished
+                </h3>
+                <p class="text-base-content/70">With the Orders domain, you've now created a powerful sales analysis system that:</p>
+                <ul class="list-disc list-inside text-sm text-base-content/70 ml-4 space-y-1 mt-2">
+                  <li>Connects multiple business entities in a single interface</li>
+                  <li>Enables complex multi-table queries without writing SQL</li>
+                  <li>Provides instant visualization of sales metrics</li>
+                  <li>Allows saving and sharing of business intelligence queries</li>
+                  <li>Demonstrates Selecto's ability to handle real-world complexity</li>
+                </ul>
+
+                <div class="alert alert-info mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Pro Tip:</strong> The Orders domain is ideal for creating dashboard views. Try saving different queries as views like "This Month's Sales", "Top Customers", or "Pending Orders" for quick access to key metrics.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5: Generate Employees/HR Domain -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-info to-info-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">5</div>
+              <div>
+                <h2 class="card-title text-2xl">Generate Employees/HR Domain</h2>
+                <p class="text-base-content/70">Complete your HR management system</p>
+              </div>
+            </div>
+            <p class="text-base-content/80 mb-6">The Employees domain represents the human resources aspect of the business, including employee information, reporting structures, and territorial assignments. This completes the core business domains of the Northwind system.</p>
+
+            <div class="alert alert-info mb-6">
+              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <strong>💡 For AI Agents:</strong> This domain includes self-referential relationships (employees reporting to other employees) and geographic territory assignments.
+              </div>
+            </div>
+
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  Generate the Employees Domain
+                </h3>
+                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Employees domain with HR relationships:</p>
+                <div class="relative">
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Hr.Employee \
+  --expand-schemas SelectoNorthwind.Hr.EmployeeTerritory \
+    SelectoNorthwind.Geography.Territory \
+    SelectoNorthwind.Sales.Order \
+  --live --saved-views --path employees_selecto</code></pre>
+                </div>
+
+                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
+                  <input type="checkbox" />
+                  <div class="collapse-title text-sm font-medium text-yellow-800">
+                    🤖 AI Agent Notes - Click to expand
+                  </div>
+                  <div class="collapse-content text-sm text-yellow-700">
+                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
+                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mt-3">The command will prompt you for:</p>
+                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
+                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
+                </ol>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Understanding the HR Structure
+                </h3>
+                <div class="grid gap-3">
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
+                    <div><strong>Employee Hierarchy:</strong> Employees have a reports_to field creating organizational hierarchy</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
+                    <div><strong>Territory Assignments:</strong> Employees are assigned to geographic territories through EmployeeTerritory</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
+                    <div><strong>Sales Responsibility:</strong> Employees manage customer orders tracked through the Order relationship</div>
+                  </div>
+                  <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
+                    <div><strong>Personal Information:</strong> Complete employee profiles with contact details, hire dates, and notes</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Configure the Generated Files
+                </h3>
+
+                <div class="space-y-4">
+                  <div>
+                    <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain</h4>
+                    <p class="text-base-content/70 mb-3">Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/employees_domain.ex</code>:</p>
+                    <div class="relative">
+                      <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.EmployeesDomain do
+  use SelectoNorthwind.SavedViewContext  # Add this line
+
+  # ... rest of the domain configuration
+end</code></pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h4 class="font-semibold mb-2">2. Verify LiveView Configuration</h4>
+                    <p class="text-base-content/70 mb-3">The generated LiveView should have the saved view context configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/employee_live.ex</code>:</p>
+                    <div class="relative">
+                      <pre><code class="language-elixir"># Should already be configured like this:
+socket =
+  assign(socket,
+    saved_view_module: SelectoNorthwind.SelectoDomains.EmployeesDomain,
+    saved_view_context: "/employees_selecto",
+    available_saved_views: saved_views
+  )</code></pre>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-7-7 7-7m5 14l7-7-7-7" />
+                  </svg>
+                  Add Route to Router
+                </h3>
+                <p class="text-base-content/70 mb-3">Add the Employees LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:</p>
+                <div class="relative">
+                  <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
+  pipe_through :browser
+
+  # ... existing routes ...
+  live "/products_selecto", ProductLive, :index
+  live "/customers_selecto", CustomerLive, :index
+  live "/orders_selecto", OrderLive, :index
+
+  # Add this new route:
+  live "/employees_selecto", EmployeeLive, :index
+end</code></pre>
+                </div>
+                <div class="alert alert-info">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> The module name is <code>EmployeeLive</code> (singular) matching the schema name.
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  Build Assets and Start Server
+                </h3>
+                <p class="text-base-content/70 mb-3">Compile the assets and start the server:</p>
+                <div class="relative">
+                  <pre><code class="language-bash">$ mix assets.build
+$ mix phx.server</code></pre>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Test the Employees Interface
+                </h3>
+                <p class="text-base-content/70 mb-3">Navigate to the Employees interface at <code class="bg-base-300 px-2 py-1 rounded text-sm">http://localhost:4000/employees_selecto</code></p>
+
+                <div class="alert alert-success">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <div class="font-semibold">The Employees Explorer provides comprehensive HR data management:</div>
+                    <ul class="mt-2 space-y-1 text-sm">
+                      <li>• Employee profiles with complete contact information</li>
+                      <li>• Organizational hierarchy through reporting relationships</li>
+                      <li>• Territory assignments and geographic responsibilities</li>
+                      <li>• Sales order history for each employee</li>
+                      <li>• Employee photos and personal notes</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                  HR Analytics Queries to Try
+                </h3>
+                <p class="text-base-content/70 mb-3">The Employees domain enables sophisticated HR analytics. Experiment with these queries:</p>
+
+                <div class="grid gap-3">
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">🏢 Organizational Structure</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Filter by ReportsTo to see direct reports<br/>
+                      2. Group by Manager to see team sizes<br/>
+                      3. Use hierarchical queries to view org chart<br/>
+                      4. Analyze reporting chains and depth
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">🗺️ Territory Coverage</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Include EmployeeTerritory and Territory<br/>
+                      2. Group by Region to see coverage<br/>
+                      3. Identify territories with multiple reps<br/>
+                      4. Find gaps in territorial coverage
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">💼 Sales Performance by Employee</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Include Orders relationship<br/>
+                      2. Aggregate order counts and values<br/>
+                      3. Compare performance across teams<br/>
+                      4. Track sales trends by employee
+                    </div>
+                  </div>
+
+                  <div class="p-4 bg-base-200 rounded-lg">
+                    <div class="font-semibold text-sm mb-2">📅 Tenure Analysis</div>
+                    <div class="text-xs text-base-content/60">
+                      1. Calculate years of service from HireDate<br/>
+                      2. Group by hire year for cohort analysis<br/>
+                      3. Correlate tenure with performance<br/>
+                      4. Identify anniversary milestones
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                  Completing the Business System
+                </h3>
+                <p class="text-base-content/70">With the Employees domain, you've now built a complete business intelligence system covering:</p>
+                <ul class="list-disc list-inside text-sm text-base-content/70 ml-4 space-y-1 mt-2">
+                  <li><strong>Products:</strong> Inventory and catalog management</li>
+                  <li><strong>Customers:</strong> Client relationships and demographics</li>
+                  <li><strong>Orders:</strong> Sales transactions and fulfillment</li>
+                  <li><strong>Employees:</strong> Human resources and organizational structure</li>
+                </ul>
+
+                <div class="alert alert-info mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Pro Tip:</strong> The Employee domain's self-referential relationship (reports_to) demonstrates Selecto's ability to handle recursive structures. Try creating views that show complete organizational hierarchies or team structures.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Foundation steps message -->
         <div class="card bg-info/10 border border-info/20 shadow-lg">
           <div class="card-body">
@@ -685,29 +1459,31 @@ priv/repo/migrations/
               <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
               </svg>
-              Foundation Steps Complete - Ready for More
+              Comprehensive Selecto Integration Complete!
             </h2>
-            <p class="text-base-content/80 mb-4">You've completed the foundation steps of the Selecto integration tutorial! This gives you the basic setup and first domain. The tutorial will expand with additional steps covering more advanced features and additional domains.</p>
-            
+            <p class="text-base-content/80 mb-4">Congratulations! You've successfully integrated Selecto across all major business domains in the Northwind database. Your application now has powerful data exploration capabilities for Products, Customers, and Orders.</p>
+
             <div class="grid md:grid-cols-2 gap-4">
               <div class="p-4 bg-base-100 rounded-lg border">
-                <h4 class="font-semibold mb-2">Foundation Complete:</h4>
+                <h4 class="font-semibold mb-2">✅ What You've Built:</h4>
                 <ul class="text-sm space-y-1 text-base-content/70">
                   <li>• Set up the Phoenix application with Northwind database</li>
                   <li>• Added Selecto dependencies to your project</li>
-                  <li>• Generated a Products domain with LiveView integration</li>
-                  <li>• Configured saved views infrastructure</li>
+                  <li>• Generated a Products domain with Categories & Suppliers</li>
+                  <li>• Generated a Customers domain with Orders relationships</li>
+                  <li>• Generated an Orders domain connecting 5+ entities</li>
+                  <li>• Configured saved views for all domains</li>
                 </ul>
               </div>
-              
+
               <div class="p-4 bg-base-100 rounded-lg border">
-                <h4 class="font-semibold mb-2">Coming Soon - Additional Steps:</h4>
+                <h4 class="font-semibold mb-2">🚀 Next Steps to Explore:</h4>
                 <ul class="text-sm space-y-1 text-base-content/70">
-                  <li>• Step 3: Generate Customers Domain</li>
-                  <li>• Step 4: Generate Orders Domain with Relations</li>
-                  <li>• Step 5: Advanced Filtering and Search</li>
-                  <li>• Step 6: Custom Visualizations and Dashboards</li>
-                  <li>• Step 7: Advanced Saved Views and Sharing</li>
+                  <li>• Create custom saved views for common queries</li>
+                  <li>• Build dashboards combining multiple domains</li>
+                  <li>• Experiment with advanced filtering and aggregations</li>
+                  <li>• Customize the UI components for your brand</li>
+                  <li>• Add more domains (Employees, Territories, etc.)</li>
                 </ul>
               </div>
             </div>
