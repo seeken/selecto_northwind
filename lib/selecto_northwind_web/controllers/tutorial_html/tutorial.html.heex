@@ -10,10 +10,56 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
 
 <div class="min-h-screen bg-gradient-to-br from-base-100 to-base-200">
-  <!-- Header Section -->
-  <div class="bg-primary text-primary-content">
-    <div class="px-4 py-12 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-4xl">
+  <!-- Fixed Navigation Sidebar -->
+  <div class="fixed left-0 top-20 h-full w-64 bg-base-100 border-r border-base-300 overflow-y-auto z-10 hidden lg:block">
+    <div class="p-6">
+      <h3 class="text-lg font-bold mb-4 text-base-content">Tutorial Navigation</h3>
+      <nav class="space-y-2">
+        <a href="#step-0" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-primary">Step 0:</span>
+          <span class="text-base-content/70 block">Set Up Phoenix Project</span>
+        </a>
+        <a href="#step-1" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-accent">Step 1:</span>
+          <span class="text-base-content/70 block">Add Selecto Dependencies</span>
+        </a>
+        <a href="#step-2" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-success">Step 2:</span>
+          <span class="text-base-content/70 block">Generate Products Domain</span>
+        </a>
+        <a href="#step-3" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-secondary">Step 3:</span>
+          <span class="text-base-content/70 block">Generate Customers Domain</span>
+        </a>
+        <a href="#step-4" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-warning">Step 4:</span>
+          <span class="text-base-content/70 block">Generate Orders Domain</span>
+        </a>
+        <a href="#step-5" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-info">Step 5:</span>
+          <span class="text-base-content/70 block">Generate Employees Domain</span>
+        </a>
+        <div class="divider my-4"></div>
+        <a href="#complete" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold">🎉 Complete System</span>
+        </a>
+        <div class="divider my-4"></div>
+        <a href="/" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <svg class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Home
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div>
+    <!-- Header Section -->
+    <div class="bg-primary text-primary-content">
+      <div class="py-12">
+        <div class="mx-auto">
         <div class="flex items-center gap-4 mb-6">
           <div class="p-3 bg-primary-content/10 rounded-xl">
             <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -50,9 +96,9 @@
     </div>
   </div>
 
-  <!-- Content Section -->
-  <div class="px-4 py-12 sm:px-6 lg:px-8">
-    <div class="mx-auto max-w-4xl">
+    <!-- Content Section -->
+    <div class="py-12">
+      <div class="mx-auto">
       <!-- Navigation breadcrumb -->
       <div class="breadcrumbs text-sm mb-8">
         <ul>
@@ -64,13 +110,55 @@
       <!-- Tutorial Content -->
       <div class="space-y-8">
         
-        <!-- Initialize Prism.js after page loads -->
+        <!-- Initialize Prism.js after page loads and handle navigation -->
         <script>
           // Ensure Prism highlights after LiveView updates
           document.addEventListener('DOMContentLoaded', function() {
             if (typeof Prism !== 'undefined') {
               Prism.highlightAll();
             }
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+              anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                  target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                  });
+                }
+              });
+            });
+
+            // Highlight active section in navigation
+            const observerOptions = {
+              root: null,
+              rootMargin: '0px 0px -50% 0px',
+              threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+              entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                  // Remove all active classes
+                  document.querySelectorAll('a[href^="#"]').forEach(link => {
+                    link.classList.remove('bg-base-200');
+                  });
+                  // Add active class to current section link
+                  const activeLink = document.querySelector(`a[href="#${entry.target.id}"]`);
+                  if (activeLink) {
+                    activeLink.classList.add('bg-base-200');
+                  }
+                }
+              });
+            }, observerOptions);
+
+            // Observe all sections with IDs
+            document.querySelectorAll('[id^="step-"], #complete').forEach(section => {
+              observer.observe(section);
+            });
           });
         </script>
         <!-- Tutorial Structure Card -->
@@ -103,7 +191,7 @@
 
 
         <!-- Step 0 -->
-        <div class="card bg-base-100 shadow-xl">
+        <div id="step-0" class="card bg-base-100 shadow-xl scroll-mt-6">
           <div class="card-body">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-xl flex items-center justify-center text-white font-bold text-lg">0</div>
@@ -236,7 +324,7 @@ $ mix ecto.reset</code></pre>
         </div>
 
         <!-- Step 1 Expanded -->
-        <div class="card bg-base-100 shadow-xl">
+        <div id="step-1" class="card bg-base-100 shadow-xl scroll-mt-6">
           <div class="card-body">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-accent to-accent-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">1</div>
@@ -369,7 +457,7 @@ $ mix deps.compile</code></pre>
           </div>
         </div>
 
-        <div class="card bg-base-100 shadow-xl">
+        <div id="step-2" class="card bg-base-100 shadow-xl scroll-mt-6">
           <div class="card-body">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-success to-success-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">2</div>
@@ -645,7 +733,7 @@ priv/repo/migrations/
         </div>
 
         <!-- Step 3: Generate Customers Domain -->
-        <div class="card bg-base-100 shadow-xl">
+        <div id="step-3" class="card bg-base-100 shadow-xl scroll-mt-6">
           <div class="card-body">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-secondary to-secondary-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">3</div>
@@ -874,7 +962,7 @@ end</code></pre>
         </div>
 
         <!-- Step 4: Generate Orders Domain -->
-        <div class="card bg-base-100 shadow-xl">
+        <div id="step-4" class="card bg-base-100 shadow-xl scroll-mt-6">
           <div class="card-body">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-warning to-warning-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">4</div>
@@ -1147,7 +1235,7 @@ $ mix phx.server</code></pre>
         </div>
 
         <!-- Step 5: Generate Employees/HR Domain -->
-        <div class="card bg-base-100 shadow-xl">
+        <div id="step-5" class="card bg-base-100 shadow-xl scroll-mt-6">
           <div class="card-body">
             <div class="flex items-center gap-4 mb-4">
               <div class="w-12 h-12 bg-gradient-to-br from-info to-info-focus rounded-xl flex items-center justify-center text-white font-bold text-lg">5</div>
@@ -1419,7 +1507,7 @@ $ mix phx.server</code></pre>
         </div>
 
         <!-- Foundation steps message -->
-        <div class="card bg-info/10 border border-info/20 shadow-lg">
+        <div id="complete" class="card bg-info/10 border border-info/20 shadow-lg scroll-mt-6">
           <div class="card-body">
             <h2 class="card-title text-info mb-4">
               <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1481,5 +1569,6 @@ $ mix phx.server</code></pre>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </div>
