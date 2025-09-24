@@ -93,15 +93,7 @@ const TutorialCodeBlocks = {
         .replace(/\b(true|false|nil)\b/g, '<span class="text-blue-400">$1</span>')
         .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, '<span class="text-green-400">:$1</span>')
         .replace(/"([^"]*)"/g, '<span class="text-yellow-300">"$1"</span>')
-        .replace(/#.*/g, '<span class="text-gray-400 italic">// Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
-import "phoenix_html"
-// Establish Phoenix Socket and LiveView configuration.
-import {Socket} from "phoenix"
-import {LiveSocket} from "phoenix_live_view"
-import {hooks as colocatedHooks} from "phoenix-colocated/selecto_northwind"
-import topbar from "../vendor/topbar"
-
-const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")</span>')
+        .replace(/#.*/g, '<span class="text-gray-400 italic">$&</span>')
     } else if (language === 'bash') {
       // Basic bash syntax highlighting
       highlightedText = text
