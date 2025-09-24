@@ -54,6 +54,21 @@
 
       <!-- Tutorial Content -->
       <div class="space-y-8">
+        
+        <!-- Inline JavaScript for copy functionality -->
+        <script>
+          function copyCode(button, text) {
+            navigator.clipboard.writeText(text).then(function() {
+              const originalText = button.innerHTML;
+              button.innerHTML = '✓ Copied!';
+              button.className = button.className.replace('btn-primary', 'btn-success');
+              setTimeout(function() {
+                button.innerHTML = originalText;
+                button.className = button.className.replace('btn-success', 'btn-primary');
+              }, 2000);
+            });
+          }
+        </script>
         <!-- Tutorial Structure Card -->
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
@@ -137,9 +152,17 @@
                   </svg>
                   Clone the Repository
                 </h3>
-                <div class="mockup-code">
-                  <pre data-prefix="$"><code>git clone &lt;repository-url&gt;</code></pre>
-                  <pre data-prefix="$"><code>cd selecto_northwind</code></pre>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">git clone &lt;repository-url&gt;</code></pre>
+                    <pre data-prefix="$"><code class="text-green-400">cd selecto_northwind</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'git clone <repository-url>\ncd selecto_northwind')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
               </div>
 
@@ -151,8 +174,16 @@
                   Initialize Git Submodules
                 </h3>
                 <p class="text-base-content/70 mb-3">The project includes Selecto libraries as git submodules in the vendor directory:</p>
-                <div class="mockup-code">
-                  <pre data-prefix="$"><code>git submodule update --init --recursive</code></pre>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">git submodule update --init --recursive</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'git submodule update --init --recursive')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
               </div>
 
@@ -164,8 +195,16 @@
                   Install Dependencies
                 </h3>
                 <p class="text-base-content/70 mb-3">Install all Phoenix and Elixir dependencies:</p>
-                <div class="mockup-code mb-4">
-                  <pre data-prefix="$"><code>mix setup</code></pre>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">mix setup</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix setup')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
                 <div class="alert alert-info">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
@@ -192,8 +231,16 @@
                   Verify the Setup
                 </h3>
                 <p class="text-base-content/70 mb-3">Start the Phoenix server to ensure everything is working:</p>
-                <div class="mockup-code mb-4">
-                  <pre data-prefix="$"><code>mix phx.server</code></pre>
+                <div class="relative">
+                  <div class="mockup-code mb-4">
+                    <pre data-prefix="$"><code class="text-green-400">mix phx.server</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix phx.server')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
                 <p class="text-base-content/70">Visit <a href="http://localhost:4000" class="link link-primary">http://localhost:4000</a> and you should see the Northwind Demo landing page with navigation links to Customers, Catalog, Orders, and Analytics sections.</p>
               </div>
@@ -275,17 +322,34 @@
                   Add Dependencies to mix.exs
                 </h3>
                 <p class="text-base-content/70 mb-3">Open your <code class="bg-base-300 px-2 py-1 rounded text-sm">mix.exs</code> file and add the following dependencies to the <code class="bg-base-300 px-2 py-1 rounded text-sm">deps</code> function:</p>
-                <div class="mockup-code">
-                  <pre><code phx-no-curly-interpolation>defp deps do
+                <div class="relative">
+                  <div class="mockup-code">
+<pre><code><span class="text-purple-400">defp</span> <span class="text-blue-300">deps</span> <span class="text-purple-400">do</span>
+  [
+    <span class="text-gray-400"># ... existing dependencies ...</span>
+
+    <span class="text-gray-400"># Selecto libraries</span>
+      <%= "{" %><span class="text-green-400">:selecto</span>, <span class="text-orange-300">path</span>: <span class="text-yellow-300">"./vendor/selecto"</span><%= "}" %>,
+      <%= "{" %><span class="text-green-400">:selecto_components</span>, <span class="text-orange-300">path</span>: <span class="text-yellow-300">"./vendor/selecto_components"</span><%= "}" %>,
+      <%= "{" %><span class="text-green-400">:selecto_mix</span>, <span class="text-orange-300">path:</span> <span class="text-yellow-300">"./vendor/selecto_mix"</span>, <span class="text-orange-300">only:</span> [<span class="text-green-400">:dev</span>, <span class="text-green-400">:test</span>]<%= "}" %>
+  ]
+<span class="text-purple-400">end</span></code></pre>
+                  </div>
+                  <button
+                    onclick="copyCode(this, `defp deps do
   [
     # ... existing dependencies ...
 
     # Selecto libraries
-    {:selecto, path: "./vendor/selecto"},
-    {:selecto_components, path: "./vendor/selecto_components"},
-    {:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]}
+    {:selecto, path: './vendor/selecto'},
+    {:selecto_components, path: './vendor/selecto_components'},
+    {:selecto_mix, path: './vendor/selecto_mix', only: [:dev, :test]}
   ]
-end</code></pre>
+end`)"
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
                 
                 <div class="alert alert-warning mt-4">
@@ -335,9 +399,17 @@ end</code></pre>
                   Install Dependencies
                 </h3>
                 <p class="text-base-content/70 mb-3">After adding the dependencies, fetch and compile them:</p>
-                <div class="mockup-code">
-                  <pre data-prefix="$"><code>mix deps.get</code></pre>
-                  <pre data-prefix="$"><code>mix deps.compile</code></pre>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">mix deps.get</code></pre>
+                    <pre data-prefix="$"><code class="text-green-400">mix deps.compile</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix deps.get\nmix deps.compile')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
               </div>
 
@@ -349,8 +421,16 @@ end</code></pre>
                   Verify Installation
                 </h3>
                 <p class="text-base-content/70 mb-3">You can verify that the Selecto libraries are properly installed by running:</p>
-                <div class="mockup-code mb-4">
-                  <pre data-prefix="$"><code>mix help | grep selecto</code></pre>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">mix help | grep selecto</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix help | grep selecto')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
                 <div class="alert alert-success">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
@@ -400,10 +480,18 @@ end</code></pre>
               <div>
                 <h3 class="text-lg font-semibold mb-3">Generate the Products Domain</h3>
                 <p class="text-base-content/70 mb-3">Run the following Mix task:</p>
-                <div class="mockup-code mb-4">
-                  <pre data-prefix="$"><code>mix selecto.gen.domain SelectoNorthwind.Catalog.Product \</code></pre>
-                  <pre data-prefix=""><code>  --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier \</code></pre>
-                  <pre data-prefix=""><code>  --live --saved-views --path products_selecto</code></pre>
+                <div class="relative">
+                  <div class="mockup-code mb-4">
+                    <pre data-prefix="$"><code class="text-green-400">mix selecto.gen.domain SelectoNorthwind.Catalog.Product \</code></pre>
+                    <pre data-prefix=""><code class="text-blue-300">  --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier \</code></pre>
+                    <pre data-prefix=""><code class="text-blue-300">  --live --saved-views --path products_selecto</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix selecto.gen.domain SelectoNorthwind.Catalog.Product --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier --live --saved-views --path products_selecto')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
                 </div>
                 <div class="alert alert-info mb-4">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
@@ -443,6 +531,220 @@ end</code></pre>
               </div>
 
               <!-- Continue with the remaining content... -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Configure SavedView Support
+                </h3>
+                <p class="text-base-content/70 mb-4">There are two parts to enabling saved views:</p>
+                
+                <div class="space-y-6">
+                  <div>
+                    <h4 class="font-semibold mb-3 text-base-content flex items-center gap-2">
+                      <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                      Add SavedView Support to Domain
+                    </h4>
+                    <p class="text-base-content/70 mb-3">The generated domain module needs to use the SavedViewContext. Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/products_domain.ex</code>:</p>
+                    <div class="relative">
+                      <div class="mockup-code">
+<pre><code><span class="text-purple-400">defmodule</span> <span class="text-blue-300">SelectoNorthwind.SelectoDomains.ProductsDomain</span> <span class="text-purple-400">do</span>
+  <span class="text-purple-400">use</span> <span class="text-blue-300">SelectoNorthwind.SavedViewContext</span>  <span class="text-gray-400"># Add this line</span>
+
+  <span class="text-gray-400"># ... rest of the domain configuration</span>
+<span class="text-purple-400">end</span></code></pre>
+                      </div>
+                      <button
+                        onclick="copyCode(this, `defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do
+  use SelectoNorthwind.SavedViewContext  # Add this line
+
+  # ... rest of the domain configuration
+end`)"
+                        class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                      >
+                        📋 Copy
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h4 class="font-semibold mb-3 text-base-content flex items-center gap-2">
+                      <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                      Set saved_view_context in LiveView
+                    </h4>
+                    <p class="text-base-content/70 mb-3">The generated LiveView (with <code class="bg-base-300 px-2 py-1 rounded text-sm">--saved-views</code> flag) automatically sets up the saved view context in the mount function. This looks like:</p>
+                    <div class="relative">
+                      <div class="mockup-code">
+<pre><code><span class="text-gray-400"># In lib/selecto_northwind_web/live/product_live.ex</span>
+<span class="text-purple-400">def</span> <span class="text-blue-300">mount</span>(<span class="text-orange-300">_params</span>, <span class="text-orange-300">_session</span>, <span class="text-orange-300">socket</span>) <span class="text-purple-400">do</span>
+  <span class="text-gray-400"># ... other setup code ...</span>
+
+  <span class="text-orange-300">socket</span> <span class="text-red-400">=</span>
+    <span class="text-blue-300">assign</span>(<span class="text-orange-300">socket</span>,
+      <span class="text-gray-400"># ... other assigns ...</span>
+      <span class="text-green-400">saved_view_module:</span> <span class="text-blue-300">SelectoNorthwind.SelectoDomains.ProductsDomain</span>,
+      <span class="text-green-400">saved_view_context:</span> <span class="text-yellow-300">"/products_selecto"</span>,  <span class="text-gray-400"># Identifies this set of saved views</span>
+      <span class="text-green-400">available_saved_views:</span> <span class="text-orange-300">saved_views</span>
+    )
+
+  <%= "{" %><span class="text-green-400">:ok</span>, <span class="text-orange-300">socket</span><%= "}" %>
+<span class="text-purple-400">end</span></code></pre>
+                      </div>
+                      <button
+                        onclick="copyCode(this, `# In lib/selecto_northwind_web/live/product_live.ex
+def mount(_params, _session, socket) do
+  # ... other setup code ...
+
+  socket =
+    assign(socket,
+      # ... other assigns ...
+      saved_view_module: SelectoNorthwind.SelectoDomains.ProductsDomain,
+      saved_view_context: '/products_selecto',  # Identifies this set of saved views
+      available_saved_views: saved_views
+    )
+
+  {:ok, socket}
+end`)"
+                        class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                      >
+                        📋 Copy
+                      </button>
+                    </div>
+                    <div class="alert alert-info mt-3">
+                      <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <div>
+                        The <code>saved_view_context</code> assign is crucial - it identifies which saved views belong to this LiveView. Typically set to the path or a unique identifier for the domain.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
+                  </svg>
+                  Run the Migration
+                </h3>
+                <p class="text-base-content/70 mb-3">After generation, run the migration to create the saved_views table:</p>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">mix ecto.migrate</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix ecto.migrate')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-7-7 7-7m5 14l7-7-7-7" />
+                  </svg>
+                  Add Route to Router
+                </h3>
+                <p class="text-base-content/70 mb-3">Add the generated LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>. This will replace the existing placeholder route:</p>
+                <div class="relative">
+                  <div class="mockup-code mb-3">
+<pre><code><span class="text-purple-400">scope</span> <span class="text-yellow-300">"/"</span>, <span class="text-blue-300">SelectoNorthwindWeb</span> <span class="text-purple-400">do</span>
+  <span class="text-blue-300">pipe_through</span> <span class="text-green-400">:browser</span>
+
+  <span class="text-gray-400"># Replace this placeholder:</span>
+  <span class="text-gray-400"># get "/products_selecto", PageController, :products_selecto</span>
+  
+  <span class="text-gray-400"># With this LiveView route:</span>
+  <span class="text-blue-300">live</span> <span class="text-yellow-300">"/products_selecto"</span>, <span class="text-blue-300">ProductLive</span>, <span class="text-green-400">:index</span>
+<span class="text-purple-400">end</span></code></pre>
+                  </div>
+                  <button
+                    onclick="copyCode(this, `scope '/', SelectoNorthwindWeb do
+  pipe_through :browser
+
+  # Replace this placeholder:
+  # get '/products_selecto', PageController, :products_selecto
+
+  # With this LiveView route:
+  live '/products_selecto', ProductLive, :index
+end`)"
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+                <div class="alert alert-warning">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> This replaces the existing placeholder route <code>get "/products_selecto", PageController, :products_selecto</code> with the actual LiveView route. The route path matches what we specified with the <code>--path</code> option, and the module name is <code>ProductLive</code> (singular).
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                  </svg>
+                  Build Assets
+                </h3>
+                <p class="text-base-content/70 mb-3">Compile the updated assets with the new SelectoComponents integration:</p>
+                <div class="relative">
+                  <div class="mockup-code">
+                    <pre data-prefix="$"><code class="text-green-400">mix assets.build</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix assets.build')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+              </div>
+              
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Verify the Setup
+                </h3>
+                <p class="text-base-content/70 mb-3">Start your Phoenix server and navigate to <code class="bg-base-300 px-2 py-1 rounded text-sm">/products_selecto</code>:</p>
+                <div class="relative">
+                  <div class="mockup-code mb-4">
+                    <pre data-prefix="$"><code class="text-green-400">mix phx.server</code></pre>
+                  </div>
+                  <button 
+                    onclick="copyCode(this, 'mix phx.server')" 
+                    class="absolute top-2 right-2 btn btn-xs btn-primary text-white shadow-lg hover:btn-primary-focus"
+                  >
+                    📋 Copy
+                  </button>
+                </div>
+                <div class="alert alert-success">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <div class="font-semibold">You should see the Products Explorer interface with:</div>
+                    <ul class="mt-2 space-y-1 text-sm">
+                      <li>• A query builder form</li>
+                      <li>• Data results in table format</li>
+                      <li>• Options to switch between Table, Detail, and Graph views</li>
+                      <li>• Ability to save and load custom views</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
               <div class="collapse collapse-arrow bg-base-200">
                 <input type="checkbox" />
                 <div class="collapse-title font-medium">

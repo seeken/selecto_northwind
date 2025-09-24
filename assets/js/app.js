@@ -25,6 +25,95 @@ import {LiveSocket} from "phoenix_live_view"
 import {hooks as colocatedHooks} from "phoenix-colocated/selecto_northwind"
 import topbar from "../vendor/topbar"
 
+// Tutorial code block functionality
+const TutorialCodeBlocks = {
+  mounted() {
+    this.addCopyButtons()
+    this.addSyntaxHighlighting()
+  },
+  
+  addCopyButtons() {
+    const codeBlocks = document.querySelectorAll('.tutorial-code-block')
+    
+    codeBlocks.forEach(block => {
+      const copyButton = document.createElement('button')
+      copyButton.className = 'absolute top-2 right-2 btn btn-xs btn-ghost opacity-60 hover:opacity-100'
+      copyButton.innerHTML = `
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+        </svg>
+        Copy
+      `
+      
+      copyButton.addEventListener('click', () => {
+        const code = block.querySelector('code')
+        const text = code.textContent
+        
+        navigator.clipboard.writeText(text).then(() => {
+          copyButton.innerHTML = `
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Copied!
+          `
+          setTimeout(() => {
+            copyButton.innerHTML = `
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              </svg>
+              Copy
+            `
+          }, 2000)
+        })
+      })
+      
+      block.style.position = 'relative'
+      block.appendChild(copyButton)
+    })
+  },
+  
+  addSyntaxHighlighting() {
+    const codeElements = document.querySelectorAll('code[data-language]')
+    
+    codeElements.forEach(code => {
+      const language = code.dataset.language
+      this.highlightCode(code, language)
+    })
+  },
+  
+  highlightCode(element, language) {
+    const text = element.textContent
+    let highlightedText = text
+    
+    if (language === 'elixir') {
+      // Basic Elixir syntax highlighting
+      highlightedText = text
+        .replace(/\b(defmodule|def|defp|end|do|use|import|alias|require|if|unless|case|cond|with|fn)\b/g, 
+                '<span class="text-purple-400 font-semibold">$1</span>')
+        .replace(/\b(true|false|nil)\b/g, '<span class="text-blue-400">$1</span>')
+        .replace(/:([a-zA-Z_][a-zA-Z0-9_]*)/g, '<span class="text-green-400">:$1</span>')
+        .replace(/"([^"]*)"/g, '<span class="text-yellow-300">"$1"</span>')
+        .replace(/#.*/g, '<span class="text-gray-400 italic">// Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
+import "phoenix_html"
+// Establish Phoenix Socket and LiveView configuration.
+import {Socket} from "phoenix"
+import {LiveSocket} from "phoenix_live_view"
+import {hooks as colocatedHooks} from "phoenix-colocated/selecto_northwind"
+import topbar from "../vendor/topbar"
+
+const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")</span>')
+    } else if (language === 'bash') {
+      // Basic bash syntax highlighting
+      highlightedText = text
+        .replace(/^(\$ |# )/gm, '<span class="text-green-400 font-semibold">$1</span>')
+        .replace(/\bmix\b/g, '<span class="text-purple-400 font-semibold">mix</span>')
+        .replace(/\b(git|cd|npm)\b/g, '<span class="text-blue-400 font-semibold">$1</span>')
+    }
+    
+    element.innerHTML = highlightedText
+  }
+}
+
 const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
@@ -45,6 +134,11 @@ liveSocket.connect()
 // >> liveSocket.enableLatencySim(1000)  // enabled for duration of browser session
 // >> liveSocket.disableLatencySim()
 window.liveSocket = liveSocket
+
+// Initialize tutorial code blocks when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  TutorialCodeBlocks.mounted()
+})
 
 // The lines below enable quality of life phoenix_live_reload
 // development features:
