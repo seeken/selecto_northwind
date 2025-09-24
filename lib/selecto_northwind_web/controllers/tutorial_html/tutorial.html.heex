@@ -389,7 +389,15 @@ $ mix deps.compile</code></pre>
                   </svg>
                   Next Step
                 </h3>
-                <p class="text-base-content/70">With the dependencies installed, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Customers table.</p>
+                <div class="alert alert-warning mb-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>⚠️ Important for AI Agents:</strong> After adding dependencies, you <strong>MUST restart the Phoenix server</strong> to ensure proper compilation of the new Selecto libraries. The server needs to be restarted when dependencies are added.
+                  </div>
+                </div>
+                <p class="text-base-content/70">With the dependencies installed, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Products table.</p>
               </div>
             </div>
           </div>
@@ -405,6 +413,15 @@ $ mix deps.compile</code></pre>
               </div>
             </div>
             <p class="text-base-content/80 mb-6">In this step, we'll use the <code class="bg-base-300 px-2 py-1 rounded text-sm">mix selecto.gen.domain</code> task to generate Selecto domain configuration for the Product schema and its related schemas (Categories and Suppliers) from the Catalog context.</p>
+            
+            <div class="alert alert-info mb-6">
+              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <strong>💡 For AI Agents:</strong> This step requires server restarts at specific points to ensure proper asset compilation and Tailwind CSS scanning. Pay attention to the restart warnings throughout this step.
+              </div>
+            </div>
             
             <div class="space-y-6">
               <div>
@@ -570,6 +587,14 @@ end</code></pre>
                 <p class="text-base-content/70 mb-3">Compile the updated assets with the new SelectoComponents integration:</p>
                 <div class="relative">
                   <pre><code class="language-bash">$ mix assets.build</code></pre>
+                </div>
+                <div class="alert alert-error mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🚨 Critical for AI Agents:</strong> You <strong>MUST restart the Phoenix server</strong> after this step! The server needs to restart so Tailwind can properly scan the <code class="bg-base-300 px-1 rounded">vendor/selecto_components</code> directory and include the necessary CSS classes. Without restarting, the SelectoComponents UI will not render correctly.
+                  </div>
                 </div>
               </div>
               
