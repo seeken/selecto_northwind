@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM hexpm/elixir:latest-erlang-ubuntu-jammy-20240423.1.0
+FROM hexpm/elixir:1.16.2-erlang-26.2.4-ubuntu-jammy-20240402.1
 
 # Install dependencies
 RUN apt-get update && \
