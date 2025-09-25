@@ -1,7 +1,13 @@
 {
   "name": "Elixir & Phoenix DevContainer",
-  "build": {
-    "dockerfile": "Dockerfile"
+  "features": {
+    "ghcr.io/devcontainers/features/elixir:1": {
+      "version": "1.16.2"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/postgres-client:1": {}
   },
   "forwardPorts": [4000],
   "postCreateCommand": "mix deps.get && mix ecto.setup",
@@ -9,7 +15,20 @@
     "terminal.integrated.shell.linux": "/bin/bash"
   },
   "features": {
-    "ghcr.io/devcontainers/features/azure-cli:1": false
+    "ghcr.io/devcontainers/features/elixir:1": {
+      "version": "1.16.2"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/postgres-client:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+      }
+    }
   },
   "remoteUser": "vscode"
 }
