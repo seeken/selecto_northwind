@@ -1,0 +1,510 @@
+<Layouts.flash_group flash={@flash} />
+
+<!-- Prism.js for syntax highlighting -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-elixir.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+
+<div class="min-h-screen bg-gradient-to-br from-base-100 to-base-200">
+  <!-- Fixed Navigation Sidebar -->
+  <div class="fixed left-0 top-20 h-full w-64 bg-base-100 border-r border-base-300 overflow-y-auto z-10 hidden lg:block">
+    <div class="p-6">
+      <h3 class="text-lg font-bold mb-4 text-base-content">Tutorial Navigation</h3>
+      <nav class="space-y-2">
+        <a href="#overview" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-primary">Overview</span>
+          <span class="text-base-content/70 block">Why Postgrex without Ecto?</span>
+        </a>
+        <a href="#step-1" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-accent">Step 1:</span>
+          <span class="text-base-content/70 block">Add Dependencies</span>
+        </a>
+        <a href="#step-2" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-success">Step 2:</span>
+          <span class="text-base-content/70 block">Configure Database Connection</span>
+        </a>
+        <a href="#step-3" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-secondary">Step 3:</span>
+          <span class="text-base-content/70 block">Generate Domain from Database</span>
+        </a>
+        <a href="#step-4" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-warning">Step 4:</span>
+          <span class="text-base-content/70 block">Create LiveView</span>
+        </a>
+        <a href="#step-5" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-info">Step 5:</span>
+          <span class="text-base-content/70 block">Add Routing & Test</span>
+        </a>
+        <div class="divider my-4"></div>
+        <a href="#comparison" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold">📊 Ecto vs Postgrex</span>
+        </a>
+        <div class="divider my-4"></div>
+        <a href="/" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <svg class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          Back to Home
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div>
+    <!-- Header Section -->
+    <div class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+      <div class="py-12">
+        <div class="mx-auto">
+        <div class="flex items-center gap-4 mb-6">
+          <div class="p-3 bg-white/10 rounded-xl">
+            <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m11.5 6.5v3a2.5 2.5 0 01-5 0v-3m0 5h.01" />
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-4xl font-bold mb-2">Selecto + Postgrex Tutorial</h1>
+            <p class="text-xl text-white/80">Use Selecto directly with PostgreSQL - No Ecto Required!</p>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap gap-3">
+          <div class="badge badge-outline badge-lg border-white/30 text-white">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+            Phoenix LiveView
+          </div>
+          <div class="badge badge-outline badge-lg border-white/30 text-white">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7" />
+            </svg>
+            Postgrex
+          </div>
+          <div class="badge badge-outline badge-lg border-white/30 text-white">
+            <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+            No Ecto Schemas
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="py-12">
+      <div class="mx-auto">
+      <!-- Overview Section -->
+      <section id="overview" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
+              <div class="badge badge-primary badge-lg">Overview</div>
+            </h2>
+
+            <div class="prose max-w-none">
+              <p class="text-lg text-base-content/80 mb-6">
+                This tutorial shows you how to use Selecto with <strong>direct PostgreSQL connections</strong> via Postgrex,
+                without requiring Ecto schemas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 1: Dependencies -->
+      <section id="step-1" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
+              <div class="badge badge-accent badge-lg">Step 1</div>
+              Add Dependencies
+            </h2>
+
+            <div class="alert alert-info mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span>Add Selecto libraries to your <code>mix.exs</code>. Note: Ecto is <strong>optional</strong> for this approach!</span>
+            </div>
+
+            <pre><code class="language-bash"># In mix.exs, add to deps function:
+mix deps.add selecto "~> 0.5.0"
+mix deps.add selecto_components "~> 0.3.0"
+mix deps.add postgrex "~> 0.17.0"
+mix deps.add selecto_mix "~> 0.2.0" --only dev test
+mix deps.add phoenix_live_view "~> 1.0"</code></pre>
+
+            <div class="divider text-base-content">THEN</div>
+
+            <pre><code class="language-bash"># Install dependencies
+mix deps.get
+
+# Compile
+mix compile</code></pre>
+
+            <div class="alert alert-success mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span><strong>Notice:</strong> No <code>ecto</code> or <code>ecto_sql</code> dependencies required!</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 2: Configure Connection -->
+      <section id="step-2" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
+              <div class="badge badge-success badge-lg">Step 2</div>
+              Configure Database Connection
+            </h2>
+
+            <p class="text-base-content/80 mb-4">
+              Configure a supervised Postgrex connection in your application.
+            </p>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>config/dev.exs</code>:</h3>
+
+            <pre><code class="language-elixir">config :my_app, MyApp.Database,
+  hostname: "localhost",
+  port: 5432,
+  database: "northwind_dev",
+  username: "postgres",
+  password: "postgres",
+  pool_size: 10</code></pre>
+
+            <div class="divider text-base-content">THEN</div>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/my_app/application.ex</code>:</h3>
+
+            <pre><code class="language-elixir"># In lib/my_app/application.ex, add to children list:
+children = [
+  # Start Postgrex connection pool
+  Postgrex.child_spec(
+    Application.get_env(:my_app, MyApp.Database)
+    ++ [name: MyApp.Database]
+  ),
+
+  # Phoenix endpoint
+  MyAppWeb.Endpoint
+]</code></pre>
+
+            <div class="alert alert-warning mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <span><strong>Important:</strong> The <code>name:</code> option creates a named connection you can reference throughout your app.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3: Generate Domain -->
+      <section id="step-3" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
+              <div class="badge badge-secondary badge-lg">Step 3</div>
+              Generate Domain from Database
+            </h2>
+
+            <p class="text-base-content/80 mb-4">
+              Use the new <code>mix selecto.gen.domain</code> task with database connection to automatically
+              generate a domain file by introspecting your PostgreSQL database.
+            </p>
+
+            <div class="alert alert-primary mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span><strong>Magic!</strong> Selecto will query PostgreSQL system catalogs to discover tables, columns, types, primary keys, and foreign key relationships.</span>
+            </div>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Option 1: Using DATABASE_URL</h3>
+
+            <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/northwind_dev" \
+  mix selecto.gen.domain --table products</code></pre>
+
+            <div class="divider text-base-content">OR</div>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Option 2: Using Explicit Connection Parameters</h3>
+
+            <pre><code class="language-bash">mix selecto.gen.domain \
+  --table products \
+  --host localhost \
+  --port 5432 \
+  --database northwind_dev \
+  --username postgres \
+  --password postgres</code></pre>
+
+            <div class="divider text-base-content">OR</div>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Option 3: Using Named Connection from Config</h3>
+
+            <pre><code class="language-bash"># Coming soon - reference your application's configured connection
+mix selecto.gen.domain \
+  --table products \
+  --connection MyApp.Database</code></pre>
+
+            <div class="alert alert-success mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <div>
+                <h4 class="font-bold">Generated File</h4>
+                <p class="text-sm">This creates <code>lib/my_app/selecto_domains/products_domain.ex</code> with complete domain configuration!</p>
+              </div>
+            </div>
+
+            <div class="alert alert-info mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <div>
+                <h4 class="font-bold">Generated Domain File</h4>
+                <p class="text-sm">The generated domain includes all discovered fields, types, primary keys, and foreign key relationships automatically extracted from your database schema!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 4: Create LiveView -->
+      <section id="step-4" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
+              <div class="badge badge-warning badge-lg">Step 4</div>
+              Create LiveView
+            </h2>
+
+            <p class="text-base-content/80 mb-4">
+              Create a LiveView that uses your domain with the Postgrex connection.
+            </p>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Create <code>lib/my_app_web/live/products_live.ex</code>:</h3>
+
+            <pre><code class="language-elixir">defmodule MyAppWeb.ProductsLive do
+  use MyAppWeb, :live_view
+  use SelectoComponents.Form,
+    domain: MyApp.SelectoDomains.ProductsDomain.domain()
+
+  # IMPORTANT: Provide the Postgrex connection name
+  def get_connection do
+    MyApp.Database  # Named connection from application.ex
+  end
+
+  @impl true
+  def mount(_params, _session, socket) do
+    socket = assign(socket, :page_title, "Products")
+    reply(:ok, socket)
+  end
+
+  # SelectoComponents will use get_connection/0 automatically
+end</code></pre>
+
+            <div class="alert alert-success mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span><strong>That's it!</strong> SelectoComponents will use the Postgrex connection to query data directly.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 5: Add Routing -->
+      <section id="step-5" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
+              <div class="badge badge-info badge-lg">Step 5</div>
+              Add Routing & Test
+            </h2>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/my_app_web/router.ex</code>:</h3>
+
+            <pre><code class="language-elixir">scope "/", MyAppWeb do
+  pipe_through :browser
+
+  live "/products", ProductsLive, :index
+end</code></pre>
+
+            <div class="divider text-base-content">THEN</div>
+
+            <h3 class="text-xl font-bold mb-3 text-base-content">Start your Phoenix server and test:</h3>
+
+            <pre><code class="language-bash"># Start server
+mix phx.server
+
+# Visit in browser
+open http://localhost:4000/products</code></pre>
+
+            <div class="alert alert-success mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <div>
+                <h4 class="font-bold">🎉 Success!</h4>
+                <p class="text-sm">You now have a fully functional admin interface querying PostgreSQL directly - no Ecto schemas required!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Comparison Section -->
+      <section id="comparison" class="mb-16">
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-3xl mb-4 text-base-content">📊 Ecto vs Postgrex Approach</h2>
+
+            <div class="overflow-x-auto">
+              <table class="table table-zebra">
+                <thead>
+                  <tr>
+                    <th class="text-base-content">Feature</th>
+                    <th class="text-base-content">With Ecto Schemas</th>
+                    <th class="text-base-content">Direct Postgrex</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="font-bold text-base-content">Schema Definition</td>
+                    <td>
+                      <div class="badge badge-warning">Manual</div>
+                      <span class="text-sm text-base-content">Write Ecto schema modules</span>
+                    </td>
+                    <td>
+                      <div class="badge badge-success">Automatic</div>
+                      <span class="text-sm text-base-content">Introspect from database</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold text-base-content">Dependencies</td>
+                    <td class="text-base-content"><code>ecto</code>, <code>ecto_sql</code>, <code>postgrex</code></td>
+                    <td class="text-base-content"><code>postgrex</code> only</td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold text-base-content">Setup Time</td>
+                    <td>
+                      <div class="badge badge-warning">Moderate</div>
+                      <span class="text-sm text-base-content">Define schemas + migrations</span>
+                    </td>
+                    <td>
+                      <div class="badge badge-success">Fast</div>
+                      <span class="text-sm text-base-content">Point to existing database</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold text-base-content">Foreign Keys</td>
+                    <td>
+                      <div class="badge badge-warning">Manual</div>
+                      <span class="text-sm text-base-content">Define associations in schemas</span>
+                    </td>
+                    <td>
+                      <div class="badge badge-success">Automatic</div>
+                      <span class="text-sm text-base-content">Detected from database constraints</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold text-base-content">Database Changes</td>
+                    <td>
+                      <div class="badge badge-error">Requires update</div>
+                      <span class="text-sm text-base-content">Update schema + migration</span>
+                    </td>
+                    <td>
+                      <div class="badge badge-success">Automatic</div>
+                      <span class="text-sm text-base-content">Regenerate domain</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold text-base-content">Write Operations</td>
+                    <td>
+                      <div class="badge badge-success">Full Support</div>
+                      <span class="text-sm text-base-content">Changesets, validations, etc.</span>
+                    </td>
+                    <td>
+                      <div class="badge badge-warning">Limited</div>
+                      <span class="text-sm text-base-content">Read-optimized (write support via raw SQL)</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="font-bold text-base-content">Best For</td>
+                    <td>
+                      <span class="text-sm text-base-content">Full-featured applications with complex business logic</span>
+                    </td>
+                    <td>
+                      <span class="text-sm text-base-content">Admin dashboards, reporting, legacy databases, rapid prototyping</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="alert alert-info mt-6">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <div>
+                <h3 class="font-bold">Mix and Match!</h3>
+                <div class="text-sm">You can use both approaches in the same application - Ecto for business logic and Postgrex for read-only dashboards.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Next Steps -->
+      <section class="mb-16">
+        <div class="card bg-gradient-to-r from-primary to-secondary text-primary-content shadow-xl">
+          <div class="card-body">
+            <h2 class="text-3xl font-bold mb-4 text-primary-content">🚀 Next Steps</h2>
+
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="card bg-base-100 text-base-content">
+                <div class="card-body">
+                  <h3 class="card-title text-lg">Generate More Domains</h3>
+                  <p class="text-sm">Create domains for all your tables:</p>
+                  <pre class="text-xs mt-2"><code class="language-bash">mix selecto.gen.domain --table customers
+mix selecto.gen.domain --table orders
+mix selecto.gen.domain --table employees</code></pre>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 text-base-content">
+                <div class="card-body">
+                  <h3 class="card-title text-lg">Customize Domains</h3>
+                  <p class="text-sm">Edit generated domains to add:</p>
+                  <ul class="text-sm list-disc list-inside mt-2 space-y-1">
+                    <li>Custom calculated fields</li>
+                    <li>Additional filters</li>
+                    <li>Join configurations</li>
+                    <li>Default selections</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 text-base-content">
+                <div class="card-body">
+                  <h3 class="card-title text-lg">Explore Features</h3>
+                  <p class="text-sm">Try advanced Selecto features:</p>
+                  <ul class="text-sm list-disc list-inside mt-2 space-y-1">
+                    <li>Aggregations & grouping</li>
+                    <li>Drill-down filtering</li>
+                    <li>Chart visualizations</li>
+                    <li>Saved views</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="card bg-base-100 text-base-content">
+                <div class="card-body">
+                  <h3 class="card-title text-lg">Read the Docs</h3>
+                  <p class="text-sm">Learn more about:</p>
+                  <ul class="text-sm list-disc list-inside mt-2 space-y-1">
+                    <li>Connection pooling</li>
+                    <li>Performance optimization</li>
+                    <li>Security best practices</li>
+                    <li>Production deployment</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -20,6 +20,7 @@ defmodule SelectoNorthwindWeb.Router do
 
     get "/", PageController, :home
     get "/tutorial", TutorialController, :index
+    get "/postgrex_tutorial", TutorialController, :postgrex_tutorial
 
     # Note: These placeholder routes will be replaced with LiveView routes
     # during the tutorial as you generate Selecto domains for each section

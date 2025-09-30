@@ -30,7 +30,9 @@
       "Bash(mix:*)",
       "Bash(npx:*)",
       "Bash(lsof:*)",
-      "Bash(xargs kill:*)"
+      "Bash(xargs kill:*)",
+      "Bash(timeout 60 mix compile)",
+      "Bash(killall:*)"
     ],
     "deny": [],
     "ask": []
