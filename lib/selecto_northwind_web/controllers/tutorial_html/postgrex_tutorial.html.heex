@@ -280,18 +280,26 @@ children = [
             <h3 class="text-xl font-bold mb-3 text-base-content">Recommended Command (with all features)</h3>
 
             <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/northwind_dev" \
-  mix selecto.gen.domain --table products \
-  --live --saved-views --path products_postgrex</code></pre>
+  mix selecto.gen.domain.postgrex --table products \
+  --expand --live --saved-views --path products_postgrex</code></pre>
 
             <div class="alert alert-info mb-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               <div>
                 <strong>Important Flags:</strong>
                 <ul class="text-sm mt-2 ml-4 list-disc">
+                  <li><code>--expand</code> - <strong>RECOMMENDED!</strong> Automatically introspects related tables and includes them as nested schemas</li>
                   <li><code>--live</code> - Generates the LiveView module automatically</li>
                   <li><code>--saved-views</code> - Adds support for saving/loading user-defined views</li>
                   <li><code>--path</code> - Specifies the route path for the LiveView</li>
                 </ul>
+              </div>
+            </div>
+
+            <div class="alert alert-warning mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <div>
+                <strong>Why --expand is important:</strong> Without the <code>--expand</code> flag, associations are detected but related table schemas aren't included, which prevents joins from working. The <code>--expand</code> flag introspects foreign key relationships and includes the full schema definitions for related tables (like categories and suppliers for products).
               </div>
             </div>
 
@@ -321,14 +329,14 @@ children = [
 
             <div class="divider text-base-content">ALTERNATIVE: Using Explicit Connection Parameters</div>
 
-            <pre><code class="language-bash">mix selecto.gen.domain \
+            <pre><code class="language-bash">mix selecto.gen.domain.postgrex \
   --table products \
   --host localhost \
   --port 5432 \
   --database northwind_dev \
   --username postgres \
   --password postgres \
-  --live --saved-views --path products_postgrex</code></pre>
+  --expand --live --saved-views --path products_postgrex</code></pre>
 
             <div class="alert alert-success mt-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -619,9 +627,9 @@ open http://localhost:4000/products_postgrex</code></pre>
                 <div class="card-body">
                   <h3 class="card-title text-lg">Generate More Domains</h3>
                   <p class="text-sm">Create domains for all your tables:</p>
-                  <pre class="text-xs mt-2"><code class="language-bash">mix selecto.gen.domain --table customers
-mix selecto.gen.domain --table orders
-mix selecto.gen.domain --table employees</code></pre>
+                  <pre class="text-xs mt-2"><code class="language-bash">mix selecto.gen.domain.postgrex --table customers --expand
+mix selecto.gen.domain.postgrex --table orders --expand
+mix selecto.gen.domain.postgrex --table employees --expand</code></pre>
                 </div>
               </div>
 
