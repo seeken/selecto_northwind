@@ -321,9 +321,12 @@ children = [
                 <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">4</div>
                 <div><strong>Generate saved views infrastructure</strong> for persisting user-defined views (with <code>--saved-views</code>)</div>
               </div>
-              <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
-                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">5</div>
-                <div><strong>Integrate SelectoComponents assets</strong> (Chart.js, Alpine.js, hooks, and styles)</div>
+            </div>
+
+            <div class="alert alert-warning mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <div>
+                <strong>Important:</strong> After generation, you'll need to manually integrate SelectoComponents assets in Step 5 by running <code>mix selecto.components.integrate</code>.
               </div>
             </div>
 
@@ -343,9 +346,8 @@ children = [
               <div>
                 <h4 class="font-bold">Generated Files</h4>
                 <ul class="text-sm mt-2 ml-4 list-disc">
-                  <li><code>lib/my_app/selecto_domains/products_postgrex_domain.ex</code> - Domain configuration</li>
+                  <li><code>lib/my_app/selecto_domains/products_postgrex_domain.ex</code> - Domain configuration with associations</li>
                   <li><code>lib/my_app_web/live/products_postgrex_live.ex</code> - LiveView module (if <code>--live</code> used)</li>
-                  <li>Updated <code>assets/js/app.js</code> with SelectoComponents integrations (Chart.js, Alpine.js, hooks)</li>
                   <li>Migration for saved_views table (if <code>--saved-views</code> used)</li>
                 </ul>
               </div>
