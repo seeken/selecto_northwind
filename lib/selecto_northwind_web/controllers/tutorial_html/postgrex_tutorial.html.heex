@@ -33,11 +33,11 @@
         </a>
         <a href="#step-4" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
           <span class="font-semibold text-warning">Step 4:</span>
-          <span class="text-base-content/70 block">Create LiveView</span>
+          <span class="text-base-content/70 block">Configure LiveView Connection</span>
         </a>
         <a href="#step-5" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
           <span class="font-semibold text-info">Step 5:</span>
-          <span class="text-base-content/70 block">Add Routing & Test</span>
+          <span class="text-base-content/70 block">Run Migrations, Build Assets & Test</span>
         </a>
         <div class="divider my-4"></div>
         <a href="#comparison" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
@@ -210,8 +210,8 @@ children = [
             </h2>
 
             <p class="text-base-content/80 mb-4">
-              Use the new <code>mix selecto.gen.domain</code> task with database connection to automatically
-              generate a domain file by introspecting your PostgreSQL database.
+              Use the <code>mix selecto.gen.domain</code> task with database connection and important flags to automatically
+              generate a domain file, LiveView, and asset integrations by introspecting your PostgreSQL database.
             </p>
 
             <div class="alert alert-primary mb-4">
@@ -219,14 +219,49 @@ children = [
               <span><strong>Magic!</strong> Selecto will query PostgreSQL system catalogs to discover tables, columns, types, primary keys, and foreign key relationships.</span>
             </div>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Option 1: Using DATABASE_URL</h3>
+            <h3 class="text-xl font-bold mb-3 text-base-content">Recommended Command (with all features)</h3>
 
             <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/northwind_dev" \
-  mix selecto.gen.domain --table products</code></pre>
+  mix selecto.gen.domain --table products \
+  --live --saved-views --path products_postgrex</code></pre>
 
-            <div class="divider text-base-content">OR</div>
+            <div class="alert alert-info mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <div>
+                <strong>Important Flags:</strong>
+                <ul class="text-sm mt-2 ml-4 list-disc">
+                  <li><code>--live</code> - Generates the LiveView module automatically</li>
+                  <li><code>--saved-views</code> - Adds support for saving/loading user-defined views</li>
+                  <li><code>--path</code> - Specifies the route path for the LiveView</li>
+                </ul>
+              </div>
+            </div>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Option 2: Using Explicit Connection Parameters</h3>
+            <h3 class="text-lg font-semibold mb-3">What This Command Does</h3>
+            <div class="grid gap-3">
+              <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
+                <div><strong>Introspect your PostgreSQL database</strong> to discover table structure, columns, types, and relationships</div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
+                <div><strong>Generate a Selecto domain configuration</strong> with complete field definitions</div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
+                <div><strong>Create LiveView module</strong> for interactive data exploration (with <code>--live</code>)</div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">4</div>
+                <div><strong>Generate saved views infrastructure</strong> for persisting user-defined views (with <code>--saved-views</code>)</div>
+              </div>
+              <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">5</div>
+                <div><strong>Integrate SelectoComponents assets</strong> (Chart.js, Alpine.js, hooks, and styles)</div>
+              </div>
+            </div>
+
+            <div class="divider text-base-content">ALTERNATIVE: Using Explicit Connection Parameters</div>
 
             <pre><code class="language-bash">mix selecto.gen.domain \
   --table products \
@@ -234,55 +269,48 @@ children = [
   --port 5432 \
   --database northwind_dev \
   --username postgres \
-  --password postgres</code></pre>
-
-            <div class="divider text-base-content">OR</div>
-
-            <h3 class="text-xl font-bold mb-3 text-base-content">Option 3: Using Named Connection from Config</h3>
-
-            <pre><code class="language-bash"># Coming soon - reference your application's configured connection
-mix selecto.gen.domain \
-  --table products \
-  --connection MyApp.Database</code></pre>
+  --password postgres \
+  --live --saved-views --path products_postgrex</code></pre>
 
             <div class="alert alert-success mt-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               <div>
-                <h4 class="font-bold">Generated File</h4>
-                <p class="text-sm">This creates <code>lib/my_app/selecto_domains/products_domain.ex</code> with complete domain configuration!</p>
-              </div>
-            </div>
-
-            <div class="alert alert-info mt-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <div>
-                <h4 class="font-bold">Generated Domain File</h4>
-                <p class="text-sm">The generated domain includes all discovered fields, types, primary keys, and foreign key relationships automatically extracted from your database schema!</p>
+                <h4 class="font-bold">Generated Files</h4>
+                <ul class="text-sm mt-2 ml-4 list-disc">
+                  <li><code>lib/my_app/selecto_domains/products_postgrex_domain.ex</code> - Domain configuration</li>
+                  <li><code>lib/my_app_web/live/products_postgrex_live.ex</code> - LiveView module (if <code>--live</code> used)</li>
+                  <li>Updated <code>assets/js/app.js</code> with SelectoComponents integrations (Chart.js, Alpine.js, hooks)</li>
+                  <li>Migration for saved_views table (if <code>--saved-views</code> used)</li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Step 4: Create LiveView -->
+      <!-- Step 4: Configure LiveView Connection -->
       <section id="step-4" class="mb-16">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
               <div class="badge badge-warning badge-lg">Step 4</div>
-              Create LiveView
+              Configure LiveView Connection
             </h2>
 
             <p class="text-base-content/80 mb-4">
-              Create a LiveView that uses your domain with the Postgrex connection.
+              The LiveView was automatically generated in Step 3. Now we need to configure it to use the Postgrex connection.
             </p>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Create <code>lib/my_app_web/live/products_live.ex</code>:</h3>
+            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/my_app_web/live/products_postgrex_live.ex</code>:</h3>
 
-            <pre><code class="language-elixir">defmodule MyAppWeb.ProductsLive do
+            <p class="text-base-content/70 mb-3">
+              Add the <code>get_connection/0</code> function to provide the Postgrex connection name:
+            </p>
+
+            <pre><code class="language-elixir">defmodule MyAppWeb.ProductsPostgrexLive do
   use MyAppWeb, :live_view
   use SelectoComponents.Form,
-    domain: MyApp.SelectoDomains.ProductsDomain.domain()
+    domain: MyApp.SelectoDomains.ProductsPostgrexDomain.domain()
 
   # IMPORTANT: Provide the Postgrex connection name
   def get_connection do
@@ -291,53 +319,112 @@ mix selecto.gen.domain \
 
   @impl true
   def mount(_params, _session, socket) do
-    socket = assign(socket, :page_title, "Products")
-    reply(:ok, socket)
+    # Generated mount function with saved views support
+    # ... existing code ...
+    {:ok, socket}
   end
 
   # SelectoComponents will use get_connection/0 automatically
 end</code></pre>
 
+            <div class="alert alert-warning mt-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+              <div>
+                <strong>Critical:</strong> The <code>get_connection/0</code> function is required to tell SelectoComponents which database connection to use. Without it, the LiveView won't be able to query data!
+              </div>
+            </div>
+
             <div class="alert alert-success mt-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <span><strong>That's it!</strong> SelectoComponents will use the Postgrex connection to query data directly.</span>
+              <span><strong>That's it!</strong> SelectoComponents will now use the Postgrex connection to query data directly from PostgreSQL.</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Step 5: Add Routing -->
+      <!-- Step 5: Run Migrations, Build Assets & Test -->
       <section id="step-5" class="mb-16">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
               <div class="badge badge-info badge-lg">Step 5</div>
-              Add Routing & Test
+              Run Migrations, Build Assets & Test
             </h2>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/my_app_web/router.ex</code>:</h3>
-
-            <pre><code class="language-elixir">scope "/", MyAppWeb do
-  pipe_through :browser
-
-  live "/products", ProductsLive, :index
-end</code></pre>
+            <div>
+              <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7" />
+                </svg>
+                Run Migration (if using --saved-views)
+              </h3>
+              <p class="text-base-content/70 mb-3">If you used the <code>--saved-views</code> flag, run the generated migration:</p>
+              <pre><code class="language-bash">mix ecto.migrate</code></pre>
+            </div>
 
             <div class="divider text-base-content">THEN</div>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Start your Phoenix server and test:</h3>
+            <div>
+              <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-7-7 7-7m5 14l7-7-7-7" />
+                </svg>
+                Add Route to Router
+              </h3>
+              <p class="text-base-content/70 mb-3">Add the generated LiveView route to <code>lib/my_app_web/router.ex</code>:</p>
+              <pre><code class="language-elixir">scope "/", MyAppWeb do
+  pipe_through :browser
 
-            <pre><code class="language-bash"># Start server
-mix phx.server
+  live "/products_postgrex", ProductsPostgrexLive, :index
+end</code></pre>
+            </div>
+
+            <div class="divider text-base-content">THEN</div>
+
+            <div>
+              <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                </svg>
+                Build Assets
+              </h3>
+              <p class="text-base-content/70 mb-3">Compile the assets with the new SelectoComponents integration:</p>
+              <pre><code class="language-bash">mix assets.build</code></pre>
+              <div class="alert alert-error mt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <div>
+                  <strong>🚨 Critical for AI Agents:</strong> You <strong>MUST restart the Phoenix server</strong> after this step! The server needs to restart so Tailwind can properly scan the <code class="bg-base-300 px-1 rounded">vendor/selecto_components</code> directory and include the necessary CSS classes. Without restarting, the SelectoComponents UI will not render correctly.
+                </div>
+              </div>
+            </div>
+
+            <div class="divider text-base-content">THEN</div>
+
+            <div>
+              <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                Verify the Setup
+              </h3>
+              <p class="text-base-content/70 mb-3">Start your Phoenix server and navigate to the route:</p>
+              <pre><code class="language-bash">mix phx.server
 
 # Visit in browser
-open http://localhost:4000/products</code></pre>
+open http://localhost:4000/products_postgrex</code></pre>
 
-            <div class="alert alert-success mt-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <div>
-                <h4 class="font-bold">🎉 Success!</h4>
-                <p class="text-sm">You now have a fully functional admin interface querying PostgreSQL directly - no Ecto schemas required!</p>
+              <div class="alert alert-success mt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div>
+                  <div class="font-semibold">🎉 You should see the Products Explorer interface with:</div>
+                  <ul class="mt-2 space-y-1 text-sm">
+                    <li>✅ View/Filter/Export tabs</li>
+                    <li>✅ Aggregate and Detail view modes</li>
+                    <li>✅ Real-time data from PostgreSQL via Postgrex</li>
+                    <li>✅ Interactive filtering, sorting, and grouping</li>
+                    <li>✅ All styling and JavaScript working correctly</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </div>
