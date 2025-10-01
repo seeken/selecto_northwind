@@ -122,32 +122,90 @@
           <div class="card-body">
             <h2 class="card-title text-3xl mb-4 flex items-center gap-3 text-base-content">
               <div class="badge badge-accent badge-lg">Step 1</div>
-              Add Dependencies
+              Add Selecto Dependencies
             </h2>
 
-            <div class="alert alert-info mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <span>Add Selecto libraries to your <code>mix.exs</code>. Note: Ecto is <strong>optional</strong> for this approach!</span>
-            </div>
+            <p class="text-base-content/80 mb-6">The first step is to add the Selecto libraries to your Phoenix project. These libraries provide powerful data selection, filtering, and UI components for your application.</p>
 
-            <pre><code class="language-bash"># In mix.exs, add to deps function:
-mix deps.add selecto "~> 0.5.0"
-mix deps.add selecto_components "~> 0.3.0"
-mix deps.add postgrex "~> 0.17.0"
-mix deps.add selecto_mix "~> 0.2.0" --only dev test
-mix deps.add phoenix_live_view "~> 1.0"</code></pre>
+            <div class="space-y-6">
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  Add Dependencies to mix.exs
+                </h3>
+                <p class="text-base-content/70 mb-3">Open your <code class="bg-base-300 px-2 py-1 rounded text-sm">mix.exs</code> file and add the following dependencies to the <code class="bg-base-300 px-2 py-1 rounded text-sm">deps</code> function:</p>
+                <div class="relative">
+                  <pre><code class="language-elixir">defp deps do
+  [
+    # ... existing dependencies ...
 
-            <div class="divider text-base-content">THEN</div>
+    # Selecto libraries
+    <%= "{" %>:selecto, path: "./vendor/selecto"<%= "}" %>,
+    <%= "{" %>:selecto_components, path: "./vendor/selecto_components"<%= "}" %>,
+    <%= "{" %>:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]<%= "}" %>
+  ]
+end</code></pre>
+                </div>
 
-            <pre><code class="language-bash"># Install dependencies
-mix deps.get
+                <div class="alert alert-warning mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> These dependencies are referenced as local paths because they are included as git submodules in the vendor directory. In a production environment, you would typically reference them from Hex or GitHub.
+                  </div>
+                </div>
+              </div>
 
-# Compile
-mix compile</code></pre>
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  What Each Library Does
+                </h3>
+                <div class="grid gap-4">
+                  <div class="flex items-start gap-3 p-4 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                    <div>
+                      <strong><code class="bg-base-300 px-2 py-1 rounded text-sm">selecto</code></strong>: Core library providing the query builder and data selection engine
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3 p-4 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                    <div>
+                      <strong><code class="bg-base-300 px-2 py-1 rounded text-sm">selecto_components</code></strong>: Pre-built Phoenix LiveView components for data tables, filters, and visualizations
+                    </div>
+                  </div>
+                  <div class="flex items-start gap-3 p-4 bg-base-200 rounded-lg">
+                    <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
+                    <div>
+                      <strong><code class="bg-base-300 px-2 py-1 rounded text-sm">selecto_mix</code></strong>: Mix tasks and generators for scaffolding Selecto-based views and components (development only)
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <div class="alert alert-success mt-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              <span><strong>Notice:</strong> No <code>ecto</code> or <code>ecto_sql</code> dependencies required!</span>
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Install Dependencies
+                </h3>
+                <p class="text-base-content/70 mb-3">After adding the dependencies, fetch and compile them:</p>
+                <div class="relative">
+                  <pre><code class="language-bash">mix deps.get
+mix deps.compile</code></pre>
+                </div>
+              </div>
+
+              <div class="alert alert-info">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span><strong>Notice:</strong> No <code>ecto</code> or <code>ecto_sql</code> dependencies required! Selecto can work directly with Postgrex for schema-free database access.</span>
+              </div>
             </div>
           </div>
         </div>
