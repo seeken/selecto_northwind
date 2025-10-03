@@ -17,7 +17,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
   """
 
   alias SelectoNorthwind.Repo
-  alias SelectoNorthwind.Catalog.{Category, Supplier, Product}
+  alias SelectoNorthwind.Catalog.{Category, Supplier, Product, Tag, ProductTag}
   alias SelectoNorthwind.Sales.{Customer, Order, OrderDetail, Shipper, CustomerDemographic, CustomerCustomerDemo}
   alias SelectoNorthwind.Hr.{Employee, EmployeeTerritory}
   alias SelectoNorthwind.Geography.{Region, Territory, UsState}
@@ -52,6 +52,8 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     seed_employees()
     seed_suppliers()
     seed_products()
+    seed_tags()
+    seed_product_tags()
     seed_shippers()
     seed_regions()
     seed_territories()
@@ -108,6 +110,8 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     Repo.delete_all(EmployeeTerritory)
     Repo.delete_all(Territory)
     Repo.delete_all(Region)
+    Repo.delete_all(ProductTag)
+    Repo.delete_all(Tag)
     Repo.delete_all(Product)
     Repo.delete_all(Category)
     Repo.delete_all(Supplier)
@@ -287,6 +291,124 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       Logger.debug("Inserting product: #{product.product_name} with supplier_id: #{product.supplier_id}")
       insert_with_id(Product, product)
     end)
+  end
+
+  defp seed_tags do
+    Logger.info("🏷️ Seeding Tags...")
+
+    tags_data = [
+      %{name: "Organic", description: "Certified organic products"},
+      %{name: "Kosher", description: "Kosher certified products"},
+      %{name: "Gluten-Free", description: "Products without gluten"},
+      %{name: "Vegan", description: "Products containing no animal ingredients"},
+      %{name: "Fair Trade", description: "Fair trade certified products"},
+      %{name: "Non-GMO", description: "Products without genetically modified ingredients"},
+      %{name: "Dairy-Free", description: "Products without dairy ingredients"},
+      %{name: "Sugar-Free", description: "Products without added sugar"},
+      %{name: "Local", description: "Locally sourced products"},
+      %{name: "Sustainable", description: "Sustainably produced products"}
+    ]
+
+    tags_data
+    |> Enum.each(fn tag ->
+      %Tag{}
+      |> Tag.changeset(tag)
+      |> Repo.insert!()
+    end)
+  end
+
+  defp seed_product_tags do
+    Logger.info("🔗 Seeding Product Tags...")
+
+    # Get tags and products
+    tags = Repo.all(Tag) |> Enum.into(%{}, &{&1.name, &1})
+    products = Repo.all(Product)
+
+    # Tag specific products based on their names and categories
+    product_tags = [
+      # Beverages - often organic, vegan options
+      {"Chai", ["Organic", "Fair Trade", "Vegan"]},
+      {"Chang", ["Vegan"]},
+      {"Guaraná Fantástica", ["Organic", "Vegan", "Sugar-Free"]},
+      {"Sasquatch Ale", ["Local", "Vegan"]},
+      {"Steeleye Stout", ["Local", "Vegan"]},
+      {"Côte de Blaye", ["Organic"]},
+      {"Chartreuse verte", ["Organic", "Vegan"]},
+      {"Ipoh Coffee", ["Fair Trade", "Organic", "Vegan"]},
+      {"Laughing Lumberjack Lager", ["Local", "Vegan"]},
+      {"Outback Lager", ["Vegan"]},
+      {"Rhönbräu Klosterbier", ["Organic", "Vegan"]},
+      {"Lakkalikööri", ["Vegan"]},
+
+      # Dairy products - some organic, some dairy-free alternatives
+      {"Queso Cabrales", ["Organic"]},
+      {"Queso Manchego La Pastora", ["Organic"]},
+      {"Gorgonzola Telino", ["Organic"]},
+      {"Mascarpone Fabioli", ["Organic"]},
+      {"Geitost", ["Organic"]},
+      {"Raclette Courdavault", ["Organic"]},
+      {"Camembert Pierrot", ["Organic", "Local"]},
+      {"Gudbrandsdalsost", ["Organic"]},
+      {"Flotemysost", ["Organic"]},
+      {"Mozzarella di Giovanni", ["Organic", "Local"]},
+
+      # Produce - mostly organic options
+      {"Uncle Bob's Organic Dried Pears", ["Organic", "Vegan", "Gluten-Free", "Non-GMO"]},
+      {"Northwoods Cranberry Sauce", ["Organic", "Vegan", "Gluten-Free"]},
+      {"Manjimup Dried Apples", ["Organic", "Vegan", "Gluten-Free", "Non-GMO"]},
+      {"Longlife Tofu", ["Organic", "Vegan", "Gluten-Free", "Non-GMO"]},
+      {"Rössle Sauerkraut", ["Organic", "Vegan", "Gluten-Free"]},
+
+      # Meat products - some kosher, some organic
+      {"Thüringer Rostbratwurst", ["Local"]},
+      {"Tourtière", ["Local"]},
+      {"Pâté chinois", ["Local"]},
+      {"Alice Mutton", ["Organic", "Local"]},
+      {"Mishi Kobe Niku", ["Organic"]},
+      {"Perth Pasties", ["Local"]},
+
+      # Seafood - sustainable options
+      {"Ikura", ["Sustainable", "Gluten-Free"]},
+      {"Inlagd Sill", ["Sustainable", "Gluten-Free"]},
+      {"Gravad lax", ["Sustainable", "Gluten-Free"]},
+      {"Boston Crab Meat", ["Sustainable", "Gluten-Free"]},
+      {"Jack's New England Clam Chowder", ["Sustainable"]},
+      {"Rogede sild", ["Sustainable", "Gluten-Free"]},
+      {"Spegesild", ["Sustainable", "Gluten-Free"]},
+      {"Escargots de Bourgogne", ["Local", "Gluten-Free"]},
+      {"Röd Kaviar", ["Sustainable", "Gluten-Free"]},
+      {"Nord-Ost Matjeshering", ["Sustainable", "Gluten-Free"]},
+
+      # Condiments - various certifications
+      {"Aniseed Syrup", ["Vegan", "Gluten-Free"]},
+      {"Chef Anton's Cajun Seasoning", ["Vegan", "Gluten-Free", "Non-GMO"]},
+      {"Chef Anton's Gumbo Mix", ["Vegan"]},
+      {"Grandma's Boysenberry Spread", ["Organic", "Vegan", "Gluten-Free"]},
+      {"Sirop d'érable", ["Organic", "Vegan", "Gluten-Free", "Local"]},
+      {"Vegie-spread", ["Vegan", "Gluten-Free", "Organic"]},
+      {"Louisiana Fiery Hot Pepper Sauce", ["Vegan", "Gluten-Free"]},
+      {"Louisiana Hot Spiced Okra", ["Organic", "Vegan", "Gluten-Free"]},
+      {"Original Frankfurter grüne Soße", ["Vegan", "Gluten-Free"]}
+    ]
+
+    product_tags
+    |> Enum.each(fn {product_name, tag_names} ->
+      product = Enum.find(products, &(&1.product_name == product_name))
+
+      if product do
+        Enum.each(tag_names, fn tag_name ->
+          tag = Map.get(tags, tag_name)
+
+          if tag do
+            %ProductTag{}
+            |> ProductTag.changeset(%{product_id: product.id, tag_id: tag.id})
+            |> Repo.insert!()
+          end
+        end)
+      end
+    end)
+
+    Logger.info("✅ Tagged #{length(product_tags)} products")
   end
 
   defp seed_shippers do

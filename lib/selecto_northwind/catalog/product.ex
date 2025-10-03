@@ -16,6 +16,10 @@ defmodule SelectoNorthwind.Catalog.Product do
 
     has_many :order_details, SelectoNorthwind.Sales.OrderDetail
 
+    many_to_many :tags, SelectoNorthwind.Catalog.Tag,
+      join_through: "product_tags",
+      on_replace: :delete
+
     timestamps()
   end
 
