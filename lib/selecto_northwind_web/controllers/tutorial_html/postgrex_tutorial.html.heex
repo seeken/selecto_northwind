@@ -229,7 +229,7 @@ mix deps.compile</code></pre>
             <pre><code class="language-elixir">config :selecto_northwind, SelectoNorthwind.Database,
   hostname: "localhost",
   port: 5432,
-  database: "northwind_dev",
+  database: "selecto_northwind_dev",
   username: "postgres",
   password: "postgres",
   pool_size: 10</code></pre>
@@ -279,7 +279,7 @@ children = [
 
             <h3 class="text-xl font-bold mb-3 text-base-content">Recommended Command (with all features)</h3>
 
-            <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/northwind_dev" \
+            <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/selecto_northwind_dev" \
   mix selecto.gen.domain.postgrex --table products \
   --expand --live --saved-views --path products_postgrex</code></pre>
 
@@ -336,7 +336,7 @@ children = [
   --table products \
   --host localhost \
   --port 5432 \
-  --database northwind_dev \
+  --database selecto_northwind_dev \
   --username postgres \
   --password postgres \
   --expand --live --saved-views --path products_postgrex</code></pre>
