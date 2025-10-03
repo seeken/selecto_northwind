@@ -226,7 +226,7 @@ mix deps.compile</code></pre>
 
             <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>config/dev.exs</code>:</h3>
 
-            <pre><code class="language-elixir">config :my_app, MyApp.Database,
+            <pre><code class="language-elixir">config :selecto_northwind, SelectoNorthwind.Database,
   hostname: "localhost",
   port: 5432,
   database: "northwind_dev",
@@ -236,18 +236,18 @@ mix deps.compile</code></pre>
 
             <div class="divider text-base-content">THEN</div>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/my_app/application.ex</code>:</h3>
+            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/selecto_northwind/application.ex</code>:</h3>
 
-            <pre><code class="language-elixir"># In lib/my_app/application.ex, add to children list:
+            <pre><code class="language-elixir"># In lib/selecto_northwind/application.ex, add to children list:
 children = [
   # Start Postgrex connection pool
   Postgrex.child_spec(
-    Application.get_env(:my_app, MyApp.Database)
-    ++ [name: MyApp.Database]
+    Application.get_env(:selecto_northwind, SelectoNorthwind.Database)
+    ++ [name: SelectoNorthwind.Database]
   ),
 
   # Phoenix endpoint
-  MyAppWeb.Endpoint
+  SelectoNorthwindWeb.Endpoint
 ]</code></pre>
 
             <div class="alert alert-warning mt-4">
@@ -346,8 +346,8 @@ children = [
               <div>
                 <h4 class="font-bold">Generated Files</h4>
                 <ul class="text-sm mt-2 ml-4 list-disc">
-                  <li><code>lib/my_app/selecto_domains/products_postgrex_domain.ex</code> - Domain configuration with associations</li>
-                  <li><code>lib/my_app_web/live/products_postgrex_live.ex</code> - LiveView module (if <code>--live</code> used)</li>
+                  <li><code>lib/selecto_northwind/selecto_domains/products_postgrex_domain.ex</code> - Domain configuration with associations</li>
+                  <li><code>lib/selecto_northwind_web/live/products_postgrex_live.ex</code> - LiveView module (if <code>--live</code> used)</li>
                   <li>Migration for saved_views table (if <code>--saved-views</code> used)</li>
                 </ul>
               </div>
@@ -369,20 +369,20 @@ children = [
               The LiveView was automatically generated in Step 3. Now we need to configure it to use the Postgrex connection.
             </p>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/my_app_web/live/products_postgrex_live.ex</code>:</h3>
+            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/selecto_northwind_web/live/products_postgrex_live.ex</code>:</h3>
 
             <p class="text-base-content/70 mb-3">
               Add the <code>get_connection/0</code> function to provide the Postgrex connection name:
             </p>
 
-            <pre><code class="language-elixir">defmodule MyAppWeb.ProductsPostgrexLive do
-  use MyAppWeb, :live_view
+            <pre><code class="language-elixir">defmodule SelectoNorthwindWeb.ProductsPostgrexLive do
+  use SelectoNorthwindWeb, :live_view
   use SelectoComponents.Form,
-    domain: MyApp.SelectoDomains.ProductsPostgrexDomain.domain()
+    domain: SelectoNorthwind.SelectoDomains.ProductsPostgrexDomain.domain()
 
   # IMPORTANT: Provide the Postgrex connection name
   def get_connection do
-    MyApp.Database  # Named connection from application.ex
+    SelectoNorthwind.Database  # Named connection from application.ex
   end
 
   @impl true
@@ -439,8 +439,8 @@ end</code></pre>
                 </svg>
                 Add Route to Router
               </h3>
-              <p class="text-base-content/70 mb-3">Add the generated LiveView route to <code>lib/my_app_web/router.ex</code>:</p>
-              <pre><code class="language-elixir">scope "/", MyAppWeb do
+              <p class="text-base-content/70 mb-3">Add the generated LiveView route to <code>lib/selecto_northwind_web/router.ex</code>:</p>
+              <pre><code class="language-elixir">scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
   live "/products_postgrex", ProductsPostgrexLive, :index
