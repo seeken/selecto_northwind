@@ -494,10 +494,11 @@ $ mix deps.compile</code></pre>
               
               <div>
                 <h3 class="text-lg font-semibold mb-3">Generate the Products Domain</h3>
-                <p class="text-base-content/70 mb-3">Run the following Mix task to include Categories, Suppliers, and Tags:</p>
+                <p class="text-base-content/70 mb-3">Run the following Mix task to include Categories, Suppliers, and Tags with saved views support:</p>
                 <div class="relative">
-                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-schemas SelectoNorthwind.Catalog.Category SelectoNorthwind.Catalog.Supplier SelectoNorthwind.Catalog.Tag \
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.saved_views SelectoNorthwind  # Generate saved views first
+$ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
+  --expand-schemas SelectoNorthwind.Catalog.Category,SelectoNorthwind.Catalog.Supplier,SelectoNorthwind.Catalog.Tag \
   --live --saved-views --path products_selecto</code></pre>
                 </div>
                 
