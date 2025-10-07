@@ -323,92 +323,58 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     # Get tags and products
     tags = Repo.all(Tag) |> Enum.into(%{}, &{&1.name, &1})
     products = Repo.all(Product)
+    total_products = length(products)
 
-    # Tag specific products based on their names and categories
-    product_tags = [
-      # Beverages - often organic, vegan options
-      {"Chai", ["Organic", "Fair Trade", "Vegan"]},
-      {"Chang", ["Vegan"]},
-      {"Guaraná Fantástica", ["Organic", "Vegan", "Sugar-Free"]},
-      {"Sasquatch Ale", ["Local", "Vegan"]},
-      {"Steeleye Stout", ["Local", "Vegan"]},
-      {"Côte de Blaye", ["Organic"]},
-      {"Chartreuse verte", ["Organic", "Vegan"]},
-      {"Ipoh Coffee", ["Fair Trade", "Organic", "Vegan"]},
-      {"Laughing Lumberjack Lager", ["Local", "Vegan"]},
-      {"Outback Lager", ["Vegan"]},
-      {"Rhönbräu Klosterbier", ["Organic", "Vegan"]},
-      {"Lakkalikööri", ["Vegan"]},
+    # Seed random number generator for consistent results
+    :rand.seed(:exsss, {1, 2, 3})
 
-      # Dairy products - some organic, some dairy-free alternatives
-      {"Queso Cabrales", ["Organic"]},
-      {"Queso Manchego La Pastora", ["Organic"]},
-      {"Gorgonzola Telino", ["Organic"]},
-      {"Mascarpone Fabioli", ["Organic"]},
-      {"Geitost", ["Organic"]},
-      {"Raclette Courdavault", ["Organic"]},
-      {"Camembert Pierrot", ["Organic", "Local"]},
-      {"Gudbrandsdalsost", ["Organic"]},
-      {"Flotemysost", ["Organic"]},
-      {"Mozzarella di Giovanni", ["Organic", "Local"]},
+    # We want:
+    # - Average of 1 tag per product
+    # - At least half have no tags
+    # - Some products have up to 4 tags
 
-      # Produce - mostly organic options
-      {"Uncle Bob's Organic Dried Pears", ["Organic", "Vegan", "Gluten-Free", "Non-GMO"]},
-      {"Northwoods Cranberry Sauce", ["Organic", "Vegan", "Gluten-Free"]},
-      {"Manjimup Dried Apples", ["Organic", "Vegan", "Gluten-Free", "Non-GMO"]},
-      {"Longlife Tofu", ["Organic", "Vegan", "Gluten-Free", "Non-GMO"]},
-      {"Rössle Sauerkraut", ["Organic", "Vegan", "Gluten-Free"]},
+    # Calculate how many products should have tags (roughly half)
+    products_with_tags = div(total_products, 2)
 
-      # Meat products - some kosher, some organic
-      {"Thüringer Rostbratwurst", ["Local"]},
-      {"Tourtière", ["Local"]},
-      {"Pâté chinois", ["Local"]},
-      {"Alice Mutton", ["Organic", "Local"]},
-      {"Mishi Kobe Niku", ["Organic"]},
-      {"Perth Pasties", ["Local"]},
-
-      # Seafood - sustainable options
-      {"Ikura", ["Sustainable", "Gluten-Free"]},
-      {"Inlagd Sill", ["Sustainable", "Gluten-Free"]},
-      {"Gravad lax", ["Sustainable", "Gluten-Free"]},
-      {"Boston Crab Meat", ["Sustainable", "Gluten-Free"]},
-      {"Jack's New England Clam Chowder", ["Sustainable"]},
-      {"Rogede sild", ["Sustainable", "Gluten-Free"]},
-      {"Spegesild", ["Sustainable", "Gluten-Free"]},
-      {"Escargots de Bourgogne", ["Local", "Gluten-Free"]},
-      {"Röd Kaviar", ["Sustainable", "Gluten-Free"]},
-      {"Nord-Ost Matjeshering", ["Sustainable", "Gluten-Free"]},
-
-      # Condiments - various certifications
-      {"Aniseed Syrup", ["Vegan", "Gluten-Free"]},
-      {"Chef Anton's Cajun Seasoning", ["Vegan", "Gluten-Free", "Non-GMO"]},
-      {"Chef Anton's Gumbo Mix", ["Vegan"]},
-      {"Grandma's Boysenberry Spread", ["Organic", "Vegan", "Gluten-Free"]},
-      {"Sirop d'érable", ["Organic", "Vegan", "Gluten-Free", "Local"]},
-      {"Vegie-spread", ["Vegan", "Gluten-Free", "Organic"]},
-      {"Louisiana Fiery Hot Pepper Sauce", ["Vegan", "Gluten-Free"]},
-      {"Louisiana Hot Spiced Okra", ["Organic", "Vegan", "Gluten-Free"]},
-      {"Original Frankfurter grüne Soße", ["Vegan", "Gluten-Free"]}
+    # Define tag distribution for products that will have tags
+    # This creates an average of ~2 tags per tagged product
+    # which gives us overall average of 1 tag per product
+    tag_counts = [
+      {1, 40},  # 40% get 1 tag
+      {2, 35},  # 35% get 2 tags
+      {3, 15},  # 15% get 3 tags
+      {4, 10}   # 10% get 4 tags
     ]
 
-    product_tags
-    |> Enum.each(fn {product_name, tag_names} ->
-      product = Enum.find(products, &(&1.product_name == product_name))
+    # Shuffle and select products that will get tags
+    selected_products = Enum.shuffle(products) |> Enum.take(products_with_tags)
 
-      if product do
-        Enum.each(tag_names, fn tag_name ->
-          tag = Map.get(tags, tag_name)
+    # Assign tags to selected products based on distribution
+    {_remaining_products, total_tagged} = Enum.reduce(tag_counts, {selected_products, 0}, fn {num_tags, percentage}, {remaining, tagged_count} ->
+      # Calculate how many products should get this many tags
+      count = round(products_with_tags * percentage / 100)
+      products_for_this_count = Enum.take(remaining, count)
 
-          if tag do
-            %ProductTag{}
-            |> ProductTag.changeset(%{product_id: product.id, tag_id: tag.id})
-            |> Repo.insert!()
-          end
+      # Assign tags to these products
+      Enum.each(products_for_this_count, fn product ->
+        # Select random tags
+        random_tags = Enum.take_random(Map.values(tags), num_tags)
+
+        Enum.each(random_tags, fn tag ->
+          %ProductTag{}
+          |> ProductTag.changeset(%{product_id: product.id, tag_id: tag.id})
+          |> Repo.insert!()
         end)
-      end
+      end)
+
+      {Enum.drop(remaining, count), tagged_count + length(products_for_this_count)}
     end)
 
-    Logger.info("✅ Tagged #{length(product_tags)} products")
+    # Count total tag assignments
+    total_tag_assignments = Repo.aggregate(ProductTag, :count)
+    avg_tags = if total_products > 0, do: Float.round(total_tag_assignments / total_products, 2), else: 0
+
+    Logger.info("✅ Tagged #{total_tagged} products with #{total_tag_assignments} total tag assignments (avg: #{avg_tags} tags/product)")
   end
 
   defp seed_shippers do
