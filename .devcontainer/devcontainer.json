@@ -1,13 +1,26 @@
 {
-  "name": "Elixir & Phoenix DevContainer",
+  "name": "Elixir & Phoenix",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  
   "forwardPorts": [4000],
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y curl gnupg2 apt-transport-https ca-certificates lsb-release && curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key add - && echo 'deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib' | sudo tee /etc/apt/sources.list.d/erlang.list && sudo apt-get update && sudo apt-get install -y esl-erlang && sudo apt-get install -y elixir && curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash - && sudo apt-get install -y nodejs && sudo apt-get install -y postgresql-client && sudo apt-get clean && mix local.hex --force && mix local.rebar --force && mix deps.get && mix ecto.setup",
+  
+  "postCreateCommand": "mix local.hex --force && mix local.rebar --force && mix deps.get && mix ecto.setup",
+  
   "customizations": {
     "vscode": {
+      "extensions": [
+        "jakebecker.elixir-ls",
+        "pantajoe.vscode-elixir-credo",
+        "samuelcolvin.jinjahtml"
+      ],
       "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.formatOnSave": true
       }
     }
   },
+  
   "remoteUser": "vscode"
 }
