@@ -413,6 +413,37 @@ $ mix deps.compile</code></pre>
               <div>
                 <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  Integrate SelectoComponents Assets
+                </h3>
+                <p class="text-base-content/70 mb-3">Run the integration task to set up the required JavaScript and CSS assets:</p>
+                <div class="relative">
+                  <pre><code class="language-bash">$ mix selecto.integrate.components</code></pre>
+                </div>
+                <div class="alert alert-info mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <div class="font-semibold">This command will:</div>
+                    <ul class="mt-2 space-y-1 text-sm">
+                      <li>• Add SelectoComponents hooks to <code class="bg-base-300 px-1 rounded">assets/js/app.js</code></li>
+                      <li>• Add SelectoComponents styles import to <code class="bg-base-300 px-1 rounded">assets/css/app.css</code></li>
+                      <li>• Ensure Chart.js and Alpine.js dependencies are configured in <code class="bg-base-300 px-1 rounded">assets/package.json</code></li>
+                    </ul>
+                  </div>
+                </div>
+                <p class="text-base-content/70 mt-4 mb-3">After running the integration task, build the assets:</p>
+                <div class="relative">
+                  <pre><code class="language-bash">$ mix assets.build</code></pre>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   Verify Installation
@@ -431,6 +462,7 @@ $ mix deps.compile</code></pre>
                       <li>• <code>mix selecto.gen.live</code> - Generate a LiveView with Selecto components</li>
                       <li>• <code>mix selecto.gen.domain</code> - Generate a domain configuration</li>
                       <li>• <code>mix selecto.gen.dashboard</code> - Generate a dashboard view</li>
+                      <li>• <code>mix selecto.integrate.components</code> - Integrate SelectoComponents assets</li>
                     </ul>
                   </div>
                 </div>
@@ -451,7 +483,7 @@ $ mix deps.compile</code></pre>
                     <strong>⚠️ Important for AI Agents:</strong> After adding dependencies, you <strong>MUST restart the Phoenix server</strong> to ensure proper compilation of the new Selecto libraries. The server needs to be restarted when dependencies are added.
                   </div>
                 </div>
-                <p class="text-base-content/70">With the dependencies installed, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Products table.</p>
+                <p class="text-base-content/70">With the dependencies installed and assets integrated, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Products table.</p>
               </div>
             </div>
           </div>
