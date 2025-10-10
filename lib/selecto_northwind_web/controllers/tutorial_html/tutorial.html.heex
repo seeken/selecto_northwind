@@ -526,12 +526,28 @@ $ mix deps.compile</code></pre>
               
               <div>
                 <h3 class="text-lg font-semibold mb-3">Generate the Products Domain</h3>
-                <p class="text-base-content/70 mb-3">Run the following Mix task to include Categories, Suppliers, and Tags with saved views support:</p>
+                <p class="text-base-content/70 mb-3">Run the following Mix task to include Categories, Suppliers, and Tags with optimized join modes for efficient querying:</p>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.saved_views SelectoNorthwind  # Generate saved views first
 $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-schemas SelectoNorthwind.Catalog.Category,SelectoNorthwind.Catalog.Supplier,SelectoNorthwind.Catalog.Tag \
+  --expand-schemas SelectoNorthwind.Catalog.Supplier \
+  --expand-star Category:category_name \
+  --expand-tag Tags:name \
   --live --saved-views --path products_selecto</code></pre>
+                </div>
+
+                <div class="alert alert-success mt-4 mb-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>✨ New: Smart Join Modes</strong>
+                    <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star Category:category_name</code> - Lookup table with ID-based filtering (displays name, filters by ID)</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-tag Tags:name</code> - Many-to-many tags with ID-based filtering (prevents query denormalization)</li>
+                    </ul>
+                    <p class="mt-2 text-sm">These special join modes generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
+                  </div>
                 </div>
                 
                 <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
@@ -566,11 +582,11 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                 <div class="grid gap-3">
                   <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                     <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">1</div>
-                    <div><strong>Analyze your existing Ecto schema</strong> for Product and the expanded schemas (Category, Supplier)</div>
+                    <div><strong>Analyze your existing Ecto schema</strong> for Product and the expanded schemas (Category, Supplier, Tags)</div>
                   </div>
                   <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                     <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">2</div>
-                    <div><strong>Generate a Selecto domain configuration</strong> that maps these schemas and their relationships</div>
+                    <div><strong>Generate optimized domain configurations</strong> with smart join modes for Category (star) and Tags (tag)</div>
                   </div>
                   <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                     <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">3</div>
@@ -583,6 +599,69 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                   <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                     <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold">5</div>
                     <div><strong>Integrate SelectoComponents assets</strong> (Chart.js, Alpine.js, hooks, and styles)</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Understanding Join Modes
+                </h3>
+                <p class="text-base-content/70 mb-3">The special join mode flags generate optimized configurations that improve query performance and user experience:</p>
+
+                <div class="grid gap-4 mb-4">
+                  <div class="border border-success/30 bg-success/5 rounded-lg p-4">
+                    <div class="font-semibold text-success mb-2 flex items-center gap-2">
+                      <span class="badge badge-success badge-sm">⭐ Star Mode</span>
+                      <code class="text-xs">--expand-star Category:category_name</code>
+                    </div>
+                    <p class="text-sm text-base-content/70 mb-2">For simple lookup tables with one-to-many relationships:</p>
+                    <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
+                      <li>Displays "category_name" to users (e.g., "Beverages", "Condiments")</li>
+                      <li>Filters using category ID (indexed integer column)</li>
+                      <li>Prevents denormalization in aggregate queries</li>
+                      <li>Generates <code class="bg-success/20 px-1 rounded">filter_type: :multi_select_id</code> for multi-select UI</li>
+                    </ul>
+                  </div>
+
+                  <div class="border border-info/30 bg-info/5 rounded-lg p-4">
+                    <div class="font-semibold text-info mb-2 flex items-center gap-2">
+                      <span class="badge badge-info badge-sm">🏷️ Tag Mode</span>
+                      <code class="text-xs">--expand-tag Tags:name</code>
+                    </div>
+                    <p class="text-sm text-base-content/70 mb-2">For many-to-many relationships (tags, categories, labels):</p>
+                    <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
+                      <li>Displays tag "name" to users (e.g., "Organic", "Gluten-Free", "Vegan")</li>
+                      <li>Filters using tag IDs through junction table (product_tags)</li>
+                      <li>Prevents expensive JOIN denormalization in GROUP BY queries</li>
+                      <li>Optimizes for "products with ANY of these tags" queries</li>
+                    </ul>
+                  </div>
+
+                  <div class="border border-warning/30 bg-warning/5 rounded-lg p-4">
+                    <div class="font-semibold text-warning mb-2 flex items-center gap-2">
+                      <span class="badge badge-warning badge-sm">📚 Lookup Mode</span>
+                      <code class="text-xs">--expand-lookup Status:name</code>
+                    </div>
+                    <p class="text-sm text-base-content/70 mb-2">For small reference tables (status, type, priority):</p>
+                    <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
+                      <li>Similar to star mode but for smaller, cacheable datasets</li>
+                      <li>Ideal for dropdowns and status fields</li>
+                      <li>Optimized for frequently accessed reference data</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="alert bg-gradient-to-r from-primary/10 to-secondary/10 border-primary/30">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                  </svg>
+                  <div>
+                    <strong>💡 Performance Benefit</strong>
+                    <p class="text-sm mt-1">When you group by Category or Tags in aggregate views, Selecto will use the ID for filtering while displaying the name. This avoids JOINing the entire category/tag table into each product row, resulting in much faster queries and smaller result sets.</p>
                   </div>
                 </div>
               </div>
