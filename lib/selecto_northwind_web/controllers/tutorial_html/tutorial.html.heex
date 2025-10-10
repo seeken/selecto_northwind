@@ -531,7 +531,7 @@ $ mix deps.compile</code></pre>
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.saved_views SelectoNorthwind  # Generate saved views first
 $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
   --expand-schemas SelectoNorthwind.Catalog.Supplier \
-  --expand-star Category:category_name \
+  --expand-lookup Category:category_name \
   --expand-tag Tags:name \
   --live --saved-views --path products_selecto</code></pre>
                 </div>
@@ -543,7 +543,7 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                   <div>
                     <strong>✨ New: Smart Join Modes</strong>
                     <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
-                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star Category:category_name</code> - Lookup table with ID-based filtering (displays name, filters by ID)</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-lookup Category:category_name</code> - Small lookup table (8 categories), perfect for dropdowns</li>
                       <li><code class="bg-success/20 px-2 py-1 rounded">--expand-tag Tags:name</code> - Many-to-many tags with ID-based filtering (prevents query denormalization)</li>
                     </ul>
                     <p class="mt-2 text-sm">These special join modes generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
@@ -613,17 +613,33 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                 <p class="text-base-content/70 mb-3">The special join mode flags generate optimized configurations that improve query performance and user experience:</p>
 
                 <div class="grid gap-4 mb-4">
+                  <div class="border border-warning/30 bg-warning/5 rounded-lg p-4">
+                    <div class="font-semibold text-warning mb-2 flex items-center gap-2">
+                      <span class="badge badge-warning badge-sm">📚 Lookup Mode</span>
+                      <code class="text-xs">--expand-lookup Category:category_name</code>
+                    </div>
+                    <p class="text-sm text-base-content/70 mb-2">For small, stable reference tables (3-50 records):</p>
+                    <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
+                      <li><strong>Best for:</strong> Category (8), Shippers (3), Regions (4), Status codes</li>
+                      <li>Displays "category_name" to users (e.g., "Beverages", "Condiments")</li>
+                      <li>Filters using category ID (indexed integer column)</li>
+                      <li>Perfect for dropdowns - entire dataset can be cached</li>
+                      <li>Very stable data that rarely changes</li>
+                    </ul>
+                  </div>
+
                   <div class="border border-success/30 bg-success/5 rounded-lg p-4">
                     <div class="font-semibold text-success mb-2 flex items-center gap-2">
                       <span class="badge badge-success badge-sm">⭐ Star Mode</span>
-                      <code class="text-xs">--expand-star Category:category_name</code>
+                      <code class="text-xs">--expand-star Supplier:company_name</code>
                     </div>
-                    <p class="text-sm text-base-content/70 mb-2">For simple lookup tables with one-to-many relationships:</p>
+                    <p class="text-sm text-base-content/70 mb-2">For medium-sized lookup tables (50-5000 records):</p>
                     <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                      <li>Displays "category_name" to users (e.g., "Beverages", "Condiments")</li>
-                      <li>Filters using category ID (indexed integer column)</li>
-                      <li>Prevents denormalization in aggregate queries</li>
-                      <li>Generates <code class="bg-success/20 px-1 rounded">filter_type: :multi_select_id</code> for multi-select UI</li>
+                      <li><strong>Best for:</strong> Suppliers (29), Customers (91), Employees (9), Locations</li>
+                      <li>Same ID-based filtering as lookup mode</li>
+                      <li>Too large to cache entire dataset in UI</li>
+                      <li>May grow over time (new suppliers, customers, etc.)</li>
+                      <li>Named "star" from data warehouse star schema patterns</li>
                     </ul>
                   </div>
 
@@ -632,25 +648,13 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                       <span class="badge badge-info badge-sm">🏷️ Tag Mode</span>
                       <code class="text-xs">--expand-tag Tags:name</code>
                     </div>
-                    <p class="text-sm text-base-content/70 mb-2">For many-to-many relationships (tags, categories, labels):</p>
+                    <p class="text-sm text-base-content/70 mb-2">For many-to-many relationships (unlimited records):</p>
                     <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
+                      <li><strong>Best for:</strong> Tags, Skills, Features, Labels (flexible categorization)</li>
                       <li>Displays tag "name" to users (e.g., "Organic", "Gluten-Free", "Vegan")</li>
                       <li>Filters using tag IDs through junction table (product_tags)</li>
                       <li>Prevents expensive JOIN denormalization in GROUP BY queries</li>
-                      <li>Optimizes for "products with ANY of these tags" queries</li>
-                    </ul>
-                  </div>
-
-                  <div class="border border-warning/30 bg-warning/5 rounded-lg p-4">
-                    <div class="font-semibold text-warning mb-2 flex items-center gap-2">
-                      <span class="badge badge-warning badge-sm">📚 Lookup Mode</span>
-                      <code class="text-xs">--expand-lookup Status:name</code>
-                    </div>
-                    <p class="text-sm text-base-content/70 mb-2">For small reference tables (status, type, priority):</p>
-                    <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                      <li>Similar to star mode but for smaller, cacheable datasets</li>
-                      <li>Ideal for dropdowns and status fields</li>
-                      <li>Optimized for frequently accessed reference data</li>
+                      <li>Grows organically as users create new tags</li>
                     </ul>
                   </div>
                 </div>
@@ -660,8 +664,9 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
                   </svg>
                   <div>
-                    <strong>💡 Performance Benefit</strong>
-                    <p class="text-sm mt-1">When you group by Category or Tags in aggregate views, Selecto will use the ID for filtering while displaying the name. This avoids JOINing the entire category/tag table into each product row, resulting in much faster queries and smaller result sets.</p>
+                    <strong>💡 The Rule of Thumb</strong>
+                    <p class="text-sm mt-1"><strong>Lookup:</strong> Small, stable (Category, Shippers) • <strong>Star:</strong> Medium, may grow (Suppliers, Customers) • <strong>Tag:</strong> Many-to-many (Tags, Skills)</p>
+                    <p class="text-sm mt-2">All three modes use ID-based filtering for performance - the difference is mainly about size, growth, and relationship type!</p>
                   </div>
                 </div>
               </div>
