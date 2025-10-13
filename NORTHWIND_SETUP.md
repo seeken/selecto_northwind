@@ -148,3 +148,157 @@ mix run -e 'alias SelectoNorthwind.{Repo, Catalog}; Repo.all(Catalog.Product) |>
 # Test associations
 mix run -e 'alias SelectoNorthwind.{Repo, Catalog}; import Ecto.Query; from(p in Catalog.Product, join: c in assoc(p, :category), select: {p.product_name, c.category_name}) |> Repo.all() |> IO.inspect()'
 ```
+
+## Special Join Modes for Optimized Queries
+
+This project demonstrates three special join modes (`lookup`, `star`, `tag`) that optimize common relationship patterns in Selecto:
+
+### Lookup Mode (Small Reference Tables)
+
+**Use case**: Small reference tables (< 20 items) like Categories
+
+**Example**: Categories in the Product domain
+
+```elixir
+# In lib/selecto_northwind/selecto_domains/product_domain.ex
+:category_name => %{
+  type: :string,
+  display_field: :category_name,
+  filter_type: :multi_select_id,
+  id_field: :id,
+  join_mode: :lookup,
+  prevent_denormalization: true,
+  group_by_filter: "category_id"  # Filter on products.category_id
+}
+```
+
+**Benefits**:
+- Displays user-friendly checkboxes with category names
+- Filters efficiently on `products.category_id` without joining
+- Uses SQL `IN` operator: `WHERE category_id = ANY($1)`
+- Prevents denormalization of category data
+
+**Generated automatically with**:
+```bash
+mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
+  --expand-lookup Category:category_name
+```
+
+### Star Mode (Medium-Sized Lookup Tables)
+
+**Use case**: Larger reference tables (20-100 items) like Suppliers
+
+**Example**: Suppliers in the Product domain
+
+```elixir
+# In lib/selecto_northwind/selecto_domains/product_domain.ex
+:company_name => %{
+  type: :string,
+  display_field: :company_name,
+  filter_type: :multi_select_id,
+  id_field: :id,
+  join_mode: :star,
+  prevent_denormalization: true,
+  group_by_filter: "supplier_id"  # Filter on products.supplier_id
+}
+```
+
+**Benefits**:
+- Displays searchable multi-select dropdown (better UX for more items)
+- Filters efficiently on `products.supplier_id` without joining
+- Uses SQL `IN` operator: `WHERE supplier_id = ANY($1)`
+- Prevents denormalization of supplier data
+
+**Generated automatically with**:
+```bash
+mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
+  --expand-star Supplier:company_name
+```
+
+### Tag Mode (Many-to-Many Relationships)
+
+**Use case**: Many-to-many relationships via junction tables
+
+**Example**: Tags associated with Products
+
+```elixir
+# In lib/selecto_northwind/selecto_domains/product_domain.ex
+:name => %{
+  type: :string,
+  display_field: :name,
+  filter_type: :multi_select_id,
+  id_field: :id,
+  join_mode: :tag,
+  prevent_denormalization: true
+}
+```
+
+**Benefits**:
+- Optimized for many-to-many queries through junction tables
+- Displays multi-select UI for tag selection
+- Filters using ID-based operations
+- Prevents expensive denormalization
+
+**Generated automatically with**:
+```bash
+mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
+  --expand-tag Tags:name
+```
+
+### Key Metadata Fields
+
+All three join modes use these metadata fields:
+
+- `join_mode`: `:lookup`, `:star`, or `:tag` - determines query optimization strategy
+- `filter_type`: `:multi_select_id` - enables multi-select filter UI
+- `display_field`: Field shown to users (e.g., `:category_name`, `:company_name`)
+- `id_field`: Field used for filtering (typically `:id`)
+- `group_by_filter`: Local foreign key field to filter on (e.g., `"category_id"`)
+- `prevent_denormalization`: `true` - prevents denormalizing related data into results
+
+### How It Works
+
+1. **UI Layer**: Renders checkboxes (lookup) or dropdown (star/tag) with human-readable names
+2. **Filter Creation**: When filtering, creates filter on local foreign key (e.g., `category_id`)
+3. **Query Optimization**: Filters using `WHERE field_id = ANY($1)` - no JOIN needed!
+4. **Display**: Shows names to users but filters on IDs internally
+
+### Testing Join Modes
+
+Visit http://localhost:4000/products_selecto and try:
+
+1. **Lookup Mode** - Add "Category ID" filter:
+   - Should show ~8 checkboxes with category names
+   - Select multiple categories
+   - Query filters on `products.category_id` without JOIN
+
+2. **Star Mode** - Add "Supplier ID" filter:
+   - Should show searchable dropdown with ~29 supplier names
+   - Hold Ctrl/Cmd to select multiple
+   - Query filters on `products.supplier_id` without JOIN
+
+3. **Tag Mode** - Add filter for tags (if configured):
+   - Shows multi-select for tag names
+   - Handles many-to-many efficiently
+
+### Performance Comparison
+
+**Without join modes** (traditional approach):
+```sql
+SELECT * FROM products
+JOIN categories ON products.category_id = categories.id
+WHERE categories.category_name IN ('Beverages', 'Condiments');
+```
+
+**With lookup mode**:
+```sql
+SELECT * FROM products
+WHERE products.category_id = ANY(ARRAY[1, 2]);
+```
+
+The join mode approach is:
+- ✅ Simpler SQL
+- ✅ Faster execution (no JOIN overhead)
+- ✅ Better for indexes
+- ✅ Cleaner query plans
+```

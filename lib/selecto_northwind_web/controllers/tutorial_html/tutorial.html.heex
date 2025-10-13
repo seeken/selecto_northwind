@@ -530,8 +530,8 @@ $ mix deps.compile</code></pre>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.saved_views SelectoNorthwind  # Generate saved views first
 $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-schemas SelectoNorthwind.Catalog.Supplier \
   --expand-lookup Category:category_name \
+  --expand-star Supplier:company_name \
   --expand-tag Tags:name \
   --live --saved-views --path products_selecto</code></pre>
                 </div>
@@ -543,7 +543,8 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                   <div>
                     <strong>✨ New: Smart Join Modes</strong>
                     <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
-                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-lookup Category:category_name</code> - Small lookup table (8 categories), perfect for dropdowns</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-lookup Category:category_name</code> - Small lookup table (8 categories), perfect for checkboxes</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star Supplier:company_name</code> - Medium lookup table (29 suppliers), searchable dropdown</li>
                       <li><code class="bg-success/20 px-2 py-1 rounded">--expand-tag Tags:name</code> - Many-to-many tags with ID-based filtering (prevents query denormalization)</li>
                     </ul>
                     <p class="mt-2 text-sm">These special join modes generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
