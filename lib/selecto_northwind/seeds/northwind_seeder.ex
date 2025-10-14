@@ -21,6 +21,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
   alias SelectoNorthwind.Sales.{Customer, Order, OrderDetail, Shipper, CustomerDemographic, CustomerCustomerDemo}
   alias SelectoNorthwind.Hr.{Employee, EmployeeTerritory}
   alias SelectoNorthwind.Geography.{Region, Territory, UsState}
+  alias SelectoNorthwind.Support.{Comment, FlagType, ProductFlag}
 
   import Ecto.Query
   require Logger
@@ -58,6 +59,9 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     seed_regions()
     seed_territories()
     seed_employee_territories()
+    seed_flag_types()
+    seed_product_flags()
+    seed_comments()
 
     Logger.info("✅ Master data seeding complete!")
     print_master_data_stats()
@@ -668,6 +672,162 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     Logger.info("  - Average Items per Order: #{avg_items_per_order}")
     Logger.info("  - Shipped Orders: #{shipped_orders} (#{shipped_percentage}%)")
     Logger.info("  - Total Revenue: $#{:erlang.float_to_binary(total_revenue, decimals: 2)}")
+  end
+
+  # ============================================================================
+  # Polymorphic and Flags Seeding (Mode 4 & 5)
+  # ============================================================================
+
+  defp seed_flag_types do
+    Logger.info("🏷️  Seeding flag types...")
+
+    flag_types = [
+      %{name: "is_organic", label: "Organic", entity_type: "Product", data_type: "boolean"},
+      %{name: "is_kosher", label: "Kosher", entity_type: "Product", data_type: "boolean"},
+      %{name: "is_vegan", label: "Vegan", entity_type: "Product", data_type: "boolean"},
+      %{name: "is_gluten_free", label: "Gluten Free", entity_type: "Product", data_type: "boolean"},
+      %{name: "is_dairy_free", label: "Dairy Free", entity_type: "Product", data_type: "boolean"},
+      %{name: "certification_level", label: "Certification Level", entity_type: "Product", data_type: "string"},
+      %{name: "origin_country", label: "Country of Origin", entity_type: "Product", data_type: "string"}
+    ]
+
+    Enum.each(flag_types, fn attrs ->
+      %FlagType{}
+      |> FlagType.changeset(attrs)
+      |> Repo.insert!()
+    end)
+
+    Logger.info("   ✓ Created #{length(flag_types)} flag types")
+  end
+
+  defp seed_product_flags do
+    Logger.info("🚩 Seeding product flags...")
+
+    # Get flag types
+    organic = Repo.get_by!(FlagType, name: "is_organic")
+    kosher = Repo.get_by!(FlagType, name: "is_kosher")
+    vegan = Repo.get_by!(FlagType, name: "is_vegan")
+    gluten_free = Repo.get_by!(FlagType, name: "is_gluten_free")
+    dairy_free = Repo.get_by!(FlagType, name: "is_dairy_free")
+    cert_level = Repo.get_by!(FlagType, name: "certification_level")
+    origin = Repo.get_by!(FlagType, name: "origin_country")
+
+    # Get some products to flag
+    products = Repo.all(from p in Product, limit: 20)
+
+    # Assign random flags to products
+    flags =
+      products
+      |> Enum.flat_map(fn product ->
+        # Each product gets 2-5 random flags
+        num_flags = Enum.random(2..5)
+
+        flag_types = [
+          {organic, "true"},
+          {kosher, "true"},
+          {vegan, "true"},
+          {gluten_free, "true"},
+          {dairy_free, "true"},
+          {cert_level, Enum.random(["A", "B", "C", "Premium", "Standard"])},
+          {origin, Enum.random(["USA", "France", "Italy", "Japan", "Germany", "Spain"])}
+        ]
+
+        flag_types
+        |> Enum.take_random(num_flags)
+        |> Enum.map(fn {flag_type, value} ->
+          %{
+            product_id: product.id,
+            flag_type_id: flag_type.id,
+            value: value
+          }
+        end)
+      end)
+
+    Enum.each(flags, fn attrs ->
+      %ProductFlag{}
+      |> ProductFlag.changeset(attrs)
+      |> Repo.insert!()
+    end)
+
+    Logger.info("   ✓ Created #{length(flags)} product flags")
+  end
+
+  defp seed_comments do
+    Logger.info("💬 Seeding polymorphic comments...")
+
+    # Get some entities to comment on
+    products = Repo.all(from p in Product, limit: 10)
+    orders = Repo.all(from o in Order, limit: 10)
+    customers = Repo.all(from c in Customer, limit: 5)
+
+    comments =
+      [
+        # Comments on Products
+        Enum.map(products, fn product ->
+          %{
+            commentable_type: "Product",
+            commentable_id: product.id,
+            body: Enum.random([
+              "Excellent quality product!",
+              "Very satisfied with this purchase.",
+              "Would definitely recommend to others.",
+              "Great value for the price.",
+              "Product exceeded my expectations.",
+              "Good product, fast shipping.",
+              "Nice addition to our inventory.",
+              "Customers love this item!"
+            ]),
+            user_name: Enum.random(["Alice Johnson", "Bob Smith", "Carol Williams", "David Brown", "Emma Davis"])
+          }
+        end),
+
+        # Comments on Orders
+        Enum.map(orders, fn order ->
+          %{
+            commentable_type: "Order",
+            commentable_id: order.id,
+            body: Enum.random([
+              "Order processed quickly.",
+              "Shipment arrived on time.",
+              "Everything was packed well.",
+              "One item was missing from this order.",
+              "Customer requested rush delivery.",
+              "Payment received, ready to ship.",
+              "Delivered successfully to customer.",
+              "Follow-up call needed for this order."
+            ]),
+            user_name: Enum.random(["Warehouse Team", "Shipping Dept", "Customer Service", "Order Manager", "Sales Team"])
+          }
+        end),
+
+        # Comments on Customers
+        Enum.map(customers, fn customer ->
+          %{
+            commentable_type: "Customer",
+            commentable_id: customer.id,
+            body: Enum.random([
+              "VIP customer, priority service.",
+              "Payment history is excellent.",
+              "Requested bulk discount on next order.",
+              "Preferred shipping method: express.",
+              "Long-time customer since 2020.",
+              "Special dietary requirements noted.",
+              "Always orders on Mondays.",
+              "Prefers email communication."
+            ]),
+            user_name: Enum.random(["Account Manager", "Sales Rep", "Customer Success", "Support Team"])
+          }
+        end)
+      ]
+      |> List.flatten()
+
+    Enum.each(comments, fn attrs ->
+      %Comment{}
+      |> Comment.changeset(attrs)
+      |> Repo.insert!()
+    end)
+
+    Logger.info("   ✓ Created #{length(comments)} comments (#{length(products)} on products, #{length(orders)} on orders, #{length(customers)} on customers)")
   end
 
   # Data is stored in SelectoNorthwind.Seeds.NorthwindData module
