@@ -33,7 +33,10 @@
       "Bash(xargs kill:*)",
       "Bash(timeout 60 mix compile)",
       "Bash(killall:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git cherry-pick 0e84c18)",
+      "Bash(git cherry-pick ada85b4)",
+      "Bash(git cherry-pick cb3c631)"
     ],
     "deny": [],
     "ask": []
