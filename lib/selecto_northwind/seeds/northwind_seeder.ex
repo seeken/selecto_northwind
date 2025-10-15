@@ -766,7 +766,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
         Enum.map(products, fn product ->
           %{
             commentable_type: "Product",
-            commentable_id: product.id,
+            commentable_id: to_string(product.id),
             body: Enum.random([
               "Excellent quality product!",
               "Very satisfied with this purchase.",
@@ -785,7 +785,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
         Enum.map(orders, fn order ->
           %{
             commentable_type: "Order",
-            commentable_id: order.id,
+            commentable_id: to_string(order.id),
             body: Enum.random([
               "Order processed quickly.",
               "Shipment arrived on time.",
@@ -804,7 +804,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
         Enum.map(customers, fn customer ->
           %{
             commentable_type: "Customer",
-            commentable_id: customer.id,
+            commentable_id: customer.customer_id,
             body: Enum.random([
               "VIP customer, priority service.",
               "Payment history is excellent.",

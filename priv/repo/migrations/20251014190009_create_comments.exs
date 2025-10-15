@@ -5,7 +5,7 @@ defmodule SelectoNorthwind.Repo.Migrations.CreateComments do
     create table(:comments) do
       add :body, :text, null: false
       add :commentable_type, :string, null: false
-      add :commentable_id, :integer, null: false
+      add :commentable_id, :string, null: false  # String to support both integer and string IDs
       add :user_name, :string
 
       timestamps()
