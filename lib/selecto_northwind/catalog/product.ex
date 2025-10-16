@@ -20,6 +20,10 @@ defmodule SelectoNorthwind.Catalog.Product do
       join_through: "product_tags",
       on_replace: :delete
 
+    has_many :product_flags, SelectoNorthwind.Support.ProductFlag
+    many_to_many :flag_types, SelectoNorthwind.Support.FlagType,
+      join_through: SelectoNorthwind.Support.ProductFlag
+
     timestamps()
   end
 
