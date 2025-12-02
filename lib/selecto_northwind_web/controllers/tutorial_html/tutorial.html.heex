@@ -475,12 +475,18 @@ $ mix deps.compile</code></pre>
                   </svg>
                   Next Step
                 </h3>
-                <div class="alert alert-warning mb-4">
+                <div class="alert alert-error mb-4">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
                   </svg>
                   <div>
-                    <strong>⚠️ Important for AI Agents:</strong> After adding dependencies, you <strong>MUST restart the Phoenix server</strong> to ensure proper compilation of the new Selecto libraries. The server needs to be restarted when dependencies are added.
+                    <strong>🚨 CRITICAL - AI Agents MUST Follow:</strong>
+                    <ol class="list-decimal ml-6 mt-2 space-y-1">
+                      <li><strong>Stop the Phoenix server</strong> if it's currently running (Ctrl+C twice or kill the process)</li>
+                      <li>Wait for the server to fully shut down (verify no process is listening on port 4000)</li>
+                      <li><strong>Do NOT proceed to Step 2</strong> until you have confirmed the server has been stopped and restarted</li>
+                    </ol>
+                    <p class="mt-2">The server <strong>MUST</strong> be restarted after adding dependencies to ensure proper compilation of the new Selecto libraries. This is not optional.</p>
                   </div>
                 </div>
                 <p class="text-base-content/70">With the dependencies installed and assets integrated, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Products table.</p>
@@ -500,21 +506,33 @@ $ mix deps.compile</code></pre>
             </div>
             <p class="text-base-content/80 mb-6">In this step, we'll use the <code class="bg-base-300 px-2 py-1 rounded text-sm">mix selecto.gen.domain</code> task to generate Selecto domain configuration for the Product schema and its related schemas (Categories, Suppliers, and Tags) from the Catalog context.</p>
 
+            <div class="alert alert-error mb-6">
+              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+              </svg>
+              <div>
+                <strong>🤖 AI Agents - Step 2 Workflow Summary:</strong>
+                <p class="mt-2 mb-2">This step has <strong>multiple sequential tasks</strong> that must be completed in order:</p>
+                <ol class="list-decimal ml-6 space-y-1 text-sm">
+                  <li>Run <code class="bg-base-300 px-1 rounded text-xs">mix selecto.gen.saved_views</code> command</li>
+                  <li>Run <code class="bg-base-300 px-1 rounded text-xs">mix selecto.gen.domain</code> command (with Y/Y responses)</li>
+                  <li>Edit <code class="bg-base-300 px-1 rounded text-xs">lib/selecto_northwind/selecto_domains/products_domain.ex</code> to add SavedViewContext</li>
+                  <li>Run <code class="bg-base-300 px-1 rounded text-xs">mix ecto.migrate</code></li>
+                  <li>Edit <code class="bg-base-300 px-1 rounded text-xs">lib/selecto_northwind_web/router.ex</code> to add the LiveView route</li>
+                  <li>Run <code class="bg-base-300 px-1 rounded text-xs">mix assets.build</code></li>
+                  <li><strong>CRITICAL:</strong> Restart the Phoenix server (stop then start <code class="bg-base-300 px-1 rounded text-xs">mix phx.server</code>)</li>
+                  <li>Verify at <code class="bg-base-300 px-1 rounded text-xs">http://localhost:4000/products_selecto</code></li>
+                </ol>
+                <p class="mt-2 font-semibold">Do NOT skip any steps or change the order!</p>
+              </div>
+            </div>
+
             <div class="alert alert-success mb-6">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <div>
                 <strong>🏷️ New: Product Tagging</strong> - The Northwind database now includes a many-to-many tagging system for products! Tags like "Organic", "Kosher", "Gluten-Free", "Vegan", and more are available to filter and categorize products.
-              </div>
-            </div>
-            
-            <div class="alert alert-info mb-6">
-              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              <div>
-                <strong>💡 For AI Agents:</strong> This step requires server restarts at specific points to ensure proper asset compilation and Tailwind CSS scanning. Pay attention to the restart warnings throughout this step.
               </div>
             </div>
             
@@ -526,10 +544,36 @@ $ mix deps.compile</code></pre>
               
               <div>
                 <h3 class="text-lg font-semibold mb-3">Generate the Products Domain</h3>
-                <p class="text-base-content/70 mb-3">Run the following Mix task to include Categories, Suppliers, and Tags with optimized join modes for efficient querying:</p>
+                <p class="text-base-content/70 mb-3">Run the following Mix tasks to generate the Products domain with Categories, Suppliers, and Tags using optimized join modes for efficient querying:</p>
+
+                <div class="alert alert-warning mb-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agent Instructions:</strong>
+                    <p class="mt-2">Execute these commands <strong>in order</strong>. The second command requires interactive responses:</p>
+                    <ol class="list-decimal ml-6 mt-2 space-y-1">
+                      <li>Run the first command: <code class="bg-base-300 px-2 py-1 rounded text-xs">mix selecto.gen.saved_views SelectoNorthwind</code></li>
+                      <li>For the second command, you MUST respond to two prompts with "Y":
+                        <ul class="list-disc ml-6 mt-1 text-xs">
+                          <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
+                          <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
+                        </ul>
+                      </li>
+                      <li><strong>Automated execution:</strong> To run non-interactively, use: <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code></li>
+                    </ol>
+                  </div>
+                </div>
+
+                <h4 class="font-semibold mt-4 mb-2">Step 2a: Generate Saved Views Infrastructure</h4>
                 <div class="relative">
-                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.saved_views SelectoNorthwind  # Generate saved views first
-$ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.saved_views SelectoNorthwind</code></pre>
+                </div>
+
+                <h4 class="font-semibold mb-2">Step 2b: Generate Products Domain</h4>
+                <div class="relative">
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
   --expand-lookup Category:category_name \
   --expand-star Supplier:company_name \
   --expand-tag Tags:name \
@@ -541,7 +585,7 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <div>
-                    <strong>✨ New: Smart Join Modes</strong>
+                    <strong>✨ Smart Join Modes Explained:</strong>
                     <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
                       <li><code class="bg-success/20 px-2 py-1 rounded">--expand-lookup Category:category_name</code> - Small lookup table (8 categories), perfect for checkboxes</li>
                       <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star Supplier:company_name</code> - Medium lookup table (29 suppliers), searchable dropdown</li>
@@ -550,32 +594,15 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                     <p class="mt-2 text-sm">These special join modes generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
                   </div>
                 </div>
-                
-                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
-                  <input type="checkbox" />
-                  <div class="collapse-title text-sm font-medium text-yellow-800">
-                    🤖 AI Agent Notes - Click to expand
-                  </div>
-                  <div class="collapse-content text-sm text-yellow-700">
-                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
-                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
-                  </div>
-                </div>
-                
+
                 <div class="alert alert-info mb-4">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <div>
-                    <strong>Note:</strong> The <code>--path</code> option allows you to specify a custom route path. Here we use <code>products_selecto</code> to avoid conflicts with existing routes.
+                    <strong>Note:</strong> The <code>--path products_selecto</code> option specifies a custom route path to avoid conflicts with existing routes. The <code>--saved-views</code> flag enables persistent saved views for this domain.
                   </div>
                 </div>
-                
-                <p class="text-base-content/70">The command will ask you two questions:</p>
-                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
-                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                </ol>
               </div>
 
               <div>
@@ -681,30 +708,56 @@ $ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
                   </svg>
                   Configure SavedView Support
                 </h3>
-                <p class="text-base-content/70 mb-4">There are two parts to enabling saved views:</p>
-                
+                <p class="text-base-content/70 mb-4">There are two parts to enabling saved views. <strong>You MUST complete both steps:</strong></p>
+
                 <div class="space-y-6">
                   <div>
                     <h4 class="font-semibold mb-3 text-base-content flex items-center gap-2">
                       <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">1</span>
                       Add SavedView Support to Domain
                     </h4>
-                    <p class="text-base-content/70 mb-3">The generated domain module needs to use the SavedViewContext. Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/products_domain.ex</code>:</p>
+                    <p class="text-base-content/70 mb-3">Edit the generated domain module to use the SavedViewContext.</p>
+
+                    <div class="alert alert-warning mb-3">
+                      <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                      </svg>
+                      <div>
+                        <strong>🤖 AI Agents:</strong> Open and edit the file: <code class="bg-base-300 px-2 py-1 rounded text-xs">lib/selecto_northwind/selecto_domains/products_domain.ex</code>
+                      </div>
+                    </div>
+
+                    <p class="text-base-content/70 mb-2"><strong>Find this line near the top of the file:</strong></p>
+                    <div class="relative">
+                      <pre class="mb-3"><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do</code></pre>
+                    </div>
+
+                    <p class="text-base-content/70 mb-2"><strong>Add this line immediately after the defmodule line:</strong></p>
                     <div class="relative">
                       <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do
-  use SelectoNorthwind.SavedViewContext  # Add this line
+  use SelectoNorthwind.SavedViewContext  # ← ADD THIS LINE
 
   # ... rest of the domain configuration
 end</code></pre>
                     </div>
                   </div>
-                  
+
                   <div>
                     <h4 class="font-semibold mb-3 text-base-content flex items-center gap-2">
                       <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                      Set saved_view_context in LiveView
+                      Verify LiveView saved_view_context
                     </h4>
-                    <p class="text-base-content/70 mb-3">The generated LiveView (with <code class="bg-base-300 px-2 py-1 rounded text-sm">--saved-views</code> flag) automatically sets up the saved view context in the mount function. This looks like:</p>
+                    <p class="text-base-content/70 mb-3">The generated LiveView (created with <code class="bg-base-300 px-2 py-1 rounded text-sm">--saved-views</code> flag) should already have the saved view context configured. Verify this in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/product_live.ex</code>:</p>
+
+                    <div class="alert alert-success mb-3">
+                      <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
+                      <div>
+                        <strong>🤖 AI Agents:</strong> You typically do NOT need to modify this file - it should already be correctly configured. Only verify the content matches below.
+                      </div>
+                    </div>
+
                     <div class="relative">
                       <pre><code class="language-elixir"># In lib/selecto_northwind_web/live/product_live.ex
 def mount(_params, _session, socket) do
@@ -753,24 +806,48 @@ end</code></pre>
                   </svg>
                   Add Route to Router
                 </h3>
-                <p class="text-base-content/70 mb-3">Add the generated LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>. This will replace the existing placeholder route:</p>
-                <div class="relative">
-                  <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
-  pipe_through :browser
 
-  # Replace this placeholder:
-  # get "/products_selecto", PageController, :products_selecto
-
-  # With this LiveView route:
-  live "/products_selecto", ProductLive, :index
-end</code></pre>
-                </div>
-                <div class="alert alert-warning">
+                <div class="alert alert-warning mb-3">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
                   </svg>
                   <div>
-                    <strong>Note:</strong> This replaces the existing placeholder route <code>get "/products_selecto", PageController, :products_selecto</code> with the actual LiveView route. The route path matches what we specified with the <code>--path</code> option, and the module name is <code>ProductLive</code> (singular).
+                    <strong>🤖 AI Agents - Required Action:</strong>
+                    <ol class="list-decimal ml-6 mt-2 space-y-1">
+                      <li>Open the file: <code class="bg-base-300 px-2 py-1 rounded text-xs">lib/selecto_northwind_web/router.ex</code></li>
+                      <li>Find the existing placeholder route: <code class="bg-base-300 px-2 py-1 rounded text-xs">get "/products_selecto", PageController, :products_selecto</code></li>
+                      <li>Replace it with: <code class="bg-base-300 px-2 py-1 rounded text-xs">live "/products_selecto", ProductLive, :index</code></li>
+                      <li>Ensure the route is inside the <code class="bg-base-300 px-1 rounded text-xs">scope "/", SelectoNorthwindWeb do</code> block that uses <code class="bg-base-300 px-1 rounded text-xs">pipe_through :browser</code></li>
+                    </ol>
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mb-3"><strong>Before (old placeholder route):</strong></p>
+                <div class="relative">
+                  <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
+  pipe_through :browser
+
+  # OLD - Remove this line:
+  get "/products_selecto", PageController, :products_selecto
+end</code></pre>
+                </div>
+
+                <p class="text-base-content/70 mb-3"><strong>After (new LiveView route):</strong></p>
+                <div class="relative">
+                  <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
+  pipe_through :browser
+
+  # NEW - Add this line:
+  live "/products_selecto", ProductLive, :index
+end</code></pre>
+                </div>
+
+                <div class="alert alert-info">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Important:</strong> The module name is <code>ProductLive</code> (singular) even though the path is "products_selecto" (plural). This matches the LiveView module generated in <code class="bg-base-300 px-1 rounded text-xs">lib/selecto_northwind_web/live/product_live.ex</code>
                   </div>
                 </div>
               </div>
@@ -803,21 +880,59 @@ end</code></pre>
                   </svg>
                   Verify the Setup
                 </h3>
-                <p class="text-base-content/70 mb-3">Start your Phoenix server and navigate to <code class="bg-base-300 px-2 py-1 rounded text-sm">/products_selecto</code>:</p>
+
+                <div class="alert alert-warning mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agents - Verification Steps:</strong>
+                    <ol class="list-decimal ml-6 mt-2 space-y-1">
+                      <li>Start the Phoenix server with: <code class="bg-base-300 px-2 py-1 rounded text-xs">mix phx.server</code></li>
+                      <li>Wait for the message "Access SelectoNorthwindWeb.Endpoint at http://localhost:4000"</li>
+                      <li>Check for compilation errors - if any occur, STOP and fix them before proceeding</li>
+                      <li>Navigate to: <code class="bg-base-300 px-2 py-1 rounded text-xs">http://localhost:4000/products_selecto</code></li>
+                      <li>Verify the page loads without errors (check browser console and terminal for errors)</li>
+                    </ol>
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mb-3"><strong>Start the server:</strong></p>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix phx.server</code></pre>
                 </div>
-                <div class="alert alert-success">
+
+                <p class="text-base-content/70 mb-3"><strong>Then visit:</strong> <a href="http://localhost:4000/products_selecto" class="link link-primary">http://localhost:4000/products_selecto</a></p>
+
+                <div class="alert alert-success mb-4">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <div>
-                    <div class="font-semibold">You should see the Products Explorer interface with:</div>
+                    <div class="font-semibold">✅ Success Criteria - You should see ALL of the following:</div>
                     <ul class="mt-2 space-y-1 text-sm">
-                      <li>• A query builder form</li>
-                      <li>• Data results in table format</li>
-                      <li>• Options to switch between Table, Detail, and Graph views</li>
-                      <li>• Ability to save and load custom views</li>
+                      <li>✓ Page title: "Products Explorer" or similar</li>
+                      <li>✓ A query builder form with filter options</li>
+                      <li>✓ Data results displayed in table format showing product data</li>
+                      <li>✓ View mode tabs: "Table", "Detail", and "Graph"</li>
+                      <li>✓ "Save View" and "Load View" buttons for saved views functionality</li>
+                      <li>✓ Filter options for Category, Supplier, and Tags</li>
+                      <li>✓ No error messages in browser console or terminal</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="alert alert-error">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <div class="font-semibold">❌ Common Issues - If you see errors:</div>
+                    <ul class="mt-2 space-y-2 text-sm">
+                      <li><strong>404 Not Found:</strong> Check that you added the route to <code class="bg-base-300 px-1 rounded text-xs">router.ex</code> correctly</li>
+                      <li><strong>Compilation errors:</strong> Run <code class="bg-base-300 px-1 rounded text-xs">mix compile</code> to see detailed error messages</li>
+                      <li><strong>Missing CSS styles:</strong> Restart the server (the Tailwind scanner needs to detect new files)</li>
+                      <li><strong>Module not found:</strong> Verify the LiveView file was generated at <code class="bg-base-300 px-1 rounded text-xs">lib/selecto_northwind_web/live/product_live.ex</code></li>
                     </ul>
                   </div>
                 </div>
@@ -888,6 +1003,22 @@ priv/repo/migrations/
                   </svg>
                   Generate the Customers Domain
                 </h3>
+
+                <div class="alert alert-warning mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agent Instructions:</strong>
+                    <p class="mt-2">This command requires interactive responses. You MUST respond to two prompts with "Y":</p>
+                    <ul class="list-disc ml-6 mt-2 text-xs">
+                      <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
+                      <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
+                    </ul>
+                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
+                  </div>
+                </div>
+
                 <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Customers domain with expanded schemas for related entities:</p>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Sales.Customer \
@@ -895,22 +1026,14 @@ priv/repo/migrations/
   --live --saved-views --path customers_selecto</code></pre>
                 </div>
 
-                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
-                  <input type="checkbox" />
-                  <div class="collapse-title text-sm font-medium text-yellow-800">
-                    🤖 AI Agent Notes - Click to expand
-                  </div>
-                  <div class="collapse-content text-sm text-yellow-700">
-                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
-                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
+                <div class="alert alert-info">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> The saved views infrastructure was already created in Step 2, so this command only generates the Customer-specific domain and LiveView.
                   </div>
                 </div>
-
-                <p class="text-base-content/70 mt-3">The command will prompt you for:</p>
-                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
-                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                </ol>
               </div>
 
               <div>
@@ -945,13 +1068,22 @@ priv/repo/migrations/
                   Configure the Generated Files
                 </h3>
 
+                <div class="alert alert-warning mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agents:</strong> You MUST complete step 1 below. Step 2 is for verification only.
+                  </div>
+                </div>
+
                 <div class="space-y-4">
                   <div>
-                    <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain</h4>
-                    <p class="text-base-content/70 mb-3">Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/customers_domain.ex</code>:</p>
+                    <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain (REQUIRED)</h4>
+                    <p class="text-base-content/70 mb-3">Edit <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/customers_domain.ex</code> and add the use statement:</p>
                     <div class="relative">
                       <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.CustomersDomain do
-  use SelectoNorthwind.SavedViewContext  # Add this line
+  use SelectoNorthwind.SavedViewContext  # ← ADD THIS LINE
 
   # ... rest of the domain configuration
 end</code></pre>
@@ -959,8 +1091,8 @@ end</code></pre>
                   </div>
 
                   <div>
-                    <h4 class="font-semibold mb-2">2. Verify LiveView saved_view_context</h4>
-                    <p class="text-base-content/70 mb-3">The generated LiveView should already have the saved view context configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/customer_live.ex</code>:</p>
+                    <h4 class="font-semibold mb-2">2. Verify LiveView Configuration (Auto-generated)</h4>
+                    <p class="text-base-content/70 mb-3">The generated LiveView should already be correctly configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/customer_live.ex</code>. Verify it contains:</p>
                     <div class="relative">
                       <pre><code class="language-elixir"># Should already be configured like this:
 socket =
@@ -1117,7 +1249,23 @@ end</code></pre>
                   </svg>
                   Generate the Orders Domain
                 </h3>
-                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Orders domain with its extensive relationships:</p>
+
+                <div class="alert alert-warning mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agent Instructions:</strong>
+                    <p class="mt-2">This command requires interactive responses. You MUST respond to two prompts with "Y":</p>
+                    <ul class="list-disc ml-6 mt-2 text-xs">
+                      <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
+                      <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
+                    </ul>
+                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Orders domain with its extensive relationships (OrderDetail, Shipper, Employee, Customer):</p>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Sales.Order \
   --expand-schemas SelectoNorthwind.Sales.OrderDetail \
@@ -1126,23 +1274,6 @@ end</code></pre>
     SelectoNorthwind.Sales.Customer \
   --live --saved-views --path orders_selecto</code></pre>
                 </div>
-
-                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
-                  <input type="checkbox" />
-                  <div class="collapse-title text-sm font-medium text-yellow-800">
-                    🤖 AI Agent Notes - Click to expand
-                  </div>
-                  <div class="collapse-content text-sm text-yellow-700">
-                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
-                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
-                  </div>
-                </div>
-
-                <p class="text-base-content/70 mt-3">The command will prompt you for:</p>
-                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
-                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                </ol>
               </div>
 
               <div>
@@ -1390,7 +1521,23 @@ $ mix phx.server</code></pre>
                   </svg>
                   Generate the Employees Domain
                 </h3>
-                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Employees domain with HR relationships:</p>
+
+                <div class="alert alert-warning mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agent Instructions:</strong>
+                    <p class="mt-2">This command requires interactive responses. You MUST respond to two prompts with "Y":</p>
+                    <ul class="list-disc ml-6 mt-2 text-xs">
+                      <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
+                      <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
+                    </ul>
+                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
+                  </div>
+                </div>
+
+                <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Employees domain with HR relationships (EmployeeTerritory, Territory, Orders):</p>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Hr.Employee \
   --expand-schemas SelectoNorthwind.Hr.EmployeeTerritory \
@@ -1398,23 +1545,6 @@ $ mix phx.server</code></pre>
     SelectoNorthwind.Sales.Order \
   --live --saved-views --path employees_selecto</code></pre>
                 </div>
-
-                <div class="collapse collapse-arrow bg-yellow-50 border border-yellow-200">
-                  <input type="checkbox" />
-                  <div class="collapse-title text-sm font-medium text-yellow-800">
-                    🤖 AI Agent Notes - Click to expand
-                  </div>
-                  <div class="collapse-content text-sm text-yellow-700">
-                    <p>This command requires interactive responses to two prompts. For automated execution, pipe in two Y responses:</p>
-                    <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" |</code> before the command above.
-                  </div>
-                </div>
-
-                <p class="text-base-content/70 mt-3">The command will prompt you for:</p>
-                <ol class="list-decimal list-inside text-sm text-base-content/70 ml-4 space-y-1">
-                  <li>About proceeding with uncommitted changes (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                  <li>About SelectoComponents integration (answer <code class="bg-base-300 px-1 rounded">Y</code>)</li>
-                </ol>
               </div>
 
               <div>
