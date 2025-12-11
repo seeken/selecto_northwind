@@ -27,6 +27,10 @@
           <span class="font-semibold text-success">Step 2:</span>
           <span class="text-base-content/70 block">Generate Products Domain</span>
         </a>
+        <a href="#step-2b" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
+          <span class="font-semibold text-purple-600">Step 2b:</span>
+          <span class="text-base-content/70 block">Customize with Overlays</span>
+        </a>
         <a href="#step-3" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
           <span class="font-semibold text-secondary">Step 3:</span>
           <span class="text-base-content/70 block">Generate Customers Domain</span>
@@ -969,6 +973,253 @@ priv/repo/migrations/
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2b: Customize with Config Overlays -->
+        <div id="step-2b" class="card bg-base-100 shadow-xl scroll-mt-6">
+          <div class="card-body">
+            <div class="flex items-center gap-4 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-purple-700 rounded-xl flex items-center justify-center text-white font-bold text-lg">2b</div>
+              <div>
+                <h2 class="card-title text-2xl">Customize Domain with Config Overlays</h2>
+                <p class="text-base-content/70">Non-destructive customization without modifying generated files</p>
+              </div>
+            </div>
+
+            <div class="alert alert-info mb-6">
+              <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              <div>
+                <strong>🎨 Config Overlay System:</strong> When you generated the Products domain in Step 2, Selecto automatically created an overlay file at <code class="bg-base-200 px-2 py-1 rounded">lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex</code>. This file lets you customize the domain without modifying the generated domain file itself.
+              </div>
+            </div>
+
+            <p class="text-base-content/80 mb-6">The overlay system allows you to customize columns, add filters, and configure redactions using a clean DSL. Your customizations are preserved even if you regenerate the domain!</p>
+
+            <div class="space-y-6">
+              <!-- Understanding Overlays -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                  </svg>
+                  Understanding Config Overlays
+                </h3>
+
+                <div class="bg-base-200 p-4 rounded-lg mb-4">
+                  <h4 class="font-semibold mb-2">Why Use Overlays?</h4>
+                  <ul class="list-disc list-inside space-y-2 text-sm">
+                    <li><strong>Non-Destructive:</strong> Customize without modifying generated files</li>
+                    <li><strong>Regeneration Safe:</strong> Re-run generators without losing customizations</li>
+                    <li><strong>Clean Syntax:</strong> DSL is more readable than raw map manipulation</li>
+                    <li><strong>Type Safety:</strong> Compile-time macro processing catches errors</li>
+                    <li><strong>Multi-Tenant Ready:</strong> Runtime overlay merging for dynamic configs</li>
+                  </ul>
+                </div>
+
+                <div class="bg-base-200 p-4 rounded-lg">
+                  <h4 class="font-semibold mb-2">File Structure</h4>
+                  <pre class="text-xs"><code class="language-bash">lib/selecto_northwind/selecto_domains/
+├── product_domain.ex                    # Generated domain (don't edit!)
+└── overlays/
+    └── product_domain_overlay.ex        # Your customizations (safe to edit)</code></pre>
+                </div>
+              </div>
+
+              <!-- Example Overlay -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                  </svg>
+                  Example: Customize Product Display
+                </h3>
+
+                <p class="text-base-content/70 mb-3">Let's customize how product prices and stock levels are displayed. Open the generated overlay file and add customizations:</p>
+
+                <div class="alert alert-warning mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                  </svg>
+                  <div>
+                    <strong>Note:</strong> The overlay file was auto-generated with example customizations. Feel free to uncomment and modify them!
+                  </div>
+                </div>
+
+                <pre><code class="language-elixir"># lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex
+defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
+  use Selecto.Config.OverlayDSL
+
+  # Redact sensitive fields from queries
+  @redactions [:cost_price, :internal_notes]
+
+  # Customize price column display
+  defcolumn :unit_price do
+    label "Product Price"
+    format :currency
+    precision 2
+    aggregate_functions [:sum, :avg, :min, :max]
+    sortable true
+    filterable true
+  end
+
+  # Customize stock display
+  defcolumn :units_in_stock do
+    label "Stock Level"
+    aggregate_functions [:sum, :avg, :min, :max]
+    sortable true
+  end
+
+  # Customize discontinued flag
+  defcolumn :discontinued do
+    label "Status"
+    format :yes_no
+    filterable true
+  end
+
+  # Add custom filter for low stock
+  deffilter "low_stock" do
+    name "Low Stock Alert"
+    type :boolean
+    description "Show products with stock below reorder level"
+    default false
+  end
+
+  # Add custom filter for price range
+  deffilter "price_range" do
+    name "Price Range"
+    type :string
+    description "Filter by price range (e.g., '10-100')"
+  end
+end</code></pre>
+              </div>
+
+              <!-- Available Directives -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                  </svg>
+                  Available DSL Directives
+                </h3>
+
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">Column Directives (within <code>defcolumn</code>)</h4>
+                    <ul class="text-xs space-y-1">
+                      <li><code>label/1</code> - Human-readable label</li>
+                      <li><code>format/1</code> - Display format (<code>:currency</code>, <code>:percentage</code>, <code>:yes_no</code>, <code>:date</code>)</li>
+                      <li><code>aggregate_functions/1</code> - Allowed aggregations (<code>[:sum, :avg, :count, :min, :max]</code>)</li>
+                      <li><code>precision/1</code> - Numeric precision for decimals</li>
+                      <li><code>max_length/1</code> - Max string length for display</li>
+                      <li><code>sortable/1</code> - Enable/disable sorting</li>
+                      <li><code>filterable/1</code> - Enable/disable filtering</li>
+                      <li><code>computed/1</code> - Mark as computed field</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">Filter Directives (within <code>deffilter</code>)</h4>
+                    <ul class="text-xs space-y-1">
+                      <li><code>name/1</code> - Human-readable filter name</li>
+                      <li><code>type/1</code> - Filter type (<code>:string</code>, <code>:integer</code>, <code>:boolean</code>, <code>:date</code>)</li>
+                      <li><code>description/1</code> - Help text for the filter</li>
+                      <li><code>required/1</code> - Whether filter is required</li>
+                      <li><code>default/1</code> - Default value</li>
+                      <li><code>options/1</code> - Valid options for select filters</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="bg-base-200 p-4 rounded-lg mt-4">
+                  <h4 class="font-semibold mb-2 text-sm">Module Attributes</h4>
+                  <ul class="text-xs space-y-1">
+                    <li><code>@redactions</code> - List of field atoms to redact from queries (security/privacy)</li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- How Overlays Work -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  How Overlay Merging Works
+                </h3>
+
+                <div class="space-y-3">
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">✨ Deep Merge for Columns</h4>
+                    <p class="text-xs text-base-content/70">Column properties from the overlay are merged with base domain columns. Overlay properties take precedence, but unspecified properties keep their base values.</p>
+                  </div>
+
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">➕ Additive Merge for Filters</h4>
+                    <p class="text-xs text-base-content/70">Both base filters and overlay filters are available. This allows you to add custom filters without losing generated ones.</p>
+                  </div>
+
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">🔒 Union Merge for Redactions</h4>
+                    <p class="text-xs text-base-content/70">Redacted fields from both base and overlay are combined (no duplicates). This ensures maximum security.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Testing Your Overlay -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Test Your Customizations
+                </h3>
+
+                <p class="text-base-content/70 mb-3">After making changes to your overlay file, restart the Phoenix server to see the changes:</p>
+
+                <pre><code class="language-bash"># Restart the server
+mix phx.server
+
+# Visit your Products page
+open http://localhost:4000/products_selecto</code></pre>
+
+                <div class="alert alert-success mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>✨ Pro Tip:</strong> You can regenerate the domain file anytime with <code>mix selecto.gen.domain</code> and your overlay customizations will be preserved!
+                  </div>
+                </div>
+              </div>
+
+              <!-- Advanced: Runtime Overlays -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                  Advanced: Runtime Overlay Merging
+                </h3>
+
+                <p class="text-base-content/70 mb-3">For multi-tenant scenarios or feature flags, you can merge overlays at runtime:</p>
+
+                <pre><code class="language-elixir"># In your LiveView or context
+def get_domain_for_tenant(tenant) do
+  base_domain = ProductDomain.domain()
+
+  # Load tenant-specific overlay
+  tenant_overlay = get_tenant_overlay(tenant)
+
+  # Merge at runtime
+  Selecto.Config.Overlay.merge(base_domain, tenant_overlay)
+end</code></pre>
+
+                <p class="text-xs text-base-content/60 mt-3">This allows different tenants to have different column labels, filters, or redactions without code duplication.</p>
               </div>
             </div>
           </div>
