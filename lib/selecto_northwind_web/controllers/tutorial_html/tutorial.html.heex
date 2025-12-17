@@ -44,10 +44,6 @@
           <span class="text-base-content/70 block">Generate Employees Domain</span>
         </a>
         <div class="divider my-4"></div>
-        <a href="#complete" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
-          <span class="font-semibold">🎉 Complete System</span>
-        </a>
-        <div class="divider my-4"></div>
         <a href="/" class="block px-4 py-2 rounded-lg hover:bg-base-200 transition-colors text-sm">
           <svg class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -160,7 +156,7 @@
             }, observerOptions);
 
             // Observe all sections with IDs
-            document.querySelectorAll('[id^="step-"], #complete').forEach(section => {
+            document.querySelectorAll('[id^="step-"]').forEach(section => {
               observer.observe(section);
             });
           });
@@ -565,7 +561,7 @@ $ mix deps.compile</code></pre>
                           <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
                         </ul>
                       </li>
-                      <li><strong>Automated execution:</strong> To run non-interactively, use: <code class="bg-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code></li>
+                      <li><strong>Automated execution:</strong> To run non-interactively, use: <code class="bg-yellow-100 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code></li>
                     </ol>
                   </div>
                 </div>
@@ -1266,7 +1262,7 @@ end</code></pre>
                       <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
                       <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
                     </ul>
-                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
+                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
                   </div>
                 </div>
 
@@ -1512,7 +1508,7 @@ end</code></pre>
                       <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
                       <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
                     </ul>
-                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
+                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
                   </div>
                 </div>
 
@@ -1784,7 +1780,7 @@ $ mix phx.server</code></pre>
                       <li>Prompt 1: "Do you want to proceed?" → Answer: <code>Y</code></li>
                       <li>Prompt 2: "Integrate SelectoComponents?" → Answer: <code>Y</code></li>
                     </ul>
-                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
+                    <p class="mt-2 text-xs"><strong>Automated execution:</strong> Use: <code class="bg-yellow-100 dark:bg-yellow-900 text-yellow-900 dark:text-yellow-100 px-2 py-1 rounded">echo -e "Y\nY" | mix selecto.gen.domain ...</code></p>
                   </div>
                 </div>
 
@@ -2010,55 +2006,6 @@ $ mix phx.server</code></pre>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Foundation steps message -->
-        <div id="complete" class="card bg-info/10 border border-info/20 shadow-lg scroll-mt-6">
-          <div class="card-body">
-            <h2 class="card-title text-info mb-4">
-              <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-              </svg>
-              🎉 Complete Enterprise System Built with Selecto!
-            </h2>
-            <p class="text-base-content/80 mb-4">Outstanding! You've successfully integrated Selecto across ALL major business domains in the Northwind database. Your application now provides comprehensive business intelligence capabilities spanning Products, Customers, Orders, and Employees.</p>
-
-            <div class="grid md:grid-cols-2 gap-4">
-              <div class="p-4 bg-base-100 rounded-lg border">
-                <h4 class="font-semibold mb-2">✅ Complete System Built:</h4>
-                <ul class="text-sm space-y-1 text-base-content/70">
-                  <li>• Set up Phoenix application with Northwind database</li>
-                  <li>• Added Selecto dependencies to your project</li>
-                  <li>• Products domain with Categories & Suppliers</li>
-                  <li>• Customers domain with Demographics</li>
-                  <li>• Orders domain connecting 5+ entities</li>
-                  <li>• Employees domain with HR hierarchies</li>
-                  <li>• Saved views infrastructure for all domains</li>
-                </ul>
-              </div>
-
-              <div class="p-4 bg-base-100 rounded-lg border">
-                <h4 class="font-semibold mb-2">🚀 Advanced Features to Explore:</h4>
-                <ul class="text-sm space-y-1 text-base-content/70">
-                  <li>• Create cross-domain dashboards</li>
-                  <li>• Build executive reporting views</li>
-                  <li>• Implement role-based access controls</li>
-                  <li>• Add real-time data updates with LiveView</li>
-                  <li>• Customize components for your brand</li>
-                  <li>• Export data to various formats</li>
-                </ul>
-              </div>
-            </div>
-            
-            <div class="mt-4 p-4 bg-base-200 rounded-lg">
-              <p class="text-sm text-base-content/70 text-center">
-                <svg class="w-4 h-4 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                This tutorial will be expanded with additional steps. For now, explore the generated Products interface and experiment with the Selecto features!
-              </p>
             </div>
           </div>
         </div>
