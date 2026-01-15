@@ -1,24 +1,36 @@
 # Incomplete Features Audit
 
-This document tracks incomplete, stubbed, or placeholder features across the Selecto ecosystem. Last updated: 2026-01-13.
+This document tracks incomplete, stubbed, or placeholder features across the Selecto ecosystem. Last updated: 2026-01-14.
 
 ## Overview
 
 | Library | High Priority | Medium Priority | Low Priority | Total | Completed |
 |---------|--------------|-----------------|--------------|-------|-----------|
-| Selecto (Core) | 4 | 4 | 2 | 10 | 3 |
-| SelectoComponents (UI) | 3 | 7 | 8 | 18 | 5 |
-| **Total** | **7** | **11** | **10** | **28** | **8** |
+| Selecto (Core) | 4 | 4 | 2 | 10 | 10 |
+| SelectoComponents (UI) | 3 | 7 | 8 | 18 | 11 |
+| **Total** | **7** | **11** | **10** | **28** | **21** |
 
 ### Recently Completed (branch: feature/incomplete-features-audit)
+- ✅ #1 Join/CTE Operations (selecto) - Dynamic joins at runtime
 - ✅ #2 Through-Type Joins (selecto)
+- ✅ #9 Set Operations Column Mapping (selecto) - Intelligent name-based and explicit column mapping
+- ✅ #10 SQL Type System Enhancement (selecto) - New TypeSystem module with type inference
+- ✅ #19 Filter Error Handling (selecto_components) - Robust error handling with enum validation
 - ✅ #3 Non-Association Joins / Custom Joins (selecto)
+- ✅ #4 Connection Pool Checkout (selecto) - Proper checkout/checkin/transaction support
+- ✅ #5 Streaming Output (selecto) - Memory-efficient processing for large datasets
 - ✅ #6 Multi-Argument Aggregate Functions (selecto)
+- ✅ #7 Window Function Join Extraction (selecto)
+- ✅ #8 Phoenix Helpers Query State (selecto) - Sort/filter/pagination state tracking
 - ✅ #11 Filter Set Sharing (selecto_components)
 - ✅ #12 Filter Set Export (selecto_components)
 - ✅ #13 Date Range Comparison Shortcuts (selecto_components)
+- ✅ #14 Router Event Handler Placeholders (selecto_components) - Full implementation
+- ✅ #15 Bulk Actions Processing (selecto_components) - Handler system with callbacks
 - ✅ #16 Inline Edit Validation (selecto_components)
 - ✅ #17 Inline Edit Optimistic Update (selecto_components)
+- ✅ #18 Quick Add Form Field Discovery (selecto_components) - Ecto schema introspection
+- ✅ #20 Get All Row IDs (selecto_components) - Multi-source ID extraction
 
 ---
 
@@ -26,21 +38,26 @@ This document tracks incomplete, stubbed, or placeholder features across the Sel
 
 ### High Priority
 
-#### 1. Join/CTE Operations
-- **File:** `vendor/selecto/lib/selecto.ex`
-- **Lines:** 290-313
-- **Status:** Commented out
-- **Description:** Multiple join and CTE (Common Table Expression) functions are defined but commented out:
+#### 1. Join/CTE Operations ✅ COMPLETED
+- **File:** `vendor/selecto/lib/selecto.ex`, `vendor/selecto/lib/selecto/dynamic_join.ex`
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented dynamic join functions for runtime query building.
+- **Implementation:**
+  - `Selecto.join/3` - Enable domain-configured joins or add custom joins
+  - `Selecto.join_parameterize/4` - Create parameterized instances of joins with different filters
+  - `Selecto.join_subquery/4` - Join with another Selecto query as subquery
+  - New `Selecto.DynamicJoin` module handles all dynamic join logic
+- **Usage:**
   ```elixir
-  # def join(selecto_struct, join_id, options \\ [])
-  # def join_paramterize(selecto_struct, join_id, parameter, options)
-  # def join(selecto_struct, join_id, join_selecto, options \\ [])
-  # def with(selecto_struct, cte_name, cte, params, options \\ [])
-  # def with(selecto_struct, cte_name, cte_selecto, options \\ [])
-  # def on_with(selecto_struct, cte_name, fn...)
+  # Enable a domain join
+  selecto |> Selecto.join(:category)
+
+  # Custom join
+  selecto |> Selecto.join(:audit_log, source: "audit_logs", on: [...])
+
+  # Parameterized join
+  selecto |> Selecto.join_parameterize(:orders, "active", status: "active")
   ```
-- **Impact:** Users cannot programmatically add joins or CTEs to queries at runtime
-- **Suggested Fix:** Implement join/CTE builder functions that modify the selecto struct and integrate with the SQL builder
 
 #### 2. Through-Type Joins ✅ COMPLETED
 - **File:** `vendor/selecto/lib/selecto/schema/join.ex`
@@ -61,38 +78,57 @@ This document tracks incomplete, stubbed, or placeholder features across the Sel
   - Supports optional `fields` and `filters` configuration
 - **Usage:** Define join with `non_assoc: true, source: "table_name", owner_key: :id, related_key: :foreign_id`
 
-#### 4. Connection Pool Checkout
+#### 4. Connection Pool Checkout ✅ COMPLETED
 - **File:** `vendor/selecto/lib/selecto/connection_pool.ex`
-- **Lines:** 324-326
-- **Status:** Returns `{:error, :not_implemented}`
-- **Description:** The `checkout_connection/1` function is stubbed:
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented proper connection pool management functions.
+- **Implementation:**
+  - `checkout/2` - Manual connection checkout for multi-query operations
+  - `checkin/2` - Return checked-out connection to pool
+  - `with_connection/2` - Execute function with auto-checkout/checkin
+  - `transaction/3` - Execute function within a database transaction
+  - Fixed `execute_with_pool/5` to use Postgrex directly with pool
+  - Added `execute_with_prepared_cache/5` for prepared statement caching
+- **Usage:**
   ```elixir
-  # TODO: Implement proper connection checkout using the correct DBConnection API
-  defp checkout_connection(_pool) do
-    {:error, :not_implemented}
-  end
+  # Auto-managed connection
+  Selecto.ConnectionPool.with_connection(pool, fn conn ->
+    Postgrex.query!(conn, "SELECT * FROM users", [])
+  end)
+
+  # Transaction
+  Selecto.ConnectionPool.transaction(pool, fn conn ->
+    Postgrex.query!(conn, "INSERT INTO ...", [...])
+    Postgrex.query!(conn, "UPDATE ...", [...])
+  end)
   ```
-- **Impact:** Connection pool management for direct database connections doesn't work
-- **Note:** This may be intentional if all queries go through Ecto's Repo, but limits advanced use cases
-- **Suggested Fix:** Implement using `DBConnection.checkout/2` or document that this feature is not supported
 
 ---
 
 ### Medium Priority
 
-#### 5. Streaming Output Format
-- **File:** `vendor/selecto/lib/selecto/output/formats.ex`
-- **Lines:** 89-91
-- **Status:** Returns error
-- **Description:** Streaming output transformation is not implemented:
+#### 5. Streaming Output Format ✅ COMPLETED
+- **File:** `vendor/selecto/lib/selecto/output/transformers/stream.ex`
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented comprehensive streaming transformations for large datasets.
+- **Implementation:**
+  - New `Selecto.Output.Transformers.Stream` module with full streaming support
+  - `transform/5` - Main streaming transformation with configurable batch sizes
+  - `transform_single/5` - Row-by-row streaming for simple transformations
+  - `transform_chunked/5` - Yield results in chunks for pagination
+  - `transform_to_io/6` - Stream directly to IO device/file
+  - Supports inner formats: `:maps`, `:json`, `:csv`, `:raw`
+  - Parallel batch processing option for performance
+- **Usage:**
   ```elixir
-  # TODO: Implement streaming transformer
-  defp transform_format({:stream, _inner_format}, _columns, _rows, _aliases) do
-    {:error, "Streaming output not yet implemented"}
-  end
+  # Stream to maps
+  {:ok, stream} = Selecto.execute(selecto, format: {:stream, :maps})
+  Enum.each(stream, &process_row/1)
+
+  # Stream CSV to file
+  {:ok, stream} = Selecto.execute(selecto, format: {:stream, :csv})
+  Enum.into(stream, File.stream!("output.csv"))
   ```
-- **Impact:** Large result sets cannot be streamed for memory-efficient processing
-- **Suggested Fix:** Implement using Elixir Streams to lazily transform rows
 
 #### 6. Multi-Argument Aggregate Functions ✅ COMPLETED
 - **File:** `vendor/selecto/lib/selecto/sql/functions.ex`
@@ -112,54 +148,98 @@ This document tracks incomplete, stubbed, or placeholder features across the Sel
   {:grouping, ["field1", "field2"]}
   ```
 
-#### 7. Window Function Join Extraction
+#### 7. Window Function Join Extraction ✅ COMPLETED
 - **File:** `vendor/selecto/lib/selecto/builder/window.ex`
-- **Lines:** 243
-- **Status:** Returns empty list placeholder
-- **Description:** When window functions reference fields from joined tables, the necessary joins are not automatically added:
-  ```elixir
-  # TODO: Implement join extraction for fields that require joins
-  defp extract_joins_from_window(_window_config, _domain) do
-    []
-  end
-  ```
-- **Impact:** Window functions that partition or order by joined fields may fail or produce incorrect results
-- **Suggested Fix:** Parse window function configuration and extract required joins similar to how SELECT fields are handled
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented join extraction for window function fields.
+- **Implementation:**
+  - `extract_required_joins/2` now properly collects field references from partition_by, order_by, and arguments
+  - Added `collect_field_references/3` to gather all fields from window spec
+  - Added `find_join_for_field/2` to determine which join a field requires
+  - Added `find_join_from_columns/2` to look up join requirements from column config
+  - Handles both qualified (e.g., "category.name") and unqualified field names
+- **Behavior:** Window functions that reference joined table fields now automatically include required joins
 
-#### 8. Phoenix Helpers (Query State Tracking)
+#### 8. Phoenix Helpers (Query State Tracking) ✅ COMPLETED
 - **File:** `vendor/selecto/lib/selecto/phoenix_helpers.ex`
-- **Lines:** 295-318
-- **Status:** Placeholder stubs
-- **Description:** Several helper functions for Phoenix/LiveView integration are stubs:
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented full query state tracking for Phoenix/LiveView integration.
+- **Implementation:**
+  - `get_current_page/2` - Extract current page from selecto state
+  - `get_per_page/2` - Get items per page setting
+  - `get_current_sort/1` - Get current sort field/direction
+  - `get_current_filter_value/2` - Get value for specific filter
+  - `put_pagination/3` - Set page/per_page with automatic offset calculation
+  - `remove_filter/2` - Remove filter by field name
+  - Added public helpers: `get_filters/1`, `get_sort/1`, `is_filtered?/2`, `is_sorted?/2`
+  - Added `toggle_sort/2` for UI sort toggling (asc → desc → none)
+  - Added `clear_filters/1` and `reset_query/1` for bulk operations
+- **Usage:**
   ```elixir
-  defp get_current_sort(_selecto), do: nil
-  defp get_current_filter_value(_selecto, _field), do: nil
-  defp remove_filter(selecto, _field), do: selecto  # Does nothing
+  # Check current state
+  current_filters = Selecto.PhoenixHelpers.get_filters(selecto)
+  {sort_field, direction} = Selecto.PhoenixHelpers.get_sort(selecto)
+
+  # Toggle sort in UI
+  selecto = Selecto.PhoenixHelpers.toggle_sort(selecto, "name")
   ```
-- **Impact:** LiveView components cannot easily introspect current query state for UI rendering
-- **Suggested Fix:** Store sort/filter state in selecto struct metadata and implement accessor functions
 
 ---
 
 ### Lower Priority
 
-#### 9. Set Operations Column Mapping
+#### 9. Set Operations Column Mapping ✅ COMPLETED
 - **File:** `vendor/selecto/lib/selecto/set_operations.ex`
-- **Lines:** 228
-- **Status:** Falls back to position-based
-- **Description:** Column mapping for UNION/INTERSECT/EXCEPT operations uses position-based pairing instead of intelligent mapping
-- **Impact:** Columns must be in exact order across all queries in set operations
-- **Suggested Fix:** Implement column name matching or explicit mapping configuration
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented intelligent column mapping for UNION/INTERSECT/EXCEPT operations.
+- **Implementation:**
+  - `apply_column_mapping/3` now supports three modes:
+    1. No mapping (nil): Attempts intelligent name-based matching with fallback to position
+    2. List mapping: `[{"left_col", "right_col"}, ...]` for explicit column pairing
+    3. Map mapping: `%{"left_col" => "right_col"}` alternative syntax
+  - `try_name_based_mapping/2` matches columns by exact name or common patterns
+  - `build_alternative_names/1` generates alternative names (e.g., `full_name` → `name`, `email_address` → `email`)
+  - `normalize_name/1` handles case-insensitive comparison and special characters
+  - `find_matching_right_column/2` provides fallback for unmatched columns
+- **Usage:**
+  ```elixir
+  # Automatic name-based matching
+  Selecto.union(customers_query, vendors_query)
 
-#### 10. SQL Type System Enhancement
-- **File:** `vendor/selecto/lib/selecto/builder/sql/select.ex`
-- **Lines:** 4, 789
-- **Status:** TODO comments
-- **Description:** Two related issues:
-  - Line 4: `### TODO alter prep_selector to return the data type`
-  - Line 789: `# TODO - other data types- float, decimal`
-- **Impact:** Type coercion and validation is limited; some numeric operations may not work correctly
-- **Suggested Fix:** Thread type information through the selector preparation pipeline
+  # Explicit column mapping
+  Selecto.union(customers_query, vendors_query,
+    column_mapping: [{"name", "company_name"}, {"email", "contact_email"}]
+  )
+  ```
+
+#### 10. SQL Type System Enhancement ✅ COMPLETED
+- **File:** `vendor/selecto/lib/selecto/type_system.ex` (NEW), `vendor/selecto/lib/selecto.ex`
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented comprehensive type inference system for SQL expressions.
+- **Implementation:**
+  - New `Selecto.TypeSystem` module with complete type inference for:
+    - Literals (integer, float, boolean, string, date/time, UUID)
+    - Field references (via FieldResolver)
+    - Aggregate functions (COUNT, SUM, AVG, MIN, MAX, STRING_AGG, etc.)
+    - Scalar functions (CONCAT, UPPER, ABS, ROUND, etc.)
+    - CASE expressions, COALESCE, GREATEST, LEAST
+    - Window functions
+  - Type categories: `:numeric`, `:string`, `:boolean`, `:datetime`, `:json`, `:array`, `:binary`, `:uuid`
+  - `compatible?/2` for type compatibility checking
+  - `coerce_types/3` for determining result types in operations
+  - `type_category/1` for grouping types
+  - Public API exposed via main `Selecto` module
+- **Usage:**
+  ```elixir
+  # Infer expression type
+  {:ok, :bigint} = Selecto.infer_type(selecto, {:count, "*"})
+  {:ok, :decimal} = Selecto.infer_type(selecto, {:sum, "price"})
+  {:ok, :string} = Selecto.infer_type(selecto, "product_name")
+
+  # Check type compatibility
+  true = Selecto.types_compatible?(:integer, :decimal)
+  false = Selecto.types_compatible?(:string, :boolean)
+  ```
 
 ---
 
@@ -220,42 +300,50 @@ This document tracks incomplete, stubbed, or placeholder features across the Sel
 
 ### Medium Priority
 
-#### 14. Router Event Handler Placeholders
+#### 14. Router Event Handler Placeholders ✅ COMPLETED
 - **File:** `vendor/selecto_components/lib/selecto_components/router.ex`
-- **Lines:** 107-213
-- **Status:** Multiple placeholder functions
-- **Description:** Several event handlers return `{:ok, state}` without implementation:
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented all router event handlers with full functionality.
+- **Implementation:**
+  - `handle_save_view/2` - Saves view config to saved_view_module or state
+  - `handle_tree_drop/2` - Drag-and-drop filter reordering with position support
+  - `handle_filter_remove/2` - Remove filter by UUID from configuration
+  - `handle_agg_add_filters/2` - Drill-down from aggregate cells, switches to detail view
+  - `handle_list_picker_remove/4` - Remove item from selected/group_by/aggregate lists
+  - `handle_list_picker_move/5` - Reorder items with order tracking
+  - `handle_list_picker_add/4` - Add items with UUID and order assignment
+  - `apply_filters/2` - Full filter application with all comparison operators
+  - Added helper functions for filter manipulation
+- **Supported Comparisons:** `=`, `!=`, `>`, `>=`, `<`, `<=`, `like`, `ilike`, `in`, `not_in`, `is_null`, `is_not_null`, `AND`, `OR`
 
-  | Function | Line | Purpose |
-  |----------|------|---------|
-  | `handle_save_view/2` | 107-111 | Persist view configuration |
-  | `handle_tree_drop/2` | 172-175 | Drag-and-drop filter reordering |
-  | `handle_filter_remove/2` | 178-181 | Remove filter from configuration |
-  | `handle_agg_add_filters/2` | 184-188 | Drill-down from aggregate cells |
-  | `handle_list_picker_remove/4` | 191-194 | Remove item from list |
-  | `handle_list_picker_move/5` | 197-200 | Reorder list items |
-  | `handle_list_picker_add/4` | 203-206 | Add item to list |
-  | `apply_filters/2` | 209-213 | Apply filters to query |
-
-- **Impact:** These features don't work when using the router-based event handling pattern
-- **Note:** Some functionality may be implemented directly in `form.ex` instead
-- **Suggested Fix:** Either implement these handlers or remove them if functionality exists elsewhere
-
-#### 15. Bulk Actions Processing
+#### 15. Bulk Actions Processing ✅ COMPLETED
 - **File:** `vendor/selecto_components/lib/selecto_components/enhanced_table/bulk_actions.ex`
-- **Lines:** 403-413
-- **Status:** Simulated with sleep
-- **Description:** Batch processing is simulated rather than implemented:
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented proper bulk action processing with callback support.
+- **Implementation:**
+  - `process_batch/2` now supports three handler modes:
+    1. Function handler: `%{handler: fn batch_ids -> ... end}`
+    2. Module/function handler: `%{handler: {MyModule, :process_batch}}`
+    3. Parent notification: Sends `{:bulk_action_process_batch, action_id, batch_ids}` to parent
+  - Removed simulation sleep - real processing via callbacks
+- **Usage:**
   ```elixir
-  defp process_batch(action, batch) do
-    # For now, simulate processing
-    Process.sleep(500)
-    batch_ids = Enum.map(batch, & &1.id)
-    {:ok, batch_ids}
+  # Define action with custom handler
+  %{
+    id: "delete",
+    label: "Delete",
+    handler: fn batch_ids ->
+      Repo.delete_all(from r in Record, where: r.id in ^batch_ids)
+      {:ok, batch_ids}
+    end
+  }
+
+  # Or handle in parent LiveView
+  def handle_info({:bulk_action_process_batch, "delete", batch_ids}, socket) do
+    # Process deletion
+    {:noreply, socket}
   end
   ```
-- **Impact:** Bulk actions (delete, export, etc.) don't actually perform operations
-- **Suggested Fix:** Implement callback system that allows parent components to define action handlers
 
 #### 16. Inline Edit Validation ✅ COMPLETED
 - **File:** `vendor/selecto_components/lib/selecto_components/enhanced_table/inline_edit.ex`
@@ -280,47 +368,61 @@ This document tracks incomplete, stubbed, or placeholder features across the Sel
   - Works with both list and stream-based row storage
 - **Behavior:** UI immediately reflects changes without waiting for server confirmation
 
-#### 18. Quick Add Form Field Discovery
+#### 18. Quick Add Form Field Discovery ✅ COMPLETED
 - **File:** `vendor/selecto_components/lib/selecto_components/forms/quick_add.ex`
-- **Lines:** 484-495
-- **Status:** Returns hardcoded examples
-- **Description:** Schema field extraction returns dummy data:
-  ```elixir
-  defp build_fields_from_schema(_schema) do
-    # For now, return example fields
-    [
-      %{name: :title, type: :string, required: true},
-      %{name: :description, type: :text, required: false},
-      # ...
-    ]
-  end
-  ```
-- **Impact:** Quick add forms don't adapt to actual schema structure
-- **Suggested Fix:** Use `schema.__schema__(:fields)` and `__schema__(:type, field)` to introspect fields
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented comprehensive schema introspection for form field generation.
+- **Implementation:**
+  - `build_fields_from_schema/1` now handles:
+    1. Ecto schema modules - Uses `__schema__/1` to extract fields and types
+    2. Selecto domain column configs - Extracts from columns map
+  - Added `build_field_config/3` for Ecto schema field processing
+  - Added `build_field_from_column/2` for Selecto column processing
+  - Type mapping via `ecto_type_to_form_type/1` and `selecto_type_to_form_type/1`
+  - Supports: `:string`, `:integer`, `:float`, `:decimal`, `:boolean`, `:date`, `:time`, `:datetime`, arrays, maps, enums
+  - Auto-detects required fields from foreign key associations
+  - Excludes primary keys and timestamp fields automatically
+- **Supported Input Types:** `:text`, `:number`, `:boolean`, `:date`, `:select`, `:textarea`
 
-#### 19. Filter Error Handling
+#### 19. Filter Error Handling ✅ COMPLETED
 - **File:** `vendor/selecto_components/lib/selecto_components/helpers/filters.ex`
-- **Lines:** 252, 346
-- **Status:** TODO comments
-- **Description:** Two error handling gaps:
-  - Line 252: `#### TODO handle errors` in `filter_recurse/3`
-  - Line 346: `# TODO check selected against enum_conf.mappings!` for enum validation
-- **Impact:** Invalid filter configurations may cause cryptic errors or silent failures
-- **Suggested Fix:** Add try/rescue with user-friendly error messages; validate enum values against allowed mappings
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented robust error handling for filter processing with enum validation.
+- **Implementation:**
+  - Refactored `filter_recurse/3` with try/rescue error handling
+  - `process_single_filter/3` wraps individual filter processing with error capture
+  - `process_column_filter/3` handles column lookup and type-based filter building
+  - `build_typed_filter/3` builds filters based on column type with proper error handling
+  - `safe_make_num_filter/2` and `safe_make_date_filter/1` wrap filter creation with error capture
+  - `validate_enum_value/2` validates enum values against allowed mappings:
+    - Supports map format: `%{mappings: %{key1: "label1", key2: "label2"}}`
+    - Supports list format: `[{:key1, "label1"}, {:key2, "label2"}]`
+    - Returns descriptive error messages for invalid values
+  - `find_column/2` improved column lookup by key, colid, or name
+  - Unknown column types now treated as strings with debug logging
+  - Errors are logged but don't crash filter chain - invalid filters are skipped
+- **Behavior:**
+  - Invalid filters are skipped with warning log instead of crashing
+  - Enum values are validated against configured mappings
+  - Type-specific errors (invalid date, invalid number) are captured and reported
+  - Unknown column types fall back to string filter handling
 
-#### 20. Get All Row IDs for Bulk Actions
+#### 20. Get All Row IDs for Bulk Actions ✅ COMPLETED
 - **File:** `vendor/selecto_components/lib/selecto_components/enhanced_table/bulk_actions.ex`
-- **Lines:** 416-419
-- **Status:** Returns empty list or examples
-- **Description:** Cannot retrieve all row IDs for "select all" functionality:
-  ```elixir
-  defp get_all_row_ids(socket) do
-    # This would get IDs from the parent component
-    socket.assigns[:all_row_ids] || []
-  end
-  ```
-- **Impact:** "Select all" in bulk actions doesn't work properly
-- **Suggested Fix:** Implement communication with parent component or execute count query
+- **Status:** ✅ Implemented in branch `feature/incomplete-features-audit`
+- **Description:** Implemented multi-source row ID extraction for bulk selection.
+- **Implementation:**
+  - `get_all_row_ids/1` now extracts IDs from multiple sources:
+    1. Explicit `all_row_ids` assign
+    2. `rows` list (maps with id field)
+    3. `query_results` Selecto format (rows + columns)
+    4. Phoenix `streams` data structure
+    5. Parent component request via `{:request_all_row_ids, pid}` message
+  - Added `extract_ids_from_rows/1` for list/map extraction
+  - Added `extract_ids_from_query_results/1` for Selecto format
+  - Added `extract_ids_from_stream/1` for Phoenix streams
+  - Added public `set_all_row_ids/2` for parent components to push IDs
+- **ID Fields:** Checks `:id`, `"id"`, `:_id`, `"_id"`, `"pk"`, `"primary_key"`
 
 ---
 
