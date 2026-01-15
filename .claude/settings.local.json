@@ -33,7 +33,8 @@
       "Bash(xargs kill:*)",
       "Bash(timeout 60 mix compile)",
       "Bash(killall:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(timeout 90 mix compile:*)"
     ],
     "deny": [],
     "ask": []
