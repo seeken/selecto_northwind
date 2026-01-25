@@ -574,10 +574,11 @@ $ mix deps.compile</code></pre>
                 <h4 class="font-semibold mb-2">Step 2b: Generate Products Domain</h4>
                 <div class="relative">
                   <pre class="mb-4"><code class="language-bash">$ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-lookup Category:category_name \
-  --expand-star Supplier:company_name \
-  --expand-tag Tags:name \
-  --live --saved-views --path products_selecto</code></pre>
+  --expand-schemas supplier,category,order_details \
+  --expand-star category:category_name \
+  --expand-star supplier:company_name \
+  --expand-tag tags:name \
+  --live --saved-views --path /products_selecto</code></pre>
                 </div>
 
                 <div class="alert alert-success mt-4 mb-4">
@@ -587,11 +588,12 @@ $ mix deps.compile</code></pre>
                   <div>
                     <strong>✨ Smart Join Modes Explained:</strong>
                     <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
-                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-lookup Category:category_name</code> - Small lookup table (8 categories), perfect for checkboxes</li>
-                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star Supplier:company_name</code> - Medium lookup table (29 suppliers), searchable dropdown</li>
-                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-tag Tags:name</code> - Many-to-many tags with ID-based filtering (prevents query denormalization)</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-schemas supplier,category,order_details</code> - Fully expand these associations with all columns</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star category:category_name</code> - Lookup table (8 categories), displays name, filters by ID</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star supplier:company_name</code> - Lookup table (29 suppliers), displays name, filters by ID</li>
+                      <li><code class="bg-success/20 px-2 py-1 rounded">--expand-tag tags:name</code> - Many-to-many tags with ID-based filtering (prevents query denormalization)</li>
                     </ul>
-                    <p class="mt-2 text-sm">These special join modes generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
+                    <p class="mt-2 text-sm">The <code>--expand-schemas</code> flag fully expands associated schemas with all their columns. The special join modes (star, tag) generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
                   </div>
                 </div>
 
@@ -600,7 +602,7 @@ $ mix deps.compile</code></pre>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                   </svg>
                   <div>
-                    <strong>Note:</strong> The <code>--path products_selecto</code> option specifies a custom route path to avoid conflicts with existing routes. The <code>--saved-views</code> flag enables persistent saved views for this domain.
+                    <strong>Note:</strong> The <code>--path /products_selecto</code> option specifies the route path (with leading slash) that the LiveView will use for URL navigation. The <code>--saved-views</code> flag enables persistent saved views for this domain.
                   </div>
                 </div>
               </div>
@@ -641,32 +643,31 @@ $ mix deps.compile</code></pre>
                 <p class="text-base-content/70 mb-3">The special join mode flags generate optimized configurations that improve query performance and user experience:</p>
 
                 <div class="grid gap-4 mb-4">
-                  <div class="border border-warning/30 bg-warning/5 rounded-lg p-4">
-                    <div class="font-semibold text-warning mb-2 flex items-center gap-2">
-                      <span class="badge badge-warning badge-sm">📚 Lookup Mode</span>
-                      <code class="text-xs">--expand-lookup Category:category_name</code>
+                  <div class="border border-primary/30 bg-primary/5 rounded-lg p-4">
+                    <div class="font-semibold text-primary mb-2 flex items-center gap-2">
+                      <span class="badge badge-primary badge-sm">📦 Expand Schemas</span>
+                      <code class="text-xs">--expand-schemas supplier,category,order_details</code>
                     </div>
-                    <p class="text-sm text-base-content/70 mb-2">For small, stable reference tables (3-50 records):</p>
+                    <p class="text-sm text-base-content/70 mb-2">Fully expand associated schemas with all their columns and associations:</p>
                     <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                      <li><strong>Best for:</strong> Category (8), Shippers (3), Regions (4), Status codes</li>
-                      <li>Displays "category_name" to users (e.g., "Beverages", "Condiments")</li>
-                      <li>Filters using category ID (indexed integer column)</li>
-                      <li>Perfect for dropdowns - entire dataset can be cached</li>
-                      <li>Very stable data that rarely changes</li>
+                      <li><strong>Use for:</strong> Any association you want to select/filter by multiple columns</li>
+                      <li>Expands all fields from the associated schema into the domain configuration</li>
+                      <li>Enables selecting columns like <code>supplier.company_name</code>, <code>supplier.city</code>, etc.</li>
+                      <li>Can be combined with star/tag modes for ID-based filtering</li>
                     </ul>
                   </div>
 
                   <div class="border border-success/30 bg-success/5 rounded-lg p-4">
                     <div class="font-semibold text-success mb-2 flex items-center gap-2">
                       <span class="badge badge-success badge-sm">⭐ Star Mode</span>
-                      <code class="text-xs">--expand-star Supplier:company_name</code>
+                      <code class="text-xs">--expand-star category:category_name</code>
                     </div>
-                    <p class="text-sm text-base-content/70 mb-2">For medium-sized lookup tables (50-5000 records):</p>
+                    <p class="text-sm text-base-content/70 mb-2">For lookup tables where you want to display a name but filter by ID:</p>
                     <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                      <li><strong>Best for:</strong> Suppliers (29), Customers (91), Employees (9), Locations</li>
-                      <li>Same ID-based filtering as lookup mode</li>
-                      <li>Too large to cache entire dataset in UI</li>
-                      <li>May grow over time (new suppliers, customers, etc.)</li>
+                      <li><strong>Best for:</strong> Categories (8), Suppliers (29), Customers (91), Status codes</li>
+                      <li>Displays "category_name" to users (e.g., "Beverages", "Condiments")</li>
+                      <li>Filters using category ID (indexed integer column)</li>
+                      <li>Prevents query denormalization when grouping by ID</li>
                       <li>Named "star" from data warehouse star schema patterns</li>
                     </ul>
                   </div>
@@ -674,7 +675,7 @@ $ mix deps.compile</code></pre>
                   <div class="border border-info/30 bg-info/5 rounded-lg p-4">
                     <div class="font-semibold text-info mb-2 flex items-center gap-2">
                       <span class="badge badge-info badge-sm">🏷️ Tag Mode</span>
-                      <code class="text-xs">--expand-tag Tags:name</code>
+                      <code class="text-xs">--expand-tag tags:name</code>
                     </div>
                     <p class="text-sm text-base-content/70 mb-2">For many-to-many relationships (unlimited records):</p>
                     <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
@@ -693,8 +694,8 @@ $ mix deps.compile</code></pre>
                   </svg>
                   <div>
                     <strong>💡 The Rule of Thumb</strong>
-                    <p class="text-sm mt-1"><strong>Lookup:</strong> Small, stable (Category, Shippers) • <strong>Star:</strong> Medium, may grow (Suppliers, Customers) • <strong>Tag:</strong> Many-to-many (Tags, Skills)</p>
-                    <p class="text-sm mt-2">All three modes use ID-based filtering for performance - the difference is mainly about size, growth, and relationship type!</p>
+                    <p class="text-sm mt-1"><strong>expand-schemas:</strong> Need multiple columns • <strong>Star:</strong> Display name, filter by ID • <strong>Tag:</strong> Many-to-many relationships</p>
+                    <p class="text-sm mt-2">Note: Association names must be lowercase to match the Ecto schema (e.g., <code>category</code> not <code>Category</code>).</p>
                   </div>
                 </div>
               </div>
@@ -723,18 +724,18 @@ $ mix deps.compile</code></pre>
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
                       </svg>
                       <div>
-                        <strong>🤖 AI Agents:</strong> Open and edit the file: <code class="bg-base-300 px-2 py-1 rounded text-xs">lib/selecto_northwind/selecto_domains/products_domain.ex</code>
+                        <strong>🤖 AI Agents:</strong> Open and edit the file: <code class="bg-base-300 px-2 py-1 rounded text-xs">lib/selecto_northwind/selecto_domains/product_domain.ex</code>
                       </div>
                     </div>
 
                     <p class="text-base-content/70 mb-2"><strong>Find this line near the top of the file:</strong></p>
                     <div class="relative">
-                      <pre class="mb-3"><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do</code></pre>
+                      <pre class="mb-3"><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductDomain do</code></pre>
                     </div>
 
                     <p class="text-base-content/70 mb-2"><strong>Add this line immediately after the defmodule line:</strong></p>
                     <div class="relative">
-                      <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductsDomain do
+                      <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
   use SelectoNorthwind.SavedViewContext  # ← ADD THIS LINE
 
   # ... rest of the domain configuration
@@ -766,7 +767,7 @@ def mount(_params, _session, socket) do
   socket =
     assign(socket,
       # ... other assigns ...
-      saved_view_module: SelectoNorthwind.SelectoDomains.ProductsDomain,
+      saved_view_module: SelectoNorthwind.SelectoDomains.ProductDomain,
       saved_view_context: "/products_selecto",  # Identifies this set of saved views
       available_saved_views: saved_views
     )
@@ -857,9 +858,13 @@ end</code></pre>
                   <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
                   </svg>
-                  Build Assets
+                  Integrate SelectoComponents Assets
                 </h3>
-                <p class="text-base-content/70 mb-3">Compile the updated assets with the new SelectoComponents integration:</p>
+                <p class="text-base-content/70 mb-3">Run the integration task to set up the JavaScript hooks and CSS source paths:</p>
+                <div class="relative">
+                  <pre class="mb-4"><code class="language-bash">$ mix selecto.components.integrate</code></pre>
+                </div>
+                <p class="text-base-content/70 mb-3">Then compile the updated assets:</p>
                 <div class="relative">
                   <pre><code class="language-bash">$ mix assets.build</code></pre>
                 </div>
@@ -1094,6 +1099,118 @@ defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
 end</code></pre>
               </div>
 
+              <!-- JSONB Schema Configuration -->
+              <div>
+                <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
+                  <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                  </svg>
+                  Configure JSONB Schema for Attributes
+                </h3>
+
+                <p class="text-base-content/70 mb-3">The Products table has a JSONB <code>attributes</code> column for storing flexible product metadata. Define its schema in the overlay to enable type-safe filtering and display:</p>
+
+                <div class="alert alert-info mb-3">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>🤖 AI Agents - Required Action:</strong> Add the following JSONB schema definition to your overlay file at <code class="bg-base-300 px-2 py-1 rounded text-xs">lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex</code>
+                  </div>
+                </div>
+
+                <pre><code class="language-elixir"># Add to lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex
+# Place this inside the module, after the deffilter blocks
+
+# ============================================================================
+# JSONB Schema Definitions
+# ============================================================================
+#
+# Define the structure of your JSONB columns to enable:
+# - Type-safe filtering with dot notation (e.g., attributes.color = "red")
+# - Validation on inserts/updates
+# - GraphQL type generation
+
+defjsonb_schema :attributes do
+  %<%= "{" %>
+    # Product color
+    "color" =&gt; %<%= "{" %>type: :string<%= "}" %>,
+
+    # Size options
+    "size" =&gt; %<%= "{" %>type: :string, enum: ["small", "medium", "large", "xl"]<%= "}" %>,
+
+    # Weight in kg
+    "weight" =&gt; %<%= "{" %>type: :decimal, min: 0<%= "}" %>,
+
+    # Material type
+    "material" =&gt; %<%= "{" %>type: :string<%= "}" %>,
+
+    # Whether the product is organic
+    "organic" =&gt; %<%= "{" %>type: :boolean, default: false<%= "}" %>,
+
+    # Dimensions nested object
+    "dimensions" =&gt; %<%= "{" %>
+      type: :object,
+      schema: %<%= "{" %>
+        "length" =&gt; %<%= "{" %>type: :decimal<%= "}" %>,
+        "width" =&gt; %<%= "{" %>type: :decimal<%= "}" %>,
+        "height" =&gt; %<%= "{" %>type: :decimal<%= "}" %>,
+        "unit" =&gt; %<%= "{" %>type: :string, enum: ["cm", "in", "mm"], default: "cm"<%= "}" %>
+      <%= "}" %>
+    <%= "}" %>,
+
+    # Tags for categorization
+    "tags" =&gt; %<%= "{" %>
+      type: :array,
+      items: %<%= "{" %>type: :string<%= "}" %>
+    <%= "}" %>
+  <%= "}" %>
+end</code></pre>
+
+                <div class="alert alert-success mt-4">
+                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                  <div>
+                    <strong>✨ JSONB Schema Benefits:</strong>
+                    <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
+                      <li><strong>Type-safe filtering:</strong> Filter by <code>attributes.color = "red"</code> or <code>attributes.weight > 10</code></li>
+                      <li><strong>Enum validation:</strong> Size can only be "small", "medium", "large", or "xl"</li>
+                      <li><strong>Nested objects:</strong> Access <code>attributes.dimensions.length</code></li>
+                      <li><strong>Array support:</strong> Filter products by tags within the JSONB</li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">Supported Types</h4>
+                    <ul class="text-xs space-y-1">
+                      <li><code>:string</code> - Text values</li>
+                      <li><code>:integer</code> - Whole numbers</li>
+                      <li><code>:decimal</code> / <code>:float</code> - Decimal numbers</li>
+                      <li><code>:boolean</code> - True/false values</li>
+                      <li><code>:date</code> - Date values</li>
+                      <li><code>:datetime</code> - Date and time values</li>
+                      <li><code>:object</code> - Nested objects (use <code>schema</code> key)</li>
+                      <li><code>:array</code> - Arrays (use <code>items</code> key)</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">Validation Options</h4>
+                    <ul class="text-xs space-y-1">
+                      <li><code>:required</code> - Field must be present</li>
+                      <li><code>:enum</code> - List of allowed values</li>
+                      <li><code>:min</code> / <code>:max</code> - Numeric bounds</li>
+                      <li><code>:min_length</code> / <code>:max_length</code> - String length</li>
+                      <li><code>:pattern</code> - Regex pattern for strings</li>
+                      <li><code>:default</code> - Default value if not provided</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
               <!-- Available Directives -->
               <div>
                 <h3 class="text-lg font-semibold mb-3 flex items-center gap-2">
@@ -1131,11 +1248,23 @@ end</code></pre>
                   </div>
                 </div>
 
-                <div class="bg-base-200 p-4 rounded-lg mt-4">
-                  <h4 class="font-semibold mb-2 text-sm">Module Attributes</h4>
-                  <ul class="text-xs space-y-1">
-                    <li><code>@redactions</code> - List of field atoms to redact from queries (security/privacy)</li>
-                  </ul>
+                <div class="grid md:grid-cols-2 gap-4 mt-4">
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">Module Attributes</h4>
+                    <ul class="text-xs space-y-1">
+                      <li><code>@redactions</code> - List of field atoms to redact from queries (security/privacy)</li>
+                    </ul>
+                  </div>
+
+                  <div class="bg-base-200 p-4 rounded-lg">
+                    <h4 class="font-semibold mb-2 text-sm">JSONB Schema (via <code>defjsonb_schema</code>)</h4>
+                    <ul class="text-xs space-y-1">
+                      <li><code>defjsonb_schema :column_name</code> - Define schema for JSONB column</li>
+                      <li>Supports nested objects with <code>type: :object, schema: %<%= "{" %>...<%= "}" %></code></li>
+                      <li>Supports arrays with <code>type: :array, items: %<%= "{" %>...<%= "}" %></code></li>
+                      <li>Validation: <code>:enum</code>, <code>:min</code>, <code>:max</code>, <code>:required</code>, <code>:default</code></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
 
