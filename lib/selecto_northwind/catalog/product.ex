@@ -10,6 +10,7 @@ defmodule SelectoNorthwind.Catalog.Product do
     field :units_on_order, :integer
     field :reorder_level, :integer
     field :discontinued, :boolean, default: false
+    field :attributes, :map, default: %{}
 
     belongs_to :supplier, SelectoNorthwind.Catalog.Supplier
     belongs_to :category, SelectoNorthwind.Catalog.Category
@@ -30,7 +31,7 @@ defmodule SelectoNorthwind.Catalog.Product do
   @doc false
   def changeset(product, attrs) do
     product
-    |> cast(attrs, [:product_name, :supplier_id, :category_id, :quantity_per_unit, :unit_price, :units_in_stock, :units_on_order, :reorder_level, :discontinued])
+    |> cast(attrs, [:product_name, :supplier_id, :category_id, :quantity_per_unit, :unit_price, :units_in_stock, :units_on_order, :reorder_level, :discontinued, :attributes])
     |> validate_required([:product_name])
     |> validate_length(:product_name, max: 40)
     |> validate_length(:quantity_per_unit, max: 20)
