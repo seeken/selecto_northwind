@@ -10,7 +10,8 @@ defmodule SelectoNorthwind.Support.Comment do
   schema "comments" do
     field :body, :string
     field :commentable_type, :string
-    field :commentable_id, :string  # String to support both integer and string IDs
+    # String to support both integer and string IDs
+    field :commentable_id, :string
     field :user_name, :string
 
     timestamps()

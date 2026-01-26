@@ -3,23 +3,34 @@
 <div class="min-h-[60vh] flex items-center justify-center px-4 py-10 sm:px-6 sm:py-28 lg:px-8 xl:px-28 xl:py-32">
   <div class="text-center">
     <div class="mb-8">
-      <svg class="mx-auto h-32 w-32 text-base-content/20" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <svg
+        class="mx-auto h-32 w-32 text-base-content/20"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1"
+          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
       </svg>
     </div>
-    
+
     <h1 class="text-4xl font-bold tracking-tight text-base-content sm:text-5xl">
-      <%= assigns[:page_title] || "Coming Soon" %>
+      {assigns[:page_title] || "Coming Soon"}
     </h1>
-    
+
     <p class="mt-6 text-lg leading-7 text-base-content/70">
       This endpoint will be generated as part of the demo / tutorial process.
     </p>
-    
+
     <p class="mt-2 text-sm text-base-content/60">
       Follow along with the Selecto libraries tutorial to see this section come to life.
     </p>
-    
+
     <div class="mt-10 flex items-center justify-center gap-x-6">
       <a
         href="/"
@@ -27,7 +38,7 @@
       >
         Back to Home
       </a>
-      
+
       <a
         href="https://github.com/selecto-dev"
         target="_blank"
@@ -36,11 +47,15 @@
       >
         View on GitHub
         <svg class="ml-2 h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-          <path fill-rule="evenodd" d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z" clip-rule="evenodd" />
+          <path
+            fill-rule="evenodd"
+            d="M10.868 2.884c-.321-.772-1.415-.772-1.736 0l-1.83 4.401-4.753.381c-.833.067-1.171 1.107-.536 1.651l3.62 3.102-1.106 4.637c-.194.813.691 1.456 1.405 1.02L10 15.591l4.069 2.485c.713.436 1.598-.207 1.404-1.02l-1.106-4.637 3.62-3.102c.635-.544.297-1.584-.536-1.65l-4.752-.382-1.831-4.401z"
+            clip-rule="evenodd"
+          />
         </svg>
       </a>
     </div>
-    
+
     <div class="mt-16 border-t border-base-300 pt-8">
       <div class="text-sm text-base-content/60">
         <p class="mb-2">Features coming to this section:</p>

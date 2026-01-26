@@ -17,6 +17,7 @@ defmodule SelectoNorthwind.Sales.Customer do
     field :fax, :string
 
     has_many :orders, SelectoNorthwind.Sales.Order, foreign_key: :customer_id
+
     many_to_many :customer_types, SelectoNorthwind.Sales.CustomerDemographic,
       join_through: SelectoNorthwind.Sales.CustomerCustomerDemo,
       join_keys: [customer_id: :customer_id, customer_type_id: :customer_type_id]
@@ -27,7 +28,19 @@ defmodule SelectoNorthwind.Sales.Customer do
   @doc false
   def changeset(customer, attrs) do
     customer
-    |> cast(attrs, [:customer_id, :company_name, :contact_name, :contact_title, :address, :city, :region, :postal_code, :country, :phone, :fax])
+    |> cast(attrs, [
+      :customer_id,
+      :company_name,
+      :contact_name,
+      :contact_title,
+      :address,
+      :city,
+      :region,
+      :postal_code,
+      :country,
+      :phone,
+      :fax
+    ])
     |> validate_required([:customer_id, :company_name])
     |> validate_length(:customer_id, is: 5)
     |> validate_length(:company_name, max: 40)

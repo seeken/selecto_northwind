@@ -22,8 +22,19 @@ import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
 import {Socket} from "phoenix"
 import {LiveSocket} from "phoenix_live_view"
+import TreeBuilderHook from "../../vendor/selecto_components/lib/selecto_components/components/tree_builder.hooks"
+import selectoHooks from "../../vendor/selecto_components/assets/js/hooks"
 import {hooks as colocatedHooks} from "phoenix-colocated/selecto_northwind"
 import topbar from "../vendor/topbar"
+
+// Import Chart.js for SelectoComponents graph visualization
+import Chart from "chart.js/auto"
+window.Chart = Chart
+
+// Import Alpine.js for enhanced interactivity
+import Alpine from "alpinejs"
+window.Alpine = Alpine
+Alpine.start()
 
 // Tutorial code block functionality
 const TutorialCodeBlocks = {
@@ -110,7 +121,7 @@ const csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: {_csrf_token: csrfToken},
-  hooks: {...colocatedHooks},
+  hooks: {...colocatedHooks, TreeBuilder: TreeBuilderHook, ...selectoHooks},
 })
 
 // Show progress bar on live navigation and form submits

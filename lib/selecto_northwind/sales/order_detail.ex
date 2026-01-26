@@ -27,7 +27,11 @@ defmodule SelectoNorthwind.Sales.OrderDetail do
     |> foreign_key_constraint(:product_id)
   end
 
-  def total_price(%SelectoNorthwind.Sales.OrderDetail{unit_price: unit_price, quantity: quantity, discount: discount}) do
+  def total_price(%SelectoNorthwind.Sales.OrderDetail{
+        unit_price: unit_price,
+        quantity: quantity,
+        discount: discount
+      }) do
     line_total = Decimal.mult(unit_price, quantity)
     discount_amount = Decimal.mult(line_total, discount)
     Decimal.sub(line_total, discount_amount)

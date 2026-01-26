@@ -23,7 +23,19 @@ defmodule SelectoNorthwind.Catalog.Supplier do
   @doc false
   def changeset(supplier, attrs) do
     supplier
-    |> cast(attrs, [:company_name, :contact_name, :contact_title, :address, :city, :region, :postal_code, :country, :phone, :fax, :homepage])
+    |> cast(attrs, [
+      :company_name,
+      :contact_name,
+      :contact_title,
+      :address,
+      :city,
+      :region,
+      :postal_code,
+      :country,
+      :phone,
+      :fax,
+      :homepage
+    ])
     |> validate_required([:company_name])
     |> validate_length(:company_name, max: 40)
     |> validate_length(:contact_name, max: 30)

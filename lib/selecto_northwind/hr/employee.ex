@@ -24,6 +24,7 @@ defmodule SelectoNorthwind.Hr.Employee do
 
     has_many :subordinates, SelectoNorthwind.Hr.Employee, foreign_key: :reports_to
     has_many :orders, SelectoNorthwind.Sales.Order
+
     many_to_many :territories, SelectoNorthwind.Geography.Territory,
       join_through: SelectoNorthwind.Hr.EmployeeTerritory,
       join_keys: [employee_id: :id, territory_id: :territory_id]
@@ -34,7 +35,25 @@ defmodule SelectoNorthwind.Hr.Employee do
   @doc false
   def changeset(employee, attrs) do
     employee
-    |> cast(attrs, [:last_name, :first_name, :title, :title_of_courtesy, :birth_date, :hire_date, :address, :city, :region, :postal_code, :country, :home_phone, :extension, :photo, :notes, :reports_to, :photo_path])
+    |> cast(attrs, [
+      :last_name,
+      :first_name,
+      :title,
+      :title_of_courtesy,
+      :birth_date,
+      :hire_date,
+      :address,
+      :city,
+      :region,
+      :postal_code,
+      :country,
+      :home_phone,
+      :extension,
+      :photo,
+      :notes,
+      :reports_to,
+      :photo_path
+    ])
     |> validate_required([:last_name, :first_name])
     |> validate_length(:last_name, max: 20)
     |> validate_length(:first_name, max: 10)
