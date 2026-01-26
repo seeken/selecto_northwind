@@ -1040,7 +1040,10 @@ priv/repo/migrations/
                   Example: Customize Product Display
                 </h3>
 
-                <p class="text-base-content/70 mb-3">Let's customize how product prices and stock levels are displayed. Open the generated overlay file and add customizations:</p>
+                <p class="text-base-content/70 mb-3">
+                  Let's customize how product prices and stock levels are displayed. Open the generated overlay file and add customizations. Custom
+                  filters that are not tied to a column need an <code>apply</code> function so they can be converted into real query filters.
+                </p>
 
                 <div class="alert alert-warning mb-3">
                   <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
@@ -1086,8 +1089,9 @@ defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
   deffilter "low_stock" do
     name "Low Stock Alert"
     type :boolean
-    description "Show products with stock below reorder level"
+    description "Show products with stock below a threshold"
     default false
+    apply &__MODULE__.low_stock_filter/2
   end
 
   # Add custom filter for price range
@@ -1095,7 +1099,26 @@ defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
     name "Price Range"
     type :string
     description "Filter by price range (e.g., '10-100')"
+    apply &__MODULE__.price_range_filter/2
   end
+
+  defp low_stock_filter(_selecto, %{"value" => "true"}), do: {"units_in_stock", {:<, 10}}
+  defp low_stock_filter(_selecto, _), do: {:and, []}
+
+  defp price_range_filter(_selecto, %{"value" => value}) when is_binary(value) do
+    case String.split(value, "-", parts: 2) do
+      [min, max] ->
+        case {Float.parse(String.trim(min)), Float.parse(String.trim(max))} do
+          {{min_val, _}, {max_val, _}} -> {"unit_price", {:between, min_val, max_val}}
+          _ -> {:and, []}
+        end
+
+      _ ->
+        {:and, []}
+    end
+  end
+
+  defp price_range_filter(_selecto, _), do: {:and, []}
 end</code></pre>
               </div>
 
