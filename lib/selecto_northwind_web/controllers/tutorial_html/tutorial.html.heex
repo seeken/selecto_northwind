@@ -1102,23 +1102,23 @@ defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
     apply &__MODULE__.price_range_filter/2
   end
 
-  defp low_stock_filter(_selecto, %{"value" => "true"}), do: {"units_in_stock", {:<, 10}}
-  defp low_stock_filter(_selecto, _), do: {:and, []}
+  defp low_stock_filter(_selecto, %<%= "{" %>"value" => "true"<%= "}" %>), do: <%= "{" %>"units_in_stock", <%= "{" %>:&lt;, 10<%= "}" %><%= "}" %>
+  defp low_stock_filter(_selecto, _), do: <%= "{" %>:and, []<%= "}" %>
 
-  defp price_range_filter(_selecto, %{"value" => value}) when is_binary(value) do
+  defp price_range_filter(_selecto, %<%= "{" %>"value" => value<%= "}" %>) when is_binary(value) do
     case String.split(value, "-", parts: 2) do
       [min, max] ->
-        case {Float.parse(String.trim(min)), Float.parse(String.trim(max))} do
-          {{min_val, _}, {max_val, _}} -> {"unit_price", {:between, min_val, max_val}}
-          _ -> {:and, []}
+        case <%= "{" %>Float.parse(String.trim(min)), Float.parse(String.trim(max))<%= "}" %> do
+          <%= "{" %><%= "{" %>min_val, _<%= "}" %>, <%= "{" %>max_val, _<%= "}" %><%= "}" %> -> <%= "{" %>"unit_price", <%= "{" %>:between, min_val, max_val<%= "}" %><%= "}" %>
+          _ -> <%= "{" %>:and, []<%= "}" %>
         end
 
       _ ->
-        {:and, []}
+        <%= "{" %>:and, []<%= "}" %>
     end
   end
 
-  defp price_range_filter(_selecto, _), do: {:and, []}
+  defp price_range_filter(_selecto, _), do: <%= "{" %>:and, []<%= "}" %>
 end</code></pre>
               </div>
 
