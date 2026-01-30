@@ -434,51 +434,50 @@ mix deps.compile</code></pre>
           </div>
 
           <div>
-            <h3 class="text-lg font-semibold mb-3">Configure SavedView Support</h3>
-            <p class="text-base-content/70 mb-4">There are two parts to enabling saved views. You must complete both steps:</p>
+            <h3 class="text-lg font-semibold mb-3">Verify SavedView Support</h3>
+            <p class="text-base-content/70 mb-4">The <code>--saved-views</code> flag automatically configures everything needed. Verify the generated code:</p>
 
             <div class="space-y-6">
               <div>
                 <h4 class="font-semibold mb-3 flex items-center gap-2">
                   <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">1</span>
-                  Add SavedView Support to Domain
+                  Domain Module
                 </h4>
-                <p class="text-base-content/70 mb-3">Edit the generated domain module to use the SavedViewContext. Open <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/product_domain.ex</code> and find the <code>defmodule</code> line near the top. Add the <code>use</code> statement immediately after it:</p>
-                <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
-  use SelectoNorthwind.SavedViewContext  # ADD THIS LINE
-
-  # ... rest of the domain configuration
-end</code></pre>
+                <p class="text-base-content/70 mb-3">The generator adds <code>use SavedViewContext</code> to the domain. Verify it exists in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/product_domain.ex</code>:</p>
+                <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
+                <p class="text-base-content/70 mt-2">This gives the domain module the ability to save, load, and list named views.</p>
               </div>
 
               <div>
                 <h4 class="font-semibold mb-3 flex items-center gap-2">
                   <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">2</span>
-                  Verify LiveView saved_view_context
+                  LiveView Assigns
                 </h4>
-                <p class="text-base-content/70 mb-3">The generated LiveView (created with <code class="bg-base-300 px-2 py-1 rounded text-sm">--saved-views</code> flag) should already have the saved view context configured. Verify this in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/product_live.ex</code>:</p>
-                <pre><code class="language-elixir"># In lib/selecto_northwind_web/live/product_live.ex
-def mount(_params, _session, socket) do
-  # ... other setup code ...
+                <p class="text-base-content/70 mb-3">The generated LiveView in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/product_live.ex</code> should have saved view assigns in <code>mount/3</code>:</p>
+                <pre><code class="language-elixir">saved_view_module: SelectoNorthwind.SelectoDomains.ProductDomain,
+saved_view_context: "/products_selecto",
+available_saved_views: saved_views</code></pre>
+              </div>
 
-  socket =
-    assign(socket,
-      # ... other assigns ...
-      saved_view_module: SelectoNorthwind.SelectoDomains.ProductDomain,
-      saved_view_context: "/products_selecto",  # Identifies this set of saved views
-      available_saved_views: saved_views
-    )
-
-  <%= "{" %>:ok, socket<%= "}" %>
-end</code></pre>
-                <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-3">
-                  <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  <div>
-                    The <code>saved_view_context</code> assign is crucial - it identifies which saved views belong to this LiveView. Typically set to the path or a unique identifier for the domain.
-                  </div>
-                </div>
+              <div>
+                <h4 class="font-semibold mb-3 flex items-center gap-2">
+                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                  Saved Views Dropdown
+                </h4>
+                <p class="text-base-content/70 mb-3">The generated LiveView includes a "Saved Views" dropdown in the page header. When saved views exist, a dropdown button appears next to the title:</p>
+                <pre><code class="language-html">&lt;div
+  :if={@available_saved_views != []}
+  id="saved-views-dropdown"
+  phx-update="ignore"
+  x-data="{ open: false }"
+  x-on:click.outside="open = false"
+&gt;
+  &lt;button x-on:click="open = !open"&gt;Saved Views&lt;/button&gt;
+  &lt;ul x-show="open" x-cloak&gt;
+    &lt;li :for={v &lt;- @available_saved_views}&gt;...&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;</code></pre>
+                <p class="text-base-content/70 mt-2">This uses Alpine.js (included via SelectoComponents) with <code>phx-update="ignore"</code> so LiveView does not interfere with the Alpine open/close state. Clicking a saved view navigates to <code>?saved_view=name</code>, which restores the full query configuration.</p>
               </div>
             </div>
           </div>
@@ -553,7 +552,8 @@ end</code></pre>
                   <li>- A query builder form with filter options</li>
                   <li>- Data results displayed in table format showing product data</li>
                   <li>- View mode tabs: "Table", "Detail", and "Graph"</li>
-                  <li>- "Save View" and "Load View" buttons for saved views functionality</li>
+                  <li>- "Save View" tab in the form for persisting view configurations</li>
+                  <li>- "Saved Views" dropdown in the header (appears after saving a view)</li>
                   <li>- Filter options for Category, Supplier, and Tags</li>
                   <li>- No error messages in browser console or terminal</li>
                 </ul>
@@ -1010,31 +1010,10 @@ end</code></pre>
           </div>
 
           <div>
-            <h3 class="text-lg font-semibold mb-3">Configure the Generated Files</h3>
-
-            <div class="space-y-4">
-              <div>
-                <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain (REQUIRED)</h4>
-                <p class="text-base-content/70 mb-3">Edit <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/customers_domain.ex</code> and add the use statement:</p>
-                <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.CustomersDomain do
-  use SelectoNorthwind.SavedViewContext  # ADD THIS LINE
-
-  # ... rest of the domain configuration
-end</code></pre>
-              </div>
-
-              <div>
-                <h4 class="font-semibold mb-2">2. Verify LiveView Configuration (Auto-generated)</h4>
-                <p class="text-base-content/70 mb-3">The generated LiveView should already be correctly configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/customer_live.ex</code>. Verify it contains:</p>
-                <pre><code class="language-elixir"># Should already be configured like this:
-socket =
-  assign(socket,
-    saved_view_module: SelectoNorthwind.SelectoDomains.CustomersDomain,
-    saved_view_context: "/customers_selecto",
-    available_saved_views: saved_views
-  )</code></pre>
-              </div>
-            </div>
+            <h3 class="text-lg font-semibold mb-3">Verify the Generated Files</h3>
+            <p class="text-base-content/70 mb-3">The <code>--saved-views</code> flag automatically configures everything. Verify the domain module at <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/customers_domain.ex</code> contains:</p>
+            <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
+            <p class="text-base-content/70 mt-3">The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header (visible once views have been saved).</p>
           </div>
 
           <div>
@@ -1172,31 +1151,10 @@ end</code></pre>
           </div>
 
           <div>
-            <h3 class="text-lg font-semibold mb-3">Configure the Generated Files</h3>
-
-            <div class="space-y-4">
-              <div>
-                <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain</h4>
-                <p class="text-base-content/70 mb-3">Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/orders_domain.ex</code>:</p>
-                <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.OrdersDomain do
-  use SelectoNorthwind.SavedViewContext  # Add this line
-
-  # ... rest of the domain configuration
-end</code></pre>
-              </div>
-
-              <div>
-                <h4 class="font-semibold mb-2">2. Verify LiveView Configuration</h4>
-                <p class="text-base-content/70 mb-3">The generated LiveView should have the saved view context configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/order_live.ex</code>:</p>
-                <pre><code class="language-elixir"># Should already be configured like this:
-socket =
-  assign(socket,
-    saved_view_module: SelectoNorthwind.SelectoDomains.OrdersDomain,
-    saved_view_context: "/orders_selecto",
-    available_saved_views: saved_views
-  )</code></pre>
-              </div>
-            </div>
+            <h3 class="text-lg font-semibold mb-3">Verify the Generated Files</h3>
+            <p class="text-base-content/70 mb-3">The <code>--saved-views</code> flag automatically configures everything. Verify the domain module at <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/orders_domain.ex</code> contains:</p>
+            <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
+            <p class="text-base-content/70 mt-3">The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header.</p>
           </div>
 
           <div>
@@ -1381,31 +1339,10 @@ mix phx.server</code></pre>
           </div>
 
           <div>
-            <h3 class="text-lg font-semibold mb-3">Configure the Generated Files</h3>
-
-            <div class="space-y-4">
-              <div>
-                <h4 class="font-semibold mb-2">1. Add SavedView Support to Domain</h4>
-                <p class="text-base-content/70 mb-3">Add this line to <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/employees_domain.ex</code>:</p>
-                <pre><code class="language-elixir">defmodule SelectoNorthwind.SelectoDomains.EmployeesDomain do
-  use SelectoNorthwind.SavedViewContext  # Add this line
-
-  # ... rest of the domain configuration
-end</code></pre>
-              </div>
-
-              <div>
-                <h4 class="font-semibold mb-2">2. Verify LiveView Configuration</h4>
-                <p class="text-base-content/70 mb-3">The generated LiveView should have the saved view context configured in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/employee_live.ex</code>:</p>
-                <pre><code class="language-elixir"># Should already be configured like this:
-socket =
-  assign(socket,
-    saved_view_module: SelectoNorthwind.SelectoDomains.EmployeesDomain,
-    saved_view_context: "/employees_selecto",
-    available_saved_views: saved_views
-  )</code></pre>
-              </div>
-            </div>
+            <h3 class="text-lg font-semibold mb-3">Verify the Generated Files</h3>
+            <p class="text-base-content/70 mb-3">The <code>--saved-views</code> flag automatically configures everything. Verify the domain module at <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/employees_domain.ex</code> contains:</p>
+            <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
+            <p class="text-base-content/70 mt-3">The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header.</p>
           </div>
 
           <div>
