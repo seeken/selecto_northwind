@@ -10,7 +10,3 @@
 	path = vendor/selecto_mix
 	url = https://github.com/seeken/selecto_mix.git
 	branch = main
-[submodule "vendor/selecto_livebooks"]
-	path = vendor/selecto_livebooks
-	url = git@github.com:seeken/selecto_livebooks.git
-	branch = main
