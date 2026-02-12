@@ -221,12 +221,73 @@ mix deps.compile</code></pre>
             </h2>
 
             <p class="text-base-content/80 mb-4">
-              Configure a supervised Postgrex connection in your application.
+              Selecto needs a named Postgrex connection to query data at runtime. How you set this up depends on whether your project already uses Ecto.
             </p>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>config/dev.exs</code>:</h3>
+            <!-- Tab selector -->
+            <div role="tablist" class="tabs tabs-boxed mb-6">
+              <input type="radio" name="conn_tabs" role="tab" class="tab" aria-label="Already using Ecto" checked="checked" id="tab-ecto" onclick="document.getElementById('panel-ecto').style.display='block'; document.getElementById('panel-fresh').style.display='none';" />
+              <input type="radio" name="conn_tabs" role="tab" class="tab" aria-label="No Ecto (fresh Postgrex)" id="tab-fresh" onclick="document.getElementById('panel-ecto').style.display='none'; document.getElementById('panel-fresh').style.display='block';" />
+            </div>
 
-            <pre><code class="language-elixir">config :selecto_northwind, SelectoNorthwind.Database,
+            <!-- Panel A: Existing Ecto project -->
+            <div id="panel-ecto">
+              <div class="alert alert-info mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div>
+                  <strong>Most common scenario:</strong> You have a Phoenix project with Ecto managing some tables via schemas, but other tables in the same database have no Ecto schemas. Selecto can query those tables directly via a separate Postgrex connection using the same database credentials.
+                </div>
+              </div>
+
+              <p class="text-base-content/80 mb-4">
+                Add a standalone named Postgrex connection alongside your existing Repo. It connects to the same database but gives Selecto a direct connection it can use without Ecto.
+              </p>
+
+              <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/your_app/application.ex</code>:</h3>
+
+              <pre><code class="language-elixir"># In your application.ex, add a Postgrex child alongside your Repo:
+children = [
+  # Your existing Ecto Repo (manages schema-backed tables)
+  SelectoNorthwind.Repo,
+
+  # Add a named Postgrex connection for Selecto (same database!)
+  <%= "{" %>Postgrex,
+    Application.get_env(:selecto_northwind, SelectoNorthwind.Repo)
+    |> Keyword.take([:hostname, :port, :database, :username, :password])
+    |> Keyword.put(:name, SelectoNorthwind.Database)
+    |> Keyword.put(:pool_size, 5)<%= "}" %>,
+
+  # Phoenix endpoint
+  SelectoNorthwindWeb.Endpoint
+]</code></pre>
+
+              <div class="alert alert-success mt-4 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div>
+                  <strong>No config changes needed!</strong> This reuses your existing Repo config (hostname, database, credentials) so you don't need to duplicate connection details. The <code>:name</code> option registers it as <code>SelectoNorthwind.Database</code> for Selecto to use.
+                </div>
+              </div>
+
+              <div class="alert alert-warning mt-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                <div>
+                  <strong>Why a separate connection?</strong> Ecto's Repo manages its own connection pool internally and doesn't expose a named Postgrex process. Selecto needs a named connection it can call <code>Postgrex.query(SelectoNorthwind.Database, ...)</code> on directly. The small extra pool (5 connections) is dedicated to Selecto queries.
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel B: Fresh Postgrex (no Ecto) -->
+            <div id="panel-fresh" style="display: none;">
+              <div class="alert alert-info mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div>
+                  <strong>For projects without Ecto:</strong> If you're building a pure Postgrex application or connecting to an external database you don't manage, configure the connection from scratch.
+                </div>
+              </div>
+
+              <h3 class="text-xl font-bold mb-3 text-base-content">Add to <code>config/dev.exs</code>:</h3>
+
+              <pre><code class="language-elixir">config :selecto_northwind, SelectoNorthwind.Database,
   hostname: "localhost",
   port: 5432,
   database: "selecto_northwind_dev",
@@ -234,25 +295,25 @@ mix deps.compile</code></pre>
   password: "postgres",
   pool_size: 10</code></pre>
 
-            <div class="divider text-base-content">THEN</div>
+              <div class="divider text-base-content">THEN</div>
 
-            <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/selecto_northwind/application.ex</code>:</h3>
+              <h3 class="text-xl font-bold mb-3 text-base-content">Update <code>lib/your_app/application.ex</code>:</h3>
 
-            <pre><code class="language-elixir"># In lib/selecto_northwind/application.ex, add to children list:
+              <pre><code class="language-elixir"># In your application.ex, add to children list:
 children = [
   # Start Postgrex connection pool
-  Postgrex.child_spec(
+  <%= "{" %>Postgrex,
     Application.get_env(:selecto_northwind, SelectoNorthwind.Database)
-    ++ [name: SelectoNorthwind.Database]
-  ),
+    |> Keyword.put(:name, SelectoNorthwind.Database)<%= "}" %>,
 
   # Phoenix endpoint
   SelectoNorthwindWeb.Endpoint
 ]</code></pre>
+            </div>
 
             <div class="alert alert-warning mt-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-              <span><strong>Important:</strong> The <code>name:</code> option creates a named connection you can reference throughout your app.</span>
+              <span><strong>Important:</strong> The <code>name:</code> option creates a named connection you can reference throughout your app. This is what you'll pass to Selecto as the connection.</span>
             </div>
           </div>
         </div>
