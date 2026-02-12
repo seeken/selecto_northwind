@@ -144,7 +144,7 @@
     # Selecto libraries
     <%= "{" %>:selecto, path: "./vendor/selecto"<%= "}" %>,
     <%= "{" %>:selecto_components, path: "./vendor/selecto_components"<%= "}" %>,
-    <%= "{" %>:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]<%= "}" %>
+    <%= "{" %>:selecto_postgrex_mix, path: "./vendor/selecto_postgrex_mix", only: [:dev, :test]<%= "}" %>
   ]
 end</code></pre>
                 </div>
@@ -182,7 +182,7 @@ end</code></pre>
                   <div class="flex items-start gap-3 p-4 bg-base-200 rounded-lg">
                     <div class="w-2 h-2 bg-primary rounded-full mt-2"></div>
                     <div>
-                      <strong><code class="bg-base-300 px-2 py-1 rounded text-sm">selecto_mix</code></strong>: Mix tasks and generators for scaffolding Selecto-based views and components (development only)
+                      <strong><code class="bg-base-300 px-2 py-1 rounded text-sm">selecto_postgrex_mix</code></strong>: Mix tasks and generators for scaffolding Selecto-based views and components using Postgrex (no Ecto required, development only)
                     </div>
                   </div>
                 </div>
@@ -268,7 +268,7 @@ children = [
             </h2>
 
             <p class="text-base-content/80 mb-4">
-              Use the <code>mix selecto.gen.domain</code> task with database connection and important flags to automatically
+              Use the <code>mix selecto_postgrex.gen.domain</code> task with database connection and important flags to automatically
               generate a domain file, LiveView, and asset integrations by introspecting your PostgreSQL database.
             </p>
 
@@ -280,7 +280,7 @@ children = [
             <h3 class="text-xl font-bold mb-3 text-base-content">Recommended Command (with all features)</h3>
 
             <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/selecto_northwind_dev" \
-  mix selecto.gen.domain.postgrex --table products \
+  mix selecto_postgrex.gen.domain --table products \
   --expand --live --saved-views --path products_postgrex</code></pre>
 
             <div class="alert alert-info mb-4">
@@ -299,7 +299,7 @@ children = [
             <h3 class="text-xl font-bold mb-3 text-base-content mt-6">Advanced: Specialized Join Types</h3>
 
             <pre><code class="language-bash">DATABASE_URL="postgres://postgres:postgres@localhost/selecto_northwind_dev" \
-  mix selecto.gen.domain.postgrex --table products \
+  mix selecto_postgrex.gen.domain --table products \
   --expand --dimension category,supplier --live</code></pre>
 
             <div class="alert alert-success mb-4">
@@ -352,7 +352,7 @@ children = [
 
             <div class="divider text-base-content">ALTERNATIVE: Using Explicit Connection Parameters</div>
 
-            <pre><code class="language-bash">mix selecto.gen.domain.postgrex \
+            <pre><code class="language-bash">mix selecto_postgrex.gen.domain \
   --table products \
   --host localhost \
   --port 5432 \
@@ -368,7 +368,7 @@ children = [
                 <ul class="text-sm mt-2 ml-4 list-disc">
                   <li><code>lib/selecto_northwind/selecto_domains/products_postgrex_domain.ex</code> - Domain configuration with associations</li>
                   <li><code>lib/selecto_northwind_web/live/products_postgrex_live.ex</code> - LiveView module (if <code>--live</code> used)</li>
-                  <li>Migration for saved_views table (if <code>--saved-views</code> used)</li>
+                  <li><code>priv/sql/create_saved_views.sql</code> + context module (if <code>--saved-views</code> used)</li>
                 </ul>
               </div>
             </div>
@@ -444,10 +444,15 @@ end</code></pre>
                 <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7" />
                 </svg>
-                Run Migration (if using --saved-views)
+                Run SQL Setup (if using --saved-views)
               </h3>
-              <p class="text-base-content/70 mb-3">If you used the <code>--saved-views</code> flag, run the generated migration:</p>
-              <pre><code class="language-bash">mix ecto.migrate</code></pre>
+              <p class="text-base-content/70 mb-3">If you used the <code>--saved-views</code> flag, generate the saved views infrastructure and run the SQL setup:</p>
+              <pre><code class="language-bash"># Generate the saved views SQL + context module
+mix selecto_postgrex.gen.saved_views SelectoNorthwind
+
+# Execute the generated SQL against your database
+DATABASE_URL="postgres://postgres:postgres@localhost/selecto_northwind_dev" \
+  mix selecto_postgrex.setup</code></pre>
             </div>
 
             <div class="divider text-base-content">THEN</div>
@@ -649,9 +654,12 @@ open http://localhost:4000/products_postgrex</code></pre>
                 <div class="card-body">
                   <h3 class="card-title text-lg">Generate More Domains</h3>
                   <p class="text-sm">Create domains for all your tables:</p>
-                  <pre class="text-xs mt-2"><code class="language-bash">mix selecto.gen.domain.postgrex --table customers --expand
-mix selecto.gen.domain.postgrex --table orders --expand
-mix selecto.gen.domain.postgrex --table employees --expand</code></pre>
+                  <pre class="text-xs mt-2"><code class="language-bash">DATABASE_URL="postgres://..." \
+  mix selecto_postgrex.gen.domain --table customers --expand --live
+DATABASE_URL="postgres://..." \
+  mix selecto_postgrex.gen.domain --table orders --expand --live
+DATABASE_URL="postgres://..." \
+  mix selecto_postgrex.gen.domain --table employees --expand --live</code></pre>
                 </div>
               </div>
 
