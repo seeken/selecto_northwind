@@ -41,3 +41,6 @@ npm-debug.log
 # Claude Code local settings
 /.claude/
 
+# VSCode local settings
+/.vscode/
+
