@@ -94,12 +94,6 @@ cd selecto_northwind</code></pre>
           </div>
 
           <div>
-            <h3 class="text-lg font-semibold mb-3">Initialize Git Submodules</h3>
-            <p class="text-base-content/70 mb-3">The project includes Selecto libraries as git submodules in the vendor directory:</p>
-            <pre><code class="language-bash">git submodule update --init --recursive</code></pre>
-          </div>
-
-          <div>
             <h3 class="text-lg font-semibold mb-3">Install Dependencies</h3>
             <p class="text-base-content/70 mb-3">Install all Phoenix and Elixir dependencies:</p>
             <pre><code class="language-bash">mix setup</code></pre>
@@ -180,18 +174,17 @@ mix ecto.reset</code></pre>
     # ... existing dependencies ...
 
     # Selecto libraries
-    <%= "{" %>:selecto, path: "./vendor/selecto"<%= "}" %>,
-    <%= "{" %>:selecto_components, path: "./vendor/selecto_components"<%= "}" %>,
-    <%= "{" %>:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]<%= "}" %>
+    <%= "{" %>:selecto, github: "seeken/selecto", override: true<%= "}" %>,
+    <%= "{" %>:selecto_components, github: "seeken/selecto_components"<%= "}" %>,
+    <%= "{" %>:selecto_mix, github: "seeken/selecto_mix", only: [:dev, :test]<%= "}" %>
   ]
 end</code></pre>
-
-            <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm mt-4">
+            <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
               <div>
-                <strong>Note:</strong> These dependencies are referenced as local paths because they are included as git submodules in the vendor directory. In a production environment, you would typically reference them from Hex or GitHub.
+                <strong>Note:</strong> The <code class="bg-base-300 px-1 rounded">override: true</code> option on selecto is required to resolve a dependency conflict with selecto_components.
               </div>
             </div>
           </div>

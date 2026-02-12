@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-SelectoNorthwind is a Phoenix 1.8 web application that serves as a **development sandbox specifically for selecto_mix**. The primary purpose is to develop, test, and iterate on selecto_mix functionality using the classic Northwind sample database as a realistic dataset. This project also facilitates making complementary changes to selecto and selecto_components when needed to support selecto_mix development.
+SelectoNorthwind is a Phoenix 1.8 web application that demonstrates the Selecto libraries using the classic Northwind sample database. It serves as both a tutorial/example project and a testing ground for Selecto functionality.
 
 It's built with Elixir/Phoenix and uses PostgreSQL with Ecto for data persistence.
 
@@ -12,7 +12,6 @@ It's built with Elixir/Phoenix and uses PostgreSQL with Ecto for data persistenc
 
 ### Initial Setup
 ```bash
-git submodule update --init --recursive  # Initialize vendor submodules
 mix setup                               # Install dependencies, setup database, build assets
 ```
 
@@ -44,19 +43,6 @@ mix assets.build                     # Build CSS and JS assets
 mix assets.deploy                    # Build and minify assets for production
 ```
 
-### Submodule Management
-The project uses git submodules for vendor dependencies, with **selecto_mix being the primary focus**:
-- `vendor/selecto_mix` - **Main development target**: Mix tasks and generators
-- `vendor/selecto` - Core Selecto library (modified as needed to support selecto_mix)
-- `vendor/selecto_components` - Phoenix LiveView components (modified as needed to support selecto_mix)
-
-```bash
-git submodule update --remote         # Update all submodules to latest
-git submodule update --remote vendor/selecto_mix  # Update selecto_mix specifically
-git submodule update --remote vendor/selecto      # Update core library
-git submodule foreach git pull origin main        # Pull latest for all submodules
-```
-
 ## Architecture
 
 ### Database Schema Organization
@@ -83,18 +69,11 @@ The Northwind database is organized into domain contexts:
 - Ecto/PostgreSQL for database
 - LiveView for real-time UI
 - Tailwind CSS for styling
-- **selecto_mix** (primary development focus) - Mix tasks and generators
-- selecto - Core Selecto library 
-- selecto_components - Phoenix LiveView components
+- selecto - Core Selecto library (GitHub: seeken/selecto)
+- selecto_components - Phoenix LiveView components (GitHub: seeken/selecto_components)
+- selecto_mix - Mix tasks and generators (GitHub: seeken/selecto_mix)
 
 ## Development Guidelines
-
-### selecto_mix Development
-This sandbox is specifically designed for developing and testing selecto_mix:
-- Use the Northwind database as a realistic dataset for testing Mix tasks and generators
-- Make changes to selecto and selecto_components as needed to support selecto_mix functionality
-- Test selecto_mix features against the full Northwind schema with relationships and realistic data
-- Leverage the domain contexts (Catalog, Sales, HR, Geography) to test different use cases
 
 ### Phoenix/LiveView Patterns
 - Always use `<.link navigate={href}>` and `<.link patch={href}>` instead of deprecated live_redirect/live_patch
@@ -133,5 +112,4 @@ query = from p in Catalog.Product,
   join: c in assoc(p, :category),
   select: {p.product_name, c.category_name}
 ```
-- never put reference to the main project in any of the vendored projects
 - when you are obsoleting code, delete it!

@@ -60,7 +60,12 @@ defmodule SelectoNorthwind.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:tidewave, "~> 0.5.2", only: :dev}
+      {:tidewave, "~> 0.5.2", only: :dev},
+
+      # Selecto libraries
+      {:selecto, github: "seeken/selecto", override: true},
+      {:selecto_components, github: "seeken/selecto_components"},
+      {:selecto_mix, github: "seeken/selecto_mix", only: [:dev, :test]}
     ]
   end
 
