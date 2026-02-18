@@ -6,8 +6,11 @@ defmodule SelectoNorthwind.Hr.EmployeeTerritory do
 
   schema "employee_territories" do
     belongs_to :employee, SelectoNorthwind.Hr.Employee, primary_key: true
+
     belongs_to :territory, SelectoNorthwind.Geography.Territory,
-      primary_key: true, references: :territory_id, type: :string
+      primary_key: true,
+      references: :territory_id,
+      type: :string
 
     timestamps()
   end

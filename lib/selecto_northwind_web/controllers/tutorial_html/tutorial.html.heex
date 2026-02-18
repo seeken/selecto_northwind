@@ -1,24 +1,37 @@
 <Layouts.flash_group flash={@flash} />
 
 <!-- Prism.js for syntax highlighting -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-elixir.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js"></script>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css" rel="stylesheet" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js"></script>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-elixir.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.js">
+</script>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/toolbar/prism-toolbar.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/copy-to-clipboard/prism-copy-to-clipboard.min.js">
+</script>
 
 <div class="min-h-screen bg-base-200">
   <!-- Header -->
   <div class="bg-primary text-primary-content py-8">
     <div class="max-w-5xl mx-auto px-6">
       <h1 class="text-3xl font-bold mb-2">Selecto Integration Tutorial</h1>
-      <p class="text-primary-content/80">Step-by-step guide to integrate Selecto libraries with Phoenix</p>
+      <p class="text-primary-content/80">
+        Step-by-step guide to integrate Selecto libraries with Phoenix
+      </p>
     </div>
   </div>
-
-  <!-- Main Content -->
+  
+<!-- Main Content -->
   <div class="max-w-5xl mx-auto px-6 py-10">
     <!-- Breadcrumbs -->
     <div class="breadcrumbs text-sm mb-6">
@@ -27,22 +40,36 @@
         <li class="text-base-content/60">Tutorial</li>
       </ul>
     </div>
-
-    <!-- Table of Contents -->
+    
+<!-- Table of Contents -->
     <nav class="mb-10 p-4 bg-base-100 rounded-lg shadow">
       <h2 class="font-bold text-lg mb-3">Contents</h2>
       <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-        <a href="#step-0" class="link link-hover"><span class="font-semibold">Step 0:</span> Set Up Phoenix Project</a>
-        <a href="#step-1" class="link link-hover"><span class="font-semibold">Step 1:</span> Add Selecto Dependencies</a>
-        <a href="#step-2" class="link link-hover"><span class="font-semibold">Step 2:</span> Generate Products Domain</a>
-        <a href="#step-2b" class="link link-hover"><span class="font-semibold">Step 2b:</span> Customize with Overlays</a>
-        <a href="#step-3" class="link link-hover"><span class="font-semibold">Step 3:</span> Generate Customers Domain</a>
-        <a href="#step-4" class="link link-hover"><span class="font-semibold">Step 4:</span> Generate Orders Domain</a>
-        <a href="#step-5" class="link link-hover"><span class="font-semibold">Step 5:</span> Generate Employees Domain</a>
+        <a href="#step-0" class="link link-hover">
+          <span class="font-semibold">Step 0:</span> Set Up Phoenix Project
+        </a>
+        <a href="#step-1" class="link link-hover">
+          <span class="font-semibold">Step 1:</span> Add Selecto Dependencies
+        </a>
+        <a href="#step-2" class="link link-hover">
+          <span class="font-semibold">Step 2:</span> Generate Products Domain
+        </a>
+        <a href="#step-2b" class="link link-hover">
+          <span class="font-semibold">Step 2b:</span> Customize with Overlays
+        </a>
+        <a href="#step-3" class="link link-hover">
+          <span class="font-semibold">Step 3:</span> Generate Customers Domain
+        </a>
+        <a href="#step-4" class="link link-hover">
+          <span class="font-semibold">Step 4:</span> Generate Orders Domain
+        </a>
+        <a href="#step-5" class="link link-hover">
+          <span class="font-semibold">Step 5:</span> Generate Employees Domain
+        </a>
       </div>
     </nav>
-
-    <!-- Initialize Prism.js after page loads and handle navigation -->
+    
+<!-- Initialize Prism.js after page loads and handle navigation -->
     <script>
       document.addEventListener('DOMContentLoaded', function() {
         if (typeof Prism !== 'undefined') {
@@ -66,25 +93,39 @@
     </script>
 
     <div class="space-y-10">
-
-      <!-- Tutorial Structure -->
+      
+<!-- Tutorial Structure -->
       <div class="bg-base-100 rounded-lg shadow p-6">
         <h2 class="text-xl font-bold mb-3">Tutorial Structure</h2>
-        <p class="text-base-content/80 mb-4">This tutorial is organized into steps, with each step building upon the previous one. You can:</p>
+        <p class="text-base-content/80 mb-4">
+          This tutorial is organized into steps, with each step building upon the previous one. You can:
+        </p>
         <ul class="list-disc list-inside space-y-2 text-base-content/80">
-          <li>Follow along from the beginning by checking out the <code class="bg-base-300 px-2 py-1 rounded text-sm">main</code> branch</li>
-          <li>Jump to any step by checking out <code class="bg-base-300 px-2 py-1 rounded text-sm">tutorial-step-N</code> (where N is the step number)</li>
-          <li>Compare your work with the reference implementation by diffing against the step branches</li>
+          <li>
+            Follow along from the beginning by checking out the
+            <code class="bg-base-300 px-2 py-1 rounded text-sm">main</code>
+            branch
+          </li>
+          <li>
+            Jump to any step by checking out
+            <code class="bg-base-300 px-2 py-1 rounded text-sm">tutorial-step-N</code>
+            (where N is the step number)
+          </li>
+          <li>
+            Compare your work with the reference implementation by diffing against the step branches
+          </li>
         </ul>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 0 -->
       <!-- ================================================================ -->
       <div id="step-0" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
         <h2 class="text-2xl font-bold mb-1">Step 0: Set Up the Basic Phoenix Project</h2>
         <p class="text-base-content/70 mb-4">Initialize your development environment</p>
-        <p class="text-base-content/80 mb-6">Before integrating Selecto, you need to set up the basic Phoenix application with the Northwind database. This step ensures you have a working Phoenix app with the database schema and sample data loaded.</p>
+        <p class="text-base-content/80 mb-6">
+          Before integrating Selecto, you need to set up the basic Phoenix application with the Northwind database. This step ensures you have a working Phoenix app with the database schema and sample data loaded.
+        </p>
 
         <div class="space-y-6">
           <div>
@@ -99,7 +140,13 @@ cd selecto_northwind</code></pre>
             <pre><code class="language-bash">mix setup</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
                 <div class="font-semibold">This command runs:</div>
@@ -107,7 +154,9 @@ cd selecto_northwind</code></pre>
                   <li>- <code>mix deps.get</code> - Fetches all dependencies</li>
                   <li>- <code>mix ecto.create</code> - Creates the database</li>
                   <li>- <code>mix ecto.migrate</code> - Runs database migrations</li>
-                  <li>- <code>mix run priv/repo/seeds.exs</code> - Seeds the Northwind sample data</li>
+                  <li>
+                    - <code>mix run priv/repo/seeds.exs</code> - Seeds the Northwind sample data
+                  </li>
                   <li>- <code>npm install</code> - Installs JavaScript dependencies</li>
                 </ul>
               </div>
@@ -116,14 +165,22 @@ cd selecto_northwind</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Verify the Setup</h3>
-            <p class="text-base-content/70 mb-3">Start the Phoenix server to ensure everything is working:</p>
+            <p class="text-base-content/70 mb-3">
+              Start the Phoenix server to ensure everything is working:
+            </p>
             <pre class="mb-4"><code class="language-bash">mix phx.server</code></pre>
-            <p class="text-base-content/70">Visit <a href="http://localhost:4000" class="link link-primary">http://localhost:4000</a> and you should see the Northwind Demo landing page with navigation links to Customers, Catalog, Orders, and Analytics sections.</p>
+            <p class="text-base-content/70">
+              Visit
+              <a href="http://localhost:4000" class="link link-primary">http://localhost:4000</a>
+              and you should see the Northwind Demo landing page with navigation links to Customers, Catalog, Orders, and Analytics sections.
+            </p>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Check Database Connection</h3>
-            <p class="text-base-content/70 mb-3">Verify the database is properly seeded with data:</p>
+            <p class="text-base-content/70 mb-3">
+              Verify the database is properly seeded with data:
+            </p>
             <pre><code class="language-elixir">iex -S mix
 # In the IEx console:
 iex> alias SelectoNorthwind.Repo
@@ -137,7 +194,9 @@ iex> Repo.aggregate(from(c in "customers"), :count)
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Development Commands Reference</h3>
-            <p class="text-base-content/70 mb-3">Common commands you'll use during development:</p>
+            <p class="text-base-content/70 mb-3">
+              Common commands you'll use during development:
+            </p>
             <pre><code class="language-bash"># Start Phoenix server
 mix phx.server
 # Start server with interactive Elixir shell
@@ -152,23 +211,34 @@ mix ecto.reset</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Next Step</h3>
-            <p class="text-base-content/70">With the basic Phoenix application set up and the Northwind database loaded, you're ready to proceed to Step 1 where we'll add the Selecto dependencies.</p>
+            <p class="text-base-content/70">
+              With the basic Phoenix application set up and the Northwind database loaded, you're ready to proceed to Step 1 where we'll add the Selecto dependencies.
+            </p>
           </div>
         </div>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 1 -->
       <!-- ================================================================ -->
       <div id="step-1" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
         <h2 class="text-2xl font-bold mb-1">Step 1: Add Selecto Dependencies</h2>
-        <p class="text-base-content/70 mb-4">Configure your Phoenix project with Selecto libraries</p>
-        <p class="text-base-content/80 mb-6">The first step is to add the Selecto libraries to your Phoenix project. These libraries provide powerful data selection, filtering, and UI components for your application.</p>
+        <p class="text-base-content/70 mb-4">
+          Configure your Phoenix project with Selecto libraries
+        </p>
+        <p class="text-base-content/80 mb-6">
+          The first step is to add the Selecto libraries to your Phoenix project. These libraries provide powerful data selection, filtering, and UI components for your application.
+        </p>
 
         <div class="space-y-6">
           <div>
             <h3 class="text-lg font-semibold mb-3">Add Dependencies to mix.exs</h3>
-            <p class="text-base-content/70 mb-3">Open your <code class="bg-base-300 px-2 py-1 rounded text-sm">mix.exs</code> file and add the following dependencies to the <code class="bg-base-300 px-2 py-1 rounded text-sm">deps</code> function:</p>
+            <p class="text-base-content/70 mb-3">
+              Open your <code class="bg-base-300 px-2 py-1 rounded text-sm">mix.exs</code>
+              file and add the following dependencies to the
+              <code class="bg-base-300 px-2 py-1 rounded text-sm">deps</code>
+              function:
+            </p>
             <pre><code class="language-elixir">defp deps do
   [
     # ... existing dependencies ...
@@ -181,10 +251,18 @@ mix ecto.reset</code></pre>
 end</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The <code class="bg-base-300 px-1 rounded">override: true</code> option on selecto is required to resolve a dependency conflict with selecto_components.
+                <strong>Note:</strong>
+                The <code class="bg-base-300 px-1 rounded">override: true</code>
+                option on selecto is required to resolve a dependency conflict with selecto_components.
               </div>
             </div>
           </div>
@@ -215,47 +293,84 @@ end</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Install Dependencies</h3>
-            <p class="text-base-content/70 mb-3">After adding the dependencies, fetch and compile them:</p>
+            <p class="text-base-content/70 mb-3">
+              After adding the dependencies, fetch and compile them:
+            </p>
             <pre><code class="language-bash">mix deps.get
 mix deps.compile</code></pre>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Integrate SelectoComponents Assets</h3>
-            <p class="text-base-content/70 mb-3">Run the integration task to set up the required JavaScript and CSS assets:</p>
+            <p class="text-base-content/70 mb-3">
+              Run the integration task to set up the required JavaScript and CSS assets:
+            </p>
             <pre><code class="language-bash">mix selecto.components.integrate</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
                 <div class="font-semibold">This command will:</div>
                 <ul class="mt-2 space-y-1 text-sm">
-                  <li>- Add SelectoComponents hooks to <code class="bg-base-300 px-1 rounded">assets/js/app.js</code></li>
-                  <li>- Add SelectoComponents styles import to <code class="bg-base-300 px-1 rounded">assets/css/app.css</code></li>
-                  <li>- Ensure Chart.js and Alpine.js dependencies are configured in <code class="bg-base-300 px-1 rounded">assets/package.json</code></li>
+                  <li>
+                    - Add SelectoComponents hooks to
+                    <code class="bg-base-300 px-1 rounded">assets/js/app.js</code>
+                  </li>
+                  <li>
+                    - Add SelectoComponents styles import to
+                    <code class="bg-base-300 px-1 rounded">assets/css/app.css</code>
+                  </li>
+                  <li>
+                    - Ensure Chart.js and Alpine.js dependencies are configured in
+                    <code class="bg-base-300 px-1 rounded">assets/package.json</code>
+                  </li>
                 </ul>
               </div>
             </div>
-            <p class="text-base-content/70 mt-4 mb-3">After running the integration task, build the assets:</p>
+            <p class="text-base-content/70 mt-4 mb-3">
+              After running the integration task, build the assets:
+            </p>
             <pre><code class="language-bash">mix assets.build</code></pre>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Verify Installation</h3>
-            <p class="text-base-content/70 mb-3">You can verify that the Selecto libraries are properly installed by running:</p>
+            <p class="text-base-content/70 mb-3">
+              You can verify that the Selecto libraries are properly installed by running:
+            </p>
             <pre><code class="language-bash">mix help | grep selecto</code></pre>
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <div class="font-semibold">You should see several new Mix tasks available, including:</div>
+                <div class="font-semibold">
+                  You should see several new Mix tasks available, including:
+                </div>
                 <ul class="mt-2 space-y-1 text-sm">
-                  <li>- <code>mix selecto.gen.live</code> - Generate a LiveView with Selecto components</li>
+                  <li>
+                    - <code>mix selecto.gen.live</code>
+                    - Generate a LiveView with Selecto components
+                  </li>
                   <li>- <code>mix selecto.gen.domain</code> - Generate a domain configuration</li>
                   <li>- <code>mix selecto.gen.dashboard</code> - Generate a dashboard view</li>
-                  <li>- <code>mix selecto.integrate.components</code> - Integrate SelectoComponents assets</li>
+                  <li>
+                    - <code>mix selecto.integrate.components</code>
+                    - Integrate SelectoComponents assets
+                  </li>
                 </ul>
               </div>
             </div>
@@ -265,42 +380,68 @@ mix deps.compile</code></pre>
             <h3 class="text-lg font-semibold mb-3">Next Step</h3>
             <div class="rounded-lg border border-error/30 bg-error/10 p-4 text-sm mb-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Important:</strong> You must restart the Phoenix server after adding dependencies. Stop the server (Ctrl+C twice), then start it again. The server must be restarted to ensure proper compilation of the new Selecto libraries.
+                <strong>Important:</strong>
+                You must restart the Phoenix server after adding dependencies. Stop the server (Ctrl+C twice), then start it again. The server must be restarted to ensure proper compilation of the new Selecto libraries.
               </div>
             </div>
-            <p class="text-base-content/70">With the dependencies installed and assets integrated, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Products table.</p>
+            <p class="text-base-content/70">
+              With the dependencies installed and assets integrated, you're ready to move on to Step 2, where we'll generate our first Selecto-powered view for the Products table.
+            </p>
           </div>
         </div>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 2 -->
       <!-- ================================================================ -->
       <div id="step-2" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
         <h2 class="text-2xl font-bold mb-1">Step 2: Generate Products Domain with Selecto</h2>
         <p class="text-base-content/70 mb-4">Create your first Selecto-powered interface</p>
-        <p class="text-base-content/80 mb-6">In this step, we'll use the <code class="bg-base-300 px-2 py-1 rounded text-sm">mix selecto.gen.domain</code> task to generate Selecto domain configuration for the Product schema and its related schemas (Categories, Suppliers, and Tags) from the Catalog context.</p>
-
+        <p class="text-base-content/80 mb-6">
+          In this step, we'll use the
+          <code class="bg-base-300 px-2 py-1 rounded text-sm">mix selecto.gen.domain</code>
+          task to generate Selecto domain configuration for the Product schema and its related schemas (Categories, Suppliers, and Tags) from the Catalog context.
+        </p>
 
         <div class="space-y-6">
           <div>
             <h3 class="text-lg font-semibold mb-3">Understanding Selecto Domains</h3>
-            <p class="text-base-content/70">Selecto domains provide a configuration layer on top of your existing Ecto schemas. They define how tables relate to each other, what fields to display, and how to query the data efficiently.</p>
+            <p class="text-base-content/70">
+              Selecto domains provide a configuration layer on top of your existing Ecto schemas. They define how tables relate to each other, what fields to display, and how to query the data efficiently.
+            </p>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Generate the Products Domain</h3>
-            <p class="text-base-content/70 mb-3">Run the following Mix tasks to generate the Products domain with Categories, Suppliers, and Tags using optimized join modes for efficient querying:</p>
+            <p class="text-base-content/70 mb-3">
+              Run the following Mix tasks to generate the Products domain with Categories, Suppliers, and Tags using optimized join modes for efficient querying:
+            </p>
 
             <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm mb-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Interactive prompts:</strong> The second command requires two interactive responses. Answer "Y" to both "Do you want to proceed?" and "Integrate SelectoComponents?" prompts. To run non-interactively, prefix with: <code class="bg-base-300 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code>
+                <strong>Interactive prompts:</strong>
+                The second command requires two interactive responses. Answer "Y" to both "Do you want to proceed?" and "Integrate SelectoComponents?" prompts. To run non-interactively, prefix with:
+                <code class="bg-base-300 px-2 py-1 rounded text-xs">
+                  echo -e "Y\nY" | mix selecto.gen.domain ...
+                </code>
               </div>
             </div>
 
@@ -317,26 +458,63 @@ mix deps.compile</code></pre>
 
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm mt-4 mb-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
                 <strong>Smart Join Modes Explained:</strong>
                 <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
-                  <li><code class="bg-success/20 px-2 py-1 rounded">--expand-schemas supplier,category,order_details</code> - Fully expand these associations with all columns</li>
-                  <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star category:category_name</code> - Lookup table (8 categories), displays name, filters by ID</li>
-                  <li><code class="bg-success/20 px-2 py-1 rounded">--expand-star supplier:company_name</code> - Lookup table (29 suppliers), displays name, filters by ID</li>
-                  <li><code class="bg-success/20 px-2 py-1 rounded">--expand-tag tags:name</code> - Many-to-many tags with ID-based filtering (prevents query denormalization)</li>
+                  <li>
+                    <code class="bg-success/20 px-2 py-1 rounded">
+                      --expand-schemas supplier,category,order_details
+                    </code>
+                    - Fully expand these associations with all columns
+                  </li>
+                  <li>
+                    <code class="bg-success/20 px-2 py-1 rounded">
+                      --expand-star category:category_name
+                    </code>
+                    - Lookup table (8 categories), displays name, filters by ID
+                  </li>
+                  <li>
+                    <code class="bg-success/20 px-2 py-1 rounded">
+                      --expand-star supplier:company_name
+                    </code>
+                    - Lookup table (29 suppliers), displays name, filters by ID
+                  </li>
+                  <li>
+                    <code class="bg-success/20 px-2 py-1 rounded">--expand-tag tags:name</code>
+                    - Many-to-many tags with ID-based filtering (prevents query denormalization)
+                  </li>
                 </ul>
-                <p class="mt-2 text-sm">The <code>--expand-schemas</code> flag fully expands associated schemas with all their columns. The special join modes (star, tag) generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.</p>
+                <p class="mt-2 text-sm">
+                  The <code>--expand-schemas</code>
+                  flag fully expands associated schemas with all their columns. The special join modes (star, tag) generate optimized configurations that display user-friendly names while filtering on indexed ID columns for better performance.
+                </p>
               </div>
             </div>
 
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mb-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The <code>--path /products_selecto</code> option specifies the route path (with leading slash) that the LiveView will use for URL navigation. The <code>--saved-views</code> flag enables persistent saved views for this domain.
+                <strong>Note:</strong>
+                The <code>--path /products_selecto</code>
+                option specifies the route path (with leading slash) that the LiveView will use for URL navigation. The
+                <code>--saved-views</code>
+                flag enables persistent saved views for this domain.
               </div>
             </div>
           </div>
@@ -345,42 +523,79 @@ mix deps.compile</code></pre>
             <h3 class="text-lg font-semibold mb-3">What This Command Does</h3>
             <div class="grid gap-3">
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
-                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">1</div>
-                <div><strong>Analyze your existing Ecto schema</strong> for Product and the expanded schemas (Category, Supplier, Tags)</div>
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
+                  1
+                </div>
+                <div>
+                  <strong>Analyze your existing Ecto schema</strong>
+                  for Product and the expanded schemas (Category, Supplier, Tags)
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
-                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">2</div>
-                <div><strong>Generate optimized domain configurations</strong> with smart join modes for Category (star) and Tags (tag)</div>
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
+                  2
+                </div>
+                <div>
+                  <strong>Generate optimized domain configurations</strong>
+                  with smart join modes for Category (star) and Tags (tag)
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
-                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">3</div>
-                <div><strong>Create LiveView modules</strong> for interactive data exploration (with <code>--live</code>)</div>
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
+                  3
+                </div>
+                <div>
+                  <strong>Create LiveView modules</strong>
+                  for interactive data exploration (with <code>--live</code>)
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
-                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">4</div>
-                <div><strong>Generate saved views infrastructure</strong> for persisting user-defined views (with <code>--saved-views</code>)</div>
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
+                  4
+                </div>
+                <div>
+                  <strong>Generate saved views infrastructure</strong>
+                  for persisting user-defined views (with <code>--saved-views</code>)
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
-                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">5</div>
-                <div><strong>Integrate SelectoComponents assets</strong> (Chart.js, Alpine.js, hooks, and styles)</div>
+                <div class="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0">
+                  5
+                </div>
+                <div>
+                  <strong>Integrate SelectoComponents assets</strong>
+                  (Chart.js, Alpine.js, hooks, and styles)
+                </div>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Understanding Join Modes</h3>
-            <p class="text-base-content/70 mb-3">The special join mode flags generate optimized configurations that improve query performance and user experience:</p>
+            <p class="text-base-content/70 mb-3">
+              The special join mode flags generate optimized configurations that improve query performance and user experience:
+            </p>
 
             <div class="grid gap-4 mb-4">
               <div class="border border-primary/30 bg-primary/5 rounded-lg p-4">
                 <div class="font-semibold text-primary mb-2">
-                  Expand Schemas: <code class="text-xs">--expand-schemas supplier,category,order_details</code>
+                  Expand Schemas:
+                  <code class="text-xs">--expand-schemas supplier,category,order_details</code>
                 </div>
-                <p class="text-sm text-base-content/70 mb-2">Fully expand associated schemas with all their columns and associations:</p>
+                <p class="text-sm text-base-content/70 mb-2">
+                  Fully expand associated schemas with all their columns and associations:
+                </p>
                 <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                  <li><strong>Use for:</strong> Any association you want to select/filter by multiple columns</li>
-                  <li>Expands all fields from the associated schema into the domain configuration</li>
-                  <li>Enables selecting columns like <code>supplier.company_name</code>, <code>supplier.city</code>, etc.</li>
+                  <li>
+                    <strong>Use for:</strong>
+                    Any association you want to select/filter by multiple columns
+                  </li>
+                  <li>
+                    Expands all fields from the associated schema into the domain configuration
+                  </li>
+                  <li>
+                    Enables selecting columns like <code>supplier.company_name</code>, <code>supplier.city</code>, etc.
+                  </li>
                   <li>Can be combined with star/tag modes for ID-based filtering</li>
                 </ul>
               </div>
@@ -389,9 +604,14 @@ mix deps.compile</code></pre>
                 <div class="font-semibold text-success mb-2">
                   Star Mode: <code class="text-xs">--expand-star category:category_name</code>
                 </div>
-                <p class="text-sm text-base-content/70 mb-2">For lookup tables where you want to display a name but filter by ID:</p>
+                <p class="text-sm text-base-content/70 mb-2">
+                  For lookup tables where you want to display a name but filter by ID:
+                </p>
                 <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                  <li><strong>Best for:</strong> Categories (8), Suppliers (29), Customers (91), Status codes</li>
+                  <li>
+                    <strong>Best for:</strong>
+                    Categories (8), Suppliers (29), Customers (91), Status codes
+                  </li>
                   <li>Displays "category_name" to users (e.g., "Beverages", "Condiments")</li>
                   <li>Filters using category ID (indexed integer column)</li>
                   <li>Prevents query denormalization when grouping by ID</li>
@@ -403,9 +623,14 @@ mix deps.compile</code></pre>
                 <div class="font-semibold text-info mb-2">
                   Tag Mode: <code class="text-xs">--expand-tag tags:name</code>
                 </div>
-                <p class="text-sm text-base-content/70 mb-2">For many-to-many relationships (unlimited records):</p>
+                <p class="text-sm text-base-content/70 mb-2">
+                  For many-to-many relationships (unlimited records):
+                </p>
                 <ul class="list-disc ml-6 text-sm text-base-content/70 space-y-1">
-                  <li><strong>Best for:</strong> Tags, Skills, Features, Labels (flexible categorization)</li>
+                  <li>
+                    <strong>Best for:</strong>
+                    Tags, Skills, Features, Labels (flexible categorization)
+                  </li>
                   <li>Displays tag "name" to users (e.g., "Organic", "Gluten-Free", "Vegan")</li>
                   <li>Filters using tag IDs through junction table (product_tags)</li>
                   <li>Prevents expensive JOIN denormalization in GROUP BY queries</li>
@@ -416,37 +641,69 @@ mix deps.compile</code></pre>
 
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
               </svg>
               <div>
                 <strong>The Rule of Thumb:</strong>
-                <p class="text-sm mt-1"><strong>expand-schemas:</strong> Need multiple columns. <strong>Star:</strong> Display name, filter by ID. <strong>Tag:</strong> Many-to-many relationships.</p>
-                <p class="text-sm mt-2">Note: Association names must be lowercase to match the Ecto schema (e.g., <code>category</code> not <code>Category</code>).</p>
+                <p class="text-sm mt-1">
+                  <strong>expand-schemas:</strong>
+                  Need multiple columns. <strong>Star:</strong>
+                  Display name, filter by ID. <strong>Tag:</strong>
+                  Many-to-many relationships.
+                </p>
+                <p class="text-sm mt-2">
+                  Note: Association names must be lowercase to match the Ecto schema (e.g.,
+                  <code>category</code>
+                  not <code>Category</code>).
+                </p>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Verify SavedView Support</h3>
-            <p class="text-base-content/70 mb-4">The <code>--saved-views</code> flag automatically configures everything needed. Verify the generated code:</p>
+            <p class="text-base-content/70 mb-4">
+              The <code>--saved-views</code>
+              flag automatically configures everything needed. Verify the generated code:
+            </p>
 
             <div class="space-y-6">
               <div>
                 <h4 class="font-semibold mb-3 flex items-center gap-2">
-                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">1</span>
+                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">
+                    1
+                  </span>
                   Domain Module
                 </h4>
-                <p class="text-base-content/70 mb-3">The generator adds <code>use SavedViewContext</code> to the domain. Verify it exists in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/product_domain.ex</code>:</p>
+                <p class="text-base-content/70 mb-3">
+                  The generator adds <code>use SavedViewContext</code>
+                  to the domain. Verify it exists in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/product_domain.ex</code>:
+                </p>
                 <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
-                <p class="text-base-content/70 mt-2">This gives the domain module the ability to save, load, and list named views.</p>
+                <p class="text-base-content/70 mt-2">
+                  This gives the domain module the ability to save, load, and list named views.
+                </p>
               </div>
 
               <div>
                 <h4 class="font-semibold mb-3 flex items-center gap-2">
-                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">2</span>
+                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">
+                    2
+                  </span>
                   LiveView Assigns
                 </h4>
-                <p class="text-base-content/70 mb-3">The generated LiveView in <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/live/product_live.ex</code> should have saved view assigns in <code>mount/3</code>:</p>
+                <p class="text-base-content/70 mb-3">
+                  The generated LiveView in
+                  <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                    lib/selecto_northwind_web/live/product_live.ex
+                  </code>
+                  should have saved view assigns in <code>mount/3</code>:
+                </p>
                 <pre><code class="language-elixir">saved_view_module: SelectoNorthwind.SelectoDomains.ProductDomain,
 saved_view_context: "/products_selecto",
 available_saved_views: saved_views</code></pre>
@@ -454,10 +711,14 @@ available_saved_views: saved_views</code></pre>
 
               <div>
                 <h4 class="font-semibold mb-3 flex items-center gap-2">
-                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">3</span>
+                  <span class="w-6 h-6 bg-primary text-primary-content rounded-full flex items-center justify-center text-sm font-bold">
+                    3
+                  </span>
                   Saved Views Dropdown
                 </h4>
-                <p class="text-base-content/70 mb-3">The generated LiveView includes a "Saved Views" dropdown in the page header. When saved views exist, a dropdown button appears next to the title:</p>
+                <p class="text-base-content/70 mb-3">
+                  The generated LiveView includes a "Saved Views" dropdown in the page header. When saved views exist, a dropdown button appears next to the title:
+                </p>
                 <pre><code class="language-html">&lt;div
   :if=&#123;@available_saved_views != []&#125;
   id="saved-views-dropdown"
@@ -470,22 +731,32 @@ available_saved_views: saved_views</code></pre>
     &lt;li :for=&#123;v &lt;- @available_saved_views&#125;&gt;...&lt;/li&gt;
   &lt;/ul&gt;
 &lt;/div&gt;</code></pre>
-                <p class="text-base-content/70 mt-2">This uses Alpine.js (included via SelectoComponents) with <code>phx-update="ignore"</code> so LiveView does not interfere with the Alpine open/close state. Clicking a saved view navigates to <code>?saved_view=name</code>, which restores the full query configuration.</p>
+                <p class="text-base-content/70 mt-2">
+                  This uses Alpine.js (included via SelectoComponents) with
+                  <code>phx-update="ignore"</code>
+                  so LiveView does not interfere with the Alpine open/close state. Clicking a saved view navigates to <code>?saved_view=name</code>, which restores the full query configuration.
+                </p>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Run the Migration</h3>
-            <p class="text-base-content/70 mb-3">After generation, run the migration to create the saved_views table:</p>
+            <p class="text-base-content/70 mb-3">
+              After generation, run the migration to create the saved_views table:
+            </p>
             <pre><code class="language-bash">mix ecto.migrate</code></pre>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Add Route to Router</h3>
-            <p class="text-base-content/70 mb-3">Open <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>. Find the existing placeholder route and replace it with the LiveView route:</p>
+            <p class="text-base-content/70 mb-3">
+              Open <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>. Find the existing placeholder route and replace it with the LiveView route:
+            </p>
 
-            <p class="text-base-content/70 mb-3"><strong>Before (old placeholder route):</strong></p>
+            <p class="text-base-content/70 mb-3">
+              <strong>Before (old placeholder route):</strong>
+            </p>
             <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
@@ -503,26 +774,48 @@ end</code></pre>
 
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Important:</strong> The module name is <code>ProductLive</code> (singular) even though the path is "products_selecto" (plural). This matches the LiveView module generated in <code class="bg-base-300 px-1 rounded text-xs">lib/selecto_northwind_web/live/product_live.ex</code>
+                <strong>Important:</strong>
+                The module name is <code>ProductLive</code>
+                (singular) even though the path is "products_selecto" (plural). This matches the LiveView module generated in
+                <code class="bg-base-300 px-1 rounded text-xs">
+                  lib/selecto_northwind_web/live/product_live.ex
+                </code>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Integrate SelectoComponents Assets</h3>
-            <p class="text-base-content/70 mb-3">Run the integration task to set up the JavaScript hooks and CSS source paths:</p>
+            <p class="text-base-content/70 mb-3">
+              Run the integration task to set up the JavaScript hooks and CSS source paths:
+            </p>
             <pre class="mb-4"><code class="language-bash">mix selecto.components.integrate</code></pre>
             <p class="text-base-content/70 mb-3">Then compile the updated assets:</p>
             <pre><code class="language-bash">mix assets.build</code></pre>
             <div class="rounded-lg border border-error/30 bg-error/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Critical:</strong> You must restart the Phoenix server after this step. The server needs to restart so Tailwind can properly scan the <code class="bg-base-300 px-1 rounded">vendor/selecto_components</code> directory and include the necessary CSS classes. Without restarting, the SelectoComponents UI will not render correctly.
+                <strong>Critical:</strong>
+                You must restart the Phoenix server after this step. The server needs to restart so Tailwind can properly scan the
+                <code class="bg-base-300 px-1 rounded">vendor/selecto_components</code>
+                directory and include the necessary CSS classes. Without restarting, the SelectoComponents UI will not render correctly.
               </div>
             </div>
           </div>
@@ -532,14 +825,27 @@ end</code></pre>
             <p class="text-base-content/70 mb-3"><strong>Start the server:</strong></p>
             <pre class="mb-4"><code class="language-bash">mix phx.server</code></pre>
 
-            <p class="text-base-content/70 mb-3"><strong>Then visit:</strong> <a href="http://localhost:4000/products_selecto" class="link link-primary">http://localhost:4000/products_selecto</a></p>
+            <p class="text-base-content/70 mb-3">
+              <strong>Then visit:</strong>
+              <a href="http://localhost:4000/products_selecto" class="link link-primary">
+                http://localhost:4000/products_selecto
+              </a>
+            </p>
 
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm mb-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <div class="font-semibold">Success Criteria - You should see ALL of the following:</div>
+                <div class="font-semibold">
+                  Success Criteria - You should see ALL of the following:
+                </div>
                 <ul class="mt-2 space-y-1 text-sm">
                   <li>- Page title: "Products Explorer" or similar</li>
                   <li>- A query builder form with filter options</li>
@@ -555,15 +861,39 @@ end</code></pre>
 
             <div class="rounded-lg border border-error/30 bg-error/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
                 <div class="font-semibold">Common Issues - If you see errors:</div>
                 <ul class="mt-2 space-y-2 text-sm">
-                  <li><strong>404 Not Found:</strong> Check that you added the route to <code class="bg-base-300 px-1 rounded text-xs">router.ex</code> correctly</li>
-                  <li><strong>Compilation errors:</strong> Run <code class="bg-base-300 px-1 rounded text-xs">mix compile</code> to see detailed error messages</li>
-                  <li><strong>Missing CSS styles:</strong> Restart the server (the Tailwind scanner needs to detect new files)</li>
-                  <li><strong>Module not found:</strong> Verify the LiveView file was generated at <code class="bg-base-300 px-1 rounded text-xs">lib/selecto_northwind_web/live/product_live.ex</code></li>
+                  <li>
+                    <strong>404 Not Found:</strong>
+                    Check that you added the route to
+                    <code class="bg-base-300 px-1 rounded text-xs">router.ex</code>
+                    correctly
+                  </li>
+                  <li>
+                    <strong>Compilation errors:</strong>
+                    Run <code class="bg-base-300 px-1 rounded text-xs">mix compile</code>
+                    to see detailed error messages
+                  </li>
+                  <li>
+                    <strong>Missing CSS styles:</strong>
+                    Restart the server (the Tailwind scanner needs to detect new files)
+                  </li>
+                  <li>
+                    <strong>Module not found:</strong>
+                    Verify the LiveView file was generated at
+                    <code class="bg-base-300 px-1 rounded text-xs">
+                      lib/selecto_northwind_web/live/product_live.ex
+                    </code>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -580,7 +910,9 @@ end</code></pre>
                   <h4 class="font-semibold mb-2">Selecto Domain Configuration</h4>
                   <pre class="text-xs"><code class="language-bash">lib/selecto_northwind/selecto_domains/
   └── products_domain.ex  # Domain configuration with Product and related schemas</code></pre>
-                  <p class="text-base-content/70 mt-2">This file contains configurations for the Product schema and expanded schemas (Category, Supplier) defining: column definitions, association mappings, default display settings, and query configurations.</p>
+                  <p class="text-base-content/70 mt-2">
+                    This file contains configurations for the Product schema and expanded schemas (Category, Supplier) defining: column definitions, association mappings, default display settings, and query configurations.
+                  </p>
                 </div>
 
                 <div>
@@ -591,7 +923,9 @@ end</code></pre>
                 </div>
 
                 <div>
-                  <h4 class="font-semibold mb-2">Saved Views Infrastructure (with --saved-views flag)</h4>
+                  <h4 class="font-semibold mb-2">
+                    Saved Views Infrastructure (with --saved-views flag)
+                  </h4>
                   <pre class="text-xs"><code class="language-bash">lib/selecto_northwind/
   ├── saved_view.ex           # Ecto schema for saved views
   └── saved_view_context.ex   # Context module for saved view operations
@@ -604,24 +938,35 @@ priv/repo/migrations/
           </div>
         </div>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 2b: Config Overlays -->
       <!-- ================================================================ -->
       <div id="step-2b" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
         <h2 class="text-2xl font-bold mb-1">Step 2b: Customize Domain with Config Overlays</h2>
-        <p class="text-base-content/70 mb-4">Non-destructive customization without modifying generated files</p>
+        <p class="text-base-content/70 mb-4">
+          Non-destructive customization without modifying generated files
+        </p>
 
         <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mb-6">
           <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            >
+            </path>
           </svg>
           <div>
-            <strong>Config Overlay System:</strong> When you generated the Products domain in Step 2, Selecto automatically created an overlay file at <code class="bg-base-200 px-2 py-1 rounded">lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex</code>. This file lets you customize the domain without modifying the generated domain file itself.
+            <strong>Config Overlay System:</strong>
+            When you generated the Products domain in Step 2, Selecto automatically created an overlay file at <code class="bg-base-200 px-2 py-1 rounded">lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex</code>. This file lets you customize the domain without modifying the generated domain file itself.
           </div>
         </div>
 
-        <p class="text-base-content/80 mb-6">The overlay system allows you to customize columns, add filters, and configure redactions using a clean DSL. Your customizations are preserved even if you regenerate the domain.</p>
+        <p class="text-base-content/80 mb-6">
+          The overlay system allows you to customize columns, add filters, and configure redactions using a clean DSL. Your customizations are preserved even if you regenerate the domain.
+        </p>
 
         <div class="space-y-6">
           <div>
@@ -630,11 +975,22 @@ priv/repo/migrations/
             <div class="bg-base-200 p-4 rounded-lg mb-4">
               <h4 class="font-semibold mb-2">Why Use Overlays?</h4>
               <ul class="list-disc list-inside space-y-2 text-sm">
-                <li><strong>Non-Destructive:</strong> Customize without modifying generated files</li>
-                <li><strong>Regeneration Safe:</strong> Re-run generators without losing customizations</li>
-                <li><strong>Clean Syntax:</strong> DSL is more readable than raw map manipulation</li>
-                <li><strong>Type Safety:</strong> Compile-time macro processing catches errors</li>
-                <li><strong>Multi-Tenant Ready:</strong> Runtime overlay merging for dynamic configs</li>
+                <li>
+                  <strong>Non-Destructive:</strong> Customize without modifying generated files
+                </li>
+                <li>
+                  <strong>Regeneration Safe:</strong>
+                  Re-run generators without losing customizations
+                </li>
+                <li>
+                  <strong>Clean Syntax:</strong> DSL is more readable than raw map manipulation
+                </li>
+                <li>
+                  <strong>Type Safety:</strong> Compile-time macro processing catches errors
+                </li>
+                <li>
+                  <strong>Multi-Tenant Ready:</strong> Runtime overlay merging for dynamic configs
+                </li>
               </ul>
             </div>
 
@@ -652,15 +1008,23 @@ priv/repo/migrations/
 
             <p class="text-base-content/70 mb-3">
               Let's customize how product prices and stock levels are displayed. Open the generated overlay file and add customizations. Custom
-              filters that are not tied to a column need an <code>apply</code> function so they can be converted into real query filters.
+              filters that are not tied to a column need an <code>apply</code>
+              function so they can be converted into real query filters.
             </p>
 
             <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm mb-3">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The overlay file was auto-generated with example customizations. Feel free to uncomment and modify them!
+                <strong>Note:</strong>
+                The overlay file was auto-generated with example customizations. Feel free to uncomment and modify them!
               </div>
             </div>
 
@@ -731,12 +1095,15 @@ defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
   defp price_range_filter(_selecto, _), do: <%= "{" %>:and, []<%= "}" %>
 end</code></pre>
           </div>
-
-          <!-- JSONB Schema Configuration -->
+          
+<!-- JSONB Schema Configuration -->
           <div>
             <h3 class="text-lg font-semibold mb-3">Configure JSONB Schema for Attributes</h3>
 
-            <p class="text-base-content/70 mb-3">The Products table has a JSONB <code>attributes</code> column for storing flexible product metadata. Define its schema in the overlay to enable type-safe filtering and display. Add the following to your overlay file:</p>
+            <p class="text-base-content/70 mb-3">
+              The Products table has a JSONB <code>attributes</code>
+              column for storing flexible product metadata. Define its schema in the overlay to enable type-safe filtering and display. Add the following to your overlay file:
+            </p>
 
             <pre><code class="language-elixir"># Add to lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex
 # Place this inside the module, after the deffilter blocks
@@ -788,15 +1155,33 @@ end</code></pre>
 
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
                 <strong>JSONB Schema Benefits:</strong>
                 <ul class="list-disc ml-6 mt-2 space-y-1 text-sm">
-                  <li><strong>Type-safe filtering:</strong> Filter by <code>attributes.color = "red"</code> or <code>attributes.weight > 10</code></li>
-                  <li><strong>Enum validation:</strong> Size can only be "small", "medium", "large", or "xl"</li>
-                  <li><strong>Nested objects:</strong> Access <code>attributes.dimensions.length</code></li>
-                  <li><strong>Array support:</strong> Filter products by tags within the JSONB</li>
+                  <li>
+                    <strong>Type-safe filtering:</strong>
+                    Filter by <code>attributes.color = "red"</code>
+                    or <code>attributes.weight > 10</code>
+                  </li>
+                  <li>
+                    <strong>Enum validation:</strong>
+                    Size can only be "small", "medium", "large", or "xl"
+                  </li>
+                  <li>
+                    <strong>Nested objects:</strong>
+                    Access <code>attributes.dimensions.length</code>
+                  </li>
+                  <li>
+                    <strong>Array support:</strong> Filter products by tags within the JSONB
+                  </li>
                 </ul>
               </div>
             </div>
@@ -829,18 +1214,26 @@ end</code></pre>
               </div>
             </div>
           </div>
-
-          <!-- Available Directives -->
+          
+<!-- Available Directives -->
           <div>
             <h3 class="text-lg font-semibold mb-3">Available DSL Directives</h3>
 
             <div class="grid md:grid-cols-2 gap-4">
               <div class="bg-base-200 p-4 rounded-lg">
-                <h4 class="font-semibold mb-2 text-sm">Column Directives (within <code>defcolumn</code>)</h4>
+                <h4 class="font-semibold mb-2 text-sm">
+                  Column Directives (within <code>defcolumn</code>)
+                </h4>
                 <ul class="text-xs space-y-1">
                   <li><code>label/1</code> - Human-readable label</li>
-                  <li><code>format/1</code> - Display format (<code>:currency</code>, <code>:percentage</code>, <code>:yes_no</code>, <code>:date</code>)</li>
-                  <li><code>aggregate_functions/1</code> - Allowed aggregations (<code>[:sum, :avg, :count, :min, :max]</code>)</li>
+                  <li>
+                    <code>format/1</code>
+                    - Display format (<code>:currency</code>, <code>:percentage</code>, <code>:yes_no</code>, <code>:date</code>)
+                  </li>
+                  <li>
+                    <code>aggregate_functions/1</code>
+                    - Allowed aggregations (<code>[:sum, :avg, :count, :min, :max]</code>)
+                  </li>
                   <li><code>precision/1</code> - Numeric precision for decimals</li>
                   <li><code>max_length/1</code> - Max string length for display</li>
                   <li><code>sortable/1</code> - Enable/disable sorting</li>
@@ -850,10 +1243,15 @@ end</code></pre>
               </div>
 
               <div class="bg-base-200 p-4 rounded-lg">
-                <h4 class="font-semibold mb-2 text-sm">Filter Directives (within <code>deffilter</code>)</h4>
+                <h4 class="font-semibold mb-2 text-sm">
+                  Filter Directives (within <code>deffilter</code>)
+                </h4>
                 <ul class="text-xs space-y-1">
                   <li><code>name/1</code> - Human-readable filter name</li>
-                  <li><code>type/1</code> - Filter type (<code>:string</code>, <code>:integer</code>, <code>:boolean</code>, <code>:date</code>)</li>
+                  <li>
+                    <code>type/1</code>
+                    - Filter type (<code>:string</code>, <code>:integer</code>, <code>:boolean</code>, <code>:date</code>)
+                  </li>
                   <li><code>description/1</code> - Help text for the filter</li>
                   <li><code>required/1</code> - Whether filter is required</li>
                   <li><code>default/1</code> - Default value</li>
@@ -866,49 +1264,73 @@ end</code></pre>
               <div class="bg-base-200 p-4 rounded-lg">
                 <h4 class="font-semibold mb-2 text-sm">Module Attributes</h4>
                 <ul class="text-xs space-y-1">
-                  <li><code>@redactions</code> - List of field atoms to redact from queries (security/privacy)</li>
+                  <li>
+                    <code>@redactions</code>
+                    - List of field atoms to redact from queries (security/privacy)
+                  </li>
                 </ul>
               </div>
 
               <div class="bg-base-200 p-4 rounded-lg">
-                <h4 class="font-semibold mb-2 text-sm">JSONB Schema (via <code>defjsonb_schema</code>)</h4>
+                <h4 class="font-semibold mb-2 text-sm">
+                  JSONB Schema (via <code>defjsonb_schema</code>)
+                </h4>
                 <ul class="text-xs space-y-1">
-                  <li><code>defjsonb_schema :column_name</code> - Define schema for JSONB column</li>
-                  <li>Supports nested objects with <code>type: :object, schema: %<%= "{" %>...<%= "}" %></code></li>
-                  <li>Supports arrays with <code>type: :array, items: %<%= "{" %>...<%= "}" %></code></li>
-                  <li>Validation: <code>:enum</code>, <code>:min</code>, <code>:max</code>, <code>:required</code>, <code>:default</code></li>
+                  <li>
+                    <code>defjsonb_schema :column_name</code> - Define schema for JSONB column
+                  </li>
+                  <li>
+                    Supports nested objects with
+                    <code>type: :object, schema: %<%= "{" %>...<%= "}" %></code>
+                  </li>
+                  <li>
+                    Supports arrays with
+                    <code>type: :array, items: %<%= "{" %>...<%= "}" %></code>
+                  </li>
+                  <li>
+                    Validation: <code>:enum</code>, <code>:min</code>, <code>:max</code>, <code>:required</code>,
+                    <code>:default</code>
+                  </li>
                 </ul>
               </div>
             </div>
           </div>
-
-          <!-- How Overlays Work -->
+          
+<!-- How Overlays Work -->
           <div>
             <h3 class="text-lg font-semibold mb-3">How Overlay Merging Works</h3>
 
             <div class="space-y-3">
               <div class="bg-base-200 p-4 rounded-lg">
                 <h4 class="font-semibold mb-2 text-sm">Deep Merge for Columns</h4>
-                <p class="text-xs text-base-content/70">Column properties from the overlay are merged with base domain columns. Overlay properties take precedence, but unspecified properties keep their base values.</p>
+                <p class="text-xs text-base-content/70">
+                  Column properties from the overlay are merged with base domain columns. Overlay properties take precedence, but unspecified properties keep their base values.
+                </p>
               </div>
 
               <div class="bg-base-200 p-4 rounded-lg">
                 <h4 class="font-semibold mb-2 text-sm">Additive Merge for Filters</h4>
-                <p class="text-xs text-base-content/70">Both base filters and overlay filters are available. This allows you to add custom filters without losing generated ones.</p>
+                <p class="text-xs text-base-content/70">
+                  Both base filters and overlay filters are available. This allows you to add custom filters without losing generated ones.
+                </p>
               </div>
 
               <div class="bg-base-200 p-4 rounded-lg">
                 <h4 class="font-semibold mb-2 text-sm">Union Merge for Redactions</h4>
-                <p class="text-xs text-base-content/70">Redacted fields from both base and overlay are combined (no duplicates). This ensures maximum security.</p>
+                <p class="text-xs text-base-content/70">
+                  Redacted fields from both base and overlay are combined (no duplicates). This ensures maximum security.
+                </p>
               </div>
             </div>
           </div>
-
-          <!-- Testing Your Overlay -->
+          
+<!-- Testing Your Overlay -->
           <div>
             <h3 class="text-lg font-semibold mb-3">Test Your Customizations</h3>
 
-            <p class="text-base-content/70 mb-3">After making changes to your overlay file, restart the Phoenix server to see the changes:</p>
+            <p class="text-base-content/70 mb-3">
+              After making changes to your overlay file, restart the Phoenix server to see the changes:
+            </p>
 
             <pre><code class="language-bash"># Restart the server
 mix phx.server
@@ -918,19 +1340,30 @@ open http://localhost:4000/products_selecto</code></pre>
 
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Pro Tip:</strong> You can regenerate the domain file anytime with <code>mix selecto.gen.domain</code> and your overlay customizations will be preserved!
+                <strong>Pro Tip:</strong>
+                You can regenerate the domain file anytime with
+                <code>mix selecto.gen.domain</code>
+                and your overlay customizations will be preserved!
               </div>
             </div>
           </div>
-
-          <!-- Advanced: Runtime Overlays -->
+          
+<!-- Advanced: Runtime Overlays -->
           <div>
             <h3 class="text-lg font-semibold mb-3">Advanced: Runtime Overlay Merging</h3>
 
-            <p class="text-base-content/70 mb-3">For multi-tenant scenarios or feature flags, you can merge overlays at runtime:</p>
+            <p class="text-base-content/70 mb-3">
+              For multi-tenant scenarios or feature flags, you can merge overlays at runtime:
+            </p>
 
             <pre><code class="language-elixir"># In your LiveView or context
 def get_domain_for_tenant(tenant) do
@@ -943,18 +1376,22 @@ def get_domain_for_tenant(tenant) do
   Selecto.Config.Overlay.merge(base_domain, tenant_overlay)
 end</code></pre>
 
-            <p class="text-xs text-base-content/60 mt-3">This allows different tenants to have different column labels, filters, or redactions without code duplication.</p>
+            <p class="text-xs text-base-content/60 mt-3">
+              This allows different tenants to have different column labels, filters, or redactions without code duplication.
+            </p>
           </div>
         </div>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 3: Customers Domain -->
       <!-- ================================================================ -->
       <div id="step-3" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
         <h2 class="text-2xl font-bold mb-1">Step 3: Generate Customers Domain with Selecto</h2>
         <p class="text-base-content/70 mb-4">Add customer management capabilities</p>
-        <p class="text-base-content/80 mb-6">Now let's generate a Selecto domain for the Customer schema and its related schemas. This demonstrates how to integrate multiple business domains into your Selecto-powered application.</p>
+        <p class="text-base-content/80 mb-6">
+          Now let's generate a Selecto domain for the Customer schema and its related schemas. This demonstrates how to integrate multiple business domains into your Selecto-powered application.
+        </p>
 
         <div class="space-y-6">
           <div>
@@ -962,24 +1399,44 @@ end</code></pre>
 
             <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm mb-3">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Interactive prompts:</strong> This command requires two "Y" responses (same as Step 2). Use <code class="bg-base-300 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code> for non-interactive execution.
+                <strong>Interactive prompts:</strong>
+                This command requires two "Y" responses (same as Step 2). Use
+                <code class="bg-base-300 px-2 py-1 rounded text-xs">
+                  echo -e "Y\nY" | mix selecto.gen.domain ...
+                </code>
+                for non-interactive execution.
               </div>
             </div>
 
-            <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Customers domain with expanded schemas for related entities:</p>
+            <p class="text-base-content/70 mb-3">
+              Run the following Mix task to generate the Customers domain with expanded schemas for related entities:
+            </p>
             <pre class="mb-4"><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Sales.Customer \
   --expand-schemas SelectoNorthwind.Sales.Order SelectoNorthwind.Sales.CustomerDemographic \
   --live --saved-views --path customers_selecto</code></pre>
 
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The saved views infrastructure was already created in Step 2, so this command only generates the Customer-specific domain and LiveView.
+                <strong>Note:</strong>
+                The saved views infrastructure was already created in Step 2, so this command only generates the Customer-specific domain and LiveView.
               </div>
             </div>
           </div>
@@ -989,29 +1446,49 @@ end</code></pre>
             <div class="grid gap-3">
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <div><strong>Customer Domain Configuration:</strong> Maps Customer schema with Orders and CustomerDemographic relationships</div>
+                <div>
+                  <strong>Customer Domain Configuration:</strong>
+                  Maps Customer schema with Orders and CustomerDemographic relationships
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <div><strong>CustomerLive Module:</strong> LiveView for interactive customer data exploration</div>
+                <div>
+                  <strong>CustomerLive Module:</strong>
+                  LiveView for interactive customer data exploration
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-secondary rounded-full mt-2"></div>
-                <div><strong>Saved Views Support:</strong> Persistence layer for customer-specific saved views</div>
+                <div>
+                  <strong>Saved Views Support:</strong>
+                  Persistence layer for customer-specific saved views
+                </div>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Verify the Generated Files</h3>
-            <p class="text-base-content/70 mb-3">The <code>--saved-views</code> flag automatically configures everything. Verify the domain module at <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/customers_domain.ex</code> contains:</p>
+            <p class="text-base-content/70 mb-3">
+              The <code>--saved-views</code>
+              flag automatically configures everything. Verify the domain module at
+              <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                lib/selecto_northwind/selecto_domains/customers_domain.ex
+              </code>
+              contains:
+            </p>
             <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
-            <p class="text-base-content/70 mt-3">The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header (visible once views have been saved).</p>
+            <p class="text-base-content/70 mt-3">
+              The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header (visible once views have been saved).
+            </p>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Add Route to Router</h3>
-            <p class="text-base-content/70 mb-3">Add the Customers LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:</p>
+            <p class="text-base-content/70 mb-3">
+              Add the Customers LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:
+            </p>
             <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
@@ -1023,10 +1500,18 @@ end</code></pre>
 end</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The module name is <code>CustomerLive</code> (singular) even though the path uses "customers" (plural).
+                <strong>Note:</strong>
+                The module name is <code>CustomerLive</code>
+                (singular) even though the path uses "customers" (plural).
               </div>
             </div>
           </div>
@@ -1039,12 +1524,20 @@ end</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Test the Customers Interface</h3>
-            <p class="text-base-content/70 mb-3">Start your Phoenix server and navigate to the new Customers interface:</p>
+            <p class="text-base-content/70 mb-3">
+              Start your Phoenix server and navigate to the new Customers interface:
+            </p>
             <pre class="mb-4"><code class="language-bash">mix phx.server
 # Visit http://localhost:4000/customers_selecto</code></pre>
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
                 <div class="font-semibold">The Customers Explorer should now include:</div>
@@ -1060,44 +1553,62 @@ end</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Try These Customer Queries</h3>
-            <p class="text-base-content/70 mb-3">Once your Customers interface is running, try these example queries to explore the data:</p>
+            <p class="text-base-content/70 mb-3">
+              Once your Customers interface is running, try these example queries to explore the data:
+            </p>
             <div class="grid gap-3">
               <div class="p-3 bg-base-200 rounded-lg">
-                <div class="font-semibold text-sm mb-1">Find customers from specific countries:</div>
-                <div class="text-xs text-base-content/60">Add filter: Country equals "USA" or "Germany"</div>
+                <div class="font-semibold text-sm mb-1">
+                  Find customers from specific countries:
+                </div>
+                <div class="text-xs text-base-content/60">
+                  Add filter: Country equals "USA" or "Germany"
+                </div>
               </div>
               <div class="p-3 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-1">Customers with recent orders:</div>
-                <div class="text-xs text-base-content/60">Include Orders in the query, then filter by order date</div>
+                <div class="text-xs text-base-content/60">
+                  Include Orders in the query, then filter by order date
+                </div>
               </div>
               <div class="p-3 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-1">Top customers by order count:</div>
-                <div class="text-xs text-base-content/60">Group by Customer, aggregate Orders count, sort descending</div>
+                <div class="text-xs text-base-content/60">
+                  Group by Customer, aggregate Orders count, sort descending
+                </div>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Next Steps</h3>
-            <p class="text-base-content/70">You now have two independent Selecto domains (Products and Customers) running in your application. Each domain:</p>
+            <p class="text-base-content/70">
+              You now have two independent Selecto domains (Products and Customers) running in your application. Each domain:
+            </p>
             <ul class="list-disc list-inside text-sm text-base-content/70 ml-4 space-y-1 mt-2">
               <li>Has its own query builder and data explorer</li>
               <li>Maintains separate saved views</li>
               <li>Can explore related data through associations</li>
               <li>Provides table, detail, and graph visualization options</li>
             </ul>
-            <p class="text-base-content/70 mt-3">Continue exploring by creating saved views, building complex queries, or proceed to generate additional domains for Orders, Employees, or other entities in the Northwind database.</p>
+            <p class="text-base-content/70 mt-3">
+              Continue exploring by creating saved views, building complex queries, or proceed to generate additional domains for Orders, Employees, or other entities in the Northwind database.
+            </p>
           </div>
         </div>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 4: Orders Domain -->
       <!-- ================================================================ -->
       <div id="step-4" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
-        <h2 class="text-2xl font-bold mb-1">Step 4: Generate Orders Domain with Complex Relationships</h2>
+        <h2 class="text-2xl font-bold mb-1">
+          Step 4: Generate Orders Domain with Complex Relationships
+        </h2>
         <p class="text-base-content/70 mb-4">Connect sales data across multiple entities</p>
-        <p class="text-base-content/80 mb-6">The Orders domain is the heart of the sales system, connecting customers, products, employees, and shipping. This step demonstrates working with complex multi-table relationships in Selecto.</p>
+        <p class="text-base-content/80 mb-6">
+          The Orders domain is the heart of the sales system, connecting customers, products, employees, and shipping. This step demonstrates working with complex multi-table relationships in Selecto.
+        </p>
 
         <div class="space-y-6">
           <div>
@@ -1105,14 +1616,27 @@ end</code></pre>
 
             <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm mb-3">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Interactive prompts:</strong> This command requires two "Y" responses (same as previous steps). Use <code class="bg-base-300 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code> for non-interactive execution.
+                <strong>Interactive prompts:</strong>
+                This command requires two "Y" responses (same as previous steps). Use
+                <code class="bg-base-300 px-2 py-1 rounded text-xs">
+                  echo -e "Y\nY" | mix selecto.gen.domain ...
+                </code>
+                for non-interactive execution.
               </div>
             </div>
 
-            <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Orders domain with its extensive relationships (OrderDetail, Shipper, Employee, Customer):</p>
+            <p class="text-base-content/70 mb-3">
+              Run the following Mix task to generate the Orders domain with its extensive relationships (OrderDetail, Shipper, Employee, Customer):
+            </p>
             <pre class="mb-4"><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Sales.Order \
   --expand-schemas SelectoNorthwind.Sales.OrderDetail \
     SelectoNorthwind.Sales.Shipper \
@@ -1126,33 +1650,56 @@ end</code></pre>
             <div class="grid gap-3">
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                <div><strong>Order -> OrderDetails:</strong> One-to-many relationship showing line items for each order with products, quantities, and prices</div>
+                <div>
+                  <strong>Order -> OrderDetails:</strong>
+                  One-to-many relationship showing line items for each order with products, quantities, and prices
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                <div><strong>Order -> Customer:</strong> Many-to-one relationship linking orders to the customer who placed them</div>
+                <div>
+                  <strong>Order -> Customer:</strong>
+                  Many-to-one relationship linking orders to the customer who placed them
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                <div><strong>Order -> Employee:</strong> Many-to-one relationship showing which employee processed the order</div>
+                <div>
+                  <strong>Order -> Employee:</strong>
+                  Many-to-one relationship showing which employee processed the order
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-warning rounded-full mt-2"></div>
-                <div><strong>Order -> Shipper:</strong> Many-to-one relationship indicating the shipping company used</div>
+                <div>
+                  <strong>Order -> Shipper:</strong>
+                  Many-to-one relationship indicating the shipping company used
+                </div>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Verify the Generated Files</h3>
-            <p class="text-base-content/70 mb-3">The <code>--saved-views</code> flag automatically configures everything. Verify the domain module at <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/orders_domain.ex</code> contains:</p>
+            <p class="text-base-content/70 mb-3">
+              The <code>--saved-views</code>
+              flag automatically configures everything. Verify the domain module at
+              <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                lib/selecto_northwind/selecto_domains/orders_domain.ex
+              </code>
+              contains:
+            </p>
             <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
-            <p class="text-base-content/70 mt-3">The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header.</p>
+            <p class="text-base-content/70 mt-3">
+              The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header.
+            </p>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Add Route to Router</h3>
-            <p class="text-base-content/70 mb-3">Add the Orders LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:</p>
+            <p class="text-base-content/70 mb-3">
+              Add the Orders LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:
+            </p>
             <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
@@ -1165,10 +1712,18 @@ end</code></pre>
 end</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The module name is <code>OrderLive</code> (singular) matching the schema name.
+                <strong>Note:</strong>
+                The module name is <code>OrderLive</code>
+                (singular) matching the schema name.
               </div>
             </div>
           </div>
@@ -1182,14 +1737,27 @@ mix phx.server</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Test the Orders Interface</h3>
-            <p class="text-base-content/70 mb-3">Navigate to the Orders interface at <code class="bg-base-300 px-2 py-1 rounded text-sm">http://localhost:4000/orders_selecto</code></p>
+            <p class="text-base-content/70 mb-3">
+              Navigate to the Orders interface at
+              <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                http://localhost:4000/orders_selecto
+              </code>
+            </p>
 
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <div class="font-semibold">The Orders Explorer provides comprehensive sales data access:</div>
+                <div class="font-semibold">
+                  The Orders Explorer provides comprehensive sales data access:
+                </div>
                 <ul class="mt-2 space-y-1 text-sm">
                   <li>- Order headers with dates, status, and shipping information</li>
                   <li>- Order details showing individual line items and products</li>
@@ -1203,25 +1771,25 @@ mix phx.server</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Powerful Order Analysis Queries</h3>
-            <p class="text-base-content/70 mb-3">The Orders domain enables complex business intelligence queries. Try these examples:</p>
+            <p class="text-base-content/70 mb-3">
+              The Orders domain enables complex business intelligence queries. Try these examples:
+            </p>
 
             <div class="grid gap-3">
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Revenue by Customer</div>
                 <div class="text-xs text-base-content/60">
-                  1. Include OrderDetails in your query<br/>
-                  2. Group by Customer Company Name<br/>
-                  3. Aggregate: Sum of (Unit Price x Quantity)<br/>
-                  4. Sort by revenue descending
+                  1. Include OrderDetails in your query<br />
+                  2. Group by Customer Company Name<br />
+                  3. Aggregate: Sum of (Unit Price x Quantity)<br /> 4. Sort by revenue descending
                 </div>
               </div>
 
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Monthly Sales Trends</div>
                 <div class="text-xs text-base-content/60">
-                  1. Group by Order Date (month)<br/>
-                  2. Include OrderDetails<br/>
-                  3. Aggregate: Count orders and sum revenue<br/>
+                  1. Group by Order Date (month)<br /> 2. Include OrderDetails<br />
+                  3. Aggregate: Count orders and sum revenue<br />
                   4. View as Graph for visualization
                 </div>
               </div>
@@ -1229,9 +1797,8 @@ mix phx.server</code></pre>
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Employee Performance</div>
                 <div class="text-xs text-base-content/60">
-                  1. Include Employee and OrderDetails<br/>
-                  2. Group by Employee Name<br/>
-                  3. Aggregate: Count of orders, Sum of revenue<br/>
+                  1. Include Employee and OrderDetails<br /> 2. Group by Employee Name<br />
+                  3. Aggregate: Count of orders, Sum of revenue<br />
                   4. Filter by date range for specific periods
                 </div>
               </div>
@@ -1239,9 +1806,8 @@ mix phx.server</code></pre>
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Shipping Analysis</div>
                 <div class="text-xs text-base-content/60">
-                  1. Include Shipper information<br/>
-                  2. Group by Shipper Company Name<br/>
-                  3. Aggregate: Average shipping cost, delivery time<br/>
+                  1. Include Shipper information<br /> 2. Group by Shipper Company Name<br />
+                  3. Aggregate: Average shipping cost, delivery time<br />
                   4. Compare shipper performance metrics
                 </div>
               </div>
@@ -1250,7 +1816,9 @@ mix phx.server</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">What You've Accomplished</h3>
-            <p class="text-base-content/70">With the Orders domain, you've now created a powerful sales analysis system that:</p>
+            <p class="text-base-content/70">
+              With the Orders domain, you've now created a powerful sales analysis system that:
+            </p>
             <ul class="list-disc list-inside text-sm text-base-content/70 ml-4 space-y-1 mt-2">
               <li>Connects multiple business entities in a single interface</li>
               <li>Enables complex multi-table queries without writing SQL</li>
@@ -1261,30 +1829,46 @@ mix phx.server</code></pre>
 
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Pro Tip:</strong> The Orders domain is ideal for creating dashboard views. Try saving different queries as views like "This Month's Sales", "Top Customers", or "Pending Orders" for quick access to key metrics.
+                <strong>Pro Tip:</strong>
+                The Orders domain is ideal for creating dashboard views. Try saving different queries as views like "This Month's Sales", "Top Customers", or "Pending Orders" for quick access to key metrics.
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- ================================================================ -->
+      
+<!-- ================================================================ -->
       <!-- Step 5: Employees/HR Domain -->
       <!-- ================================================================ -->
       <div id="step-5" class="bg-base-100 rounded-lg shadow p-6 scroll-mt-6">
         <h2 class="text-2xl font-bold mb-1">Step 5: Generate Employees/HR Domain</h2>
         <p class="text-base-content/70 mb-4">Complete your HR management system</p>
-        <p class="text-base-content/80 mb-6">The Employees domain represents the human resources aspect of the business, including employee information, reporting structures, and territorial assignments. This completes the core business domains of the Northwind system.</p>
+        <p class="text-base-content/80 mb-6">
+          The Employees domain represents the human resources aspect of the business, including employee information, reporting structures, and territorial assignments. This completes the core business domains of the Northwind system.
+        </p>
 
         <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mb-6">
           <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            >
+            </path>
           </svg>
           <div>
-            <strong>Note:</strong> This domain includes self-referential relationships (employees reporting to other employees) and geographic territory assignments.
+            <strong>Note:</strong>
+            This domain includes self-referential relationships (employees reporting to other employees) and geographic territory assignments.
           </div>
         </div>
 
@@ -1294,14 +1878,27 @@ mix phx.server</code></pre>
 
             <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm mb-3">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 15.5c-.77.833.192 2.5 1.732 2.5z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Interactive prompts:</strong> This command requires two "Y" responses (same as previous steps). Use <code class="bg-base-300 px-2 py-1 rounded text-xs">echo -e "Y\nY" | mix selecto.gen.domain ...</code> for non-interactive execution.
+                <strong>Interactive prompts:</strong>
+                This command requires two "Y" responses (same as previous steps). Use
+                <code class="bg-base-300 px-2 py-1 rounded text-xs">
+                  echo -e "Y\nY" | mix selecto.gen.domain ...
+                </code>
+                for non-interactive execution.
               </div>
             </div>
 
-            <p class="text-base-content/70 mb-3">Run the following Mix task to generate the Employees domain with HR relationships (EmployeeTerritory, Territory, Orders):</p>
+            <p class="text-base-content/70 mb-3">
+              Run the following Mix task to generate the Employees domain with HR relationships (EmployeeTerritory, Territory, Orders):
+            </p>
             <pre class="mb-4"><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Hr.Employee \
   --expand-schemas SelectoNorthwind.Hr.EmployeeTerritory \
     SelectoNorthwind.Geography.Territory \
@@ -1314,33 +1911,56 @@ mix phx.server</code></pre>
             <div class="grid gap-3">
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
-                <div><strong>Employee Hierarchy:</strong> Employees have a reports_to field creating organizational hierarchy</div>
+                <div>
+                  <strong>Employee Hierarchy:</strong>
+                  Employees have a reports_to field creating organizational hierarchy
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
-                <div><strong>Territory Assignments:</strong> Employees are assigned to geographic territories through EmployeeTerritory</div>
+                <div>
+                  <strong>Territory Assignments:</strong>
+                  Employees are assigned to geographic territories through EmployeeTerritory
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
-                <div><strong>Sales Responsibility:</strong> Employees manage customer orders tracked through the Order relationship</div>
+                <div>
+                  <strong>Sales Responsibility:</strong>
+                  Employees manage customer orders tracked through the Order relationship
+                </div>
               </div>
               <div class="flex items-start gap-3 p-3 bg-base-200 rounded-lg">
                 <div class="w-2 h-2 bg-info rounded-full mt-2"></div>
-                <div><strong>Personal Information:</strong> Complete employee profiles with contact details, hire dates, and notes</div>
+                <div>
+                  <strong>Personal Information:</strong>
+                  Complete employee profiles with contact details, hire dates, and notes
+                </div>
               </div>
             </div>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Verify the Generated Files</h3>
-            <p class="text-base-content/70 mb-3">The <code>--saved-views</code> flag automatically configures everything. Verify the domain module at <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind/selecto_domains/employees_domain.ex</code> contains:</p>
+            <p class="text-base-content/70 mb-3">
+              The <code>--saved-views</code>
+              flag automatically configures everything. Verify the domain module at
+              <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                lib/selecto_northwind/selecto_domains/employees_domain.ex
+              </code>
+              contains:
+            </p>
             <pre><code class="language-elixir">use SelectoNorthwind.SavedViewContext</code></pre>
-            <p class="text-base-content/70 mt-3">The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header.</p>
+            <p class="text-base-content/70 mt-3">
+              The generated LiveView includes the saved views assigns and a "Saved Views" dropdown in the header.
+            </p>
           </div>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Add Route to Router</h3>
-            <p class="text-base-content/70 mb-3">Add the Employees LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:</p>
+            <p class="text-base-content/70 mb-3">
+              Add the Employees LiveView route to your <code class="bg-base-300 px-2 py-1 rounded text-sm">lib/selecto_northwind_web/router.ex</code>:
+            </p>
             <pre class="mb-3"><code class="language-elixir">scope "/", SelectoNorthwindWeb do
   pipe_through :browser
 
@@ -1354,10 +1974,18 @@ mix phx.server</code></pre>
 end</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Note:</strong> The module name is <code>EmployeeLive</code> (singular) matching the schema name.
+                <strong>Note:</strong>
+                The module name is <code>EmployeeLive</code>
+                (singular) matching the schema name.
               </div>
             </div>
           </div>
@@ -1371,14 +1999,27 @@ mix phx.server</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Test the Employees Interface</h3>
-            <p class="text-base-content/70 mb-3">Navigate to the Employees interface at <code class="bg-base-300 px-2 py-1 rounded text-sm">http://localhost:4000/employees_selecto</code></p>
+            <p class="text-base-content/70 mb-3">
+              Navigate to the Employees interface at
+              <code class="bg-base-300 px-2 py-1 rounded text-sm">
+                http://localhost:4000/employees_selecto
+              </code>
+            </p>
 
             <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <div class="font-semibold">The Employees Explorer provides comprehensive HR data management:</div>
+                <div class="font-semibold">
+                  The Employees Explorer provides comprehensive HR data management:
+                </div>
                 <ul class="mt-2 space-y-1 text-sm">
                   <li>- Employee profiles with complete contact information</li>
                   <li>- Organizational hierarchy through reporting relationships</li>
@@ -1392,15 +2033,17 @@ mix phx.server</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">HR Analytics Queries to Try</h3>
-            <p class="text-base-content/70 mb-3">The Employees domain enables sophisticated HR analytics. Experiment with these queries:</p>
+            <p class="text-base-content/70 mb-3">
+              The Employees domain enables sophisticated HR analytics. Experiment with these queries:
+            </p>
 
             <div class="grid gap-3">
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Organizational Structure</div>
                 <div class="text-xs text-base-content/60">
-                  1. Filter by ReportsTo to see direct reports<br/>
-                  2. Group by Manager to see team sizes<br/>
-                  3. Use hierarchical queries to view org chart<br/>
+                  1. Filter by ReportsTo to see direct reports<br />
+                  2. Group by Manager to see team sizes<br />
+                  3. Use hierarchical queries to view org chart<br />
                   4. Analyze reporting chains and depth
                 </div>
               </div>
@@ -1408,9 +2051,9 @@ mix phx.server</code></pre>
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Territory Coverage</div>
                 <div class="text-xs text-base-content/60">
-                  1. Include EmployeeTerritory and Territory<br/>
-                  2. Group by Region to see coverage<br/>
-                  3. Identify territories with multiple reps<br/>
+                  1. Include EmployeeTerritory and Territory<br />
+                  2. Group by Region to see coverage<br />
+                  3. Identify territories with multiple reps<br />
                   4. Find gaps in territorial coverage
                 </div>
               </div>
@@ -1418,20 +2061,17 @@ mix phx.server</code></pre>
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Sales Performance by Employee</div>
                 <div class="text-xs text-base-content/60">
-                  1. Include Orders relationship<br/>
-                  2. Aggregate order counts and values<br/>
-                  3. Compare performance across teams<br/>
-                  4. Track sales trends by employee
+                  1. Include Orders relationship<br /> 2. Aggregate order counts and values<br />
+                  3. Compare performance across teams<br /> 4. Track sales trends by employee
                 </div>
               </div>
 
               <div class="p-4 bg-base-200 rounded-lg">
                 <div class="font-semibold text-sm mb-2">Tenure Analysis</div>
                 <div class="text-xs text-base-content/60">
-                  1. Calculate years of service from HireDate<br/>
-                  2. Group by hire year for cohort analysis<br/>
-                  3. Correlate tenure with performance<br/>
-                  4. Identify anniversary milestones
+                  1. Calculate years of service from HireDate<br />
+                  2. Group by hire year for cohort analysis<br />
+                  3. Correlate tenure with performance<br /> 4. Identify anniversary milestones
                 </div>
               </div>
             </div>
@@ -1439,7 +2079,9 @@ mix phx.server</code></pre>
 
           <div>
             <h3 class="text-lg font-semibold mb-3">Completing the Business System</h3>
-            <p class="text-base-content/70">With the Employees domain, you've now built a complete business intelligence system covering:</p>
+            <p class="text-base-content/70">
+              With the Employees domain, you've now built a complete business intelligence system covering:
+            </p>
             <ul class="list-disc list-inside text-sm text-base-content/70 ml-4 space-y-1 mt-2">
               <li><strong>Products:</strong> Inventory and catalog management</li>
               <li><strong>Customers:</strong> Client relationships and demographics</li>
@@ -1449,21 +2091,33 @@ mix phx.server</code></pre>
 
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
               <svg class="w-6 h-6 stroke-current shrink-0" fill="none" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                >
+                </path>
               </svg>
               <div>
-                <strong>Pro Tip:</strong> The Employee domain's self-referential relationship (reports_to) demonstrates Selecto's ability to handle recursive structures. Try creating views that show complete organizational hierarchies or team structures.
+                <strong>Pro Tip:</strong>
+                The Employee domain's self-referential relationship (reports_to) demonstrates Selecto's ability to handle recursive structures. Try creating views that show complete organizational hierarchies or team structures.
               </div>
             </div>
           </div>
         </div>
       </div>
-
-      <!-- Bottom Navigation -->
+      
+<!-- Bottom Navigation -->
       <div class="mt-12 flex justify-between items-center">
         <a href="/" class="btn btn-outline gap-2">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
           </svg>
           Back to Home
         </a>

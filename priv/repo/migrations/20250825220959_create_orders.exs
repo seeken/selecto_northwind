@@ -3,7 +3,9 @@ defmodule SelectoNorthwind.Repo.Migrations.CreateOrders do
 
   def change do
     create table(:orders) do
-      add :customer_id, references(:customers, column: :customer_id, type: :string, on_delete: :nilify_all)
+      add :customer_id,
+          references(:customers, column: :customer_id, type: :string, on_delete: :nilify_all)
+
       add :employee_id, references(:employees, on_delete: :nilify_all)
       add :order_date, :date
       add :required_date, :date

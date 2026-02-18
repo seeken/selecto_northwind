@@ -3,8 +3,16 @@ defmodule SelectoNorthwind.Repo.Migrations.CreateCustomerCustomerDemo do
 
   def change do
     create table(:customer_customer_demo, primary_key: false) do
-      add :customer_id, references(:customers, column: :customer_id, type: :string, on_delete: :delete_all), primary_key: true
-      add :customer_type_id, references(:customer_demographics, column: :customer_type_id, type: :string, on_delete: :delete_all), primary_key: true
+      add :customer_id,
+          references(:customers, column: :customer_id, type: :string, on_delete: :delete_all),
+          primary_key: true
+
+      add :customer_type_id,
+          references(:customer_demographics,
+            column: :customer_type_id,
+            type: :string,
+            on_delete: :delete_all
+          ), primary_key: true
 
       timestamps()
     end

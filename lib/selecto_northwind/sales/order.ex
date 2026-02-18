@@ -15,7 +15,10 @@ defmodule SelectoNorthwind.Sales.Order do
     field :ship_country, :string
 
     belongs_to :customer, SelectoNorthwind.Sales.Customer,
-      foreign_key: :customer_id, references: :customer_id, type: :string
+      foreign_key: :customer_id,
+      references: :customer_id,
+      type: :string
+
     belongs_to :employee, SelectoNorthwind.Hr.Employee
     belongs_to :shipper, SelectoNorthwind.Sales.Shipper, foreign_key: :ship_via
 
@@ -27,7 +30,21 @@ defmodule SelectoNorthwind.Sales.Order do
   @doc false
   def changeset(order, attrs) do
     order
-    |> cast(attrs, [:customer_id, :employee_id, :order_date, :required_date, :shipped_date, :ship_via, :freight, :ship_name, :ship_address, :ship_city, :ship_region, :ship_postal_code, :ship_country])
+    |> cast(attrs, [
+      :customer_id,
+      :employee_id,
+      :order_date,
+      :required_date,
+      :shipped_date,
+      :ship_via,
+      :freight,
+      :ship_name,
+      :ship_address,
+      :ship_city,
+      :ship_region,
+      :ship_postal_code,
+      :ship_country
+    ])
     |> validate_length(:ship_name, max: 40)
     |> validate_length(:ship_address, max: 60)
     |> validate_length(:ship_city, max: 15)

@@ -22,6 +22,7 @@ defmodule SelectoNorthwind.Catalog.Product do
       on_replace: :delete
 
     has_many :product_flags, SelectoNorthwind.Support.ProductFlag
+
     many_to_many :flag_types, SelectoNorthwind.Support.FlagType,
       join_through: SelectoNorthwind.Support.ProductFlag
 
@@ -31,7 +32,18 @@ defmodule SelectoNorthwind.Catalog.Product do
   @doc false
   def changeset(product, attrs) do
     product
-    |> cast(attrs, [:product_name, :supplier_id, :category_id, :quantity_per_unit, :unit_price, :units_in_stock, :units_on_order, :reorder_level, :discontinued, :attributes])
+    |> cast(attrs, [
+      :product_name,
+      :supplier_id,
+      :category_id,
+      :quantity_per_unit,
+      :unit_price,
+      :units_in_stock,
+      :units_on_order,
+      :reorder_level,
+      :discontinued,
+      :attributes
+    ])
     |> validate_required([:product_name])
     |> validate_length(:product_name, max: 40)
     |> validate_length(:quantity_per_unit, max: 20)

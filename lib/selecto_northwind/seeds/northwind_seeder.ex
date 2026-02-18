@@ -18,7 +18,16 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
   alias SelectoNorthwind.Repo
   alias SelectoNorthwind.Catalog.{Category, Supplier, Product, Tag, ProductTag}
-  alias SelectoNorthwind.Sales.{Customer, Order, OrderDetail, Shipper, CustomerDemographic, CustomerCustomerDemo}
+
+  alias SelectoNorthwind.Sales.{
+    Customer,
+    Order,
+    OrderDetail,
+    Shipper,
+    CustomerDemographic,
+    CustomerCustomerDemo
+  }
+
   alias SelectoNorthwind.Hr.{Employee, EmployeeTerritory}
   alias SelectoNorthwind.Geography.{Region, Territory, UsState}
   alias SelectoNorthwind.Support.{Comment, FlagType, ProductFlag}
@@ -151,37 +160,50 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       {:ok, %Postgrex.Result{rows: sequences}} ->
         Enum.each(sequences, fn [sequence_name] ->
           sql = "ALTER SEQUENCE #{sequence_name} RESTART WITH 1"
+
           case Ecto.Adapters.SQL.query(Repo, sql, []) do
-            {:ok, _} -> Logger.debug("Reset sequence: #{sequence_name}")
-            {:error, error} -> Logger.warning("Failed to reset sequence #{sequence_name}: #{inspect(error)}")
+            {:ok, _} ->
+              Logger.debug("Reset sequence: #{sequence_name}")
+
+            {:error, error} ->
+              Logger.warning("Failed to reset sequence #{sequence_name}: #{inspect(error)}")
           end
         end)
+
         Logger.info("✅ Sequences reset!")
+
       {:error, error} ->
         Logger.error("Failed to query sequences: #{inspect(error)}")
     end
   end
 
   # Private functions for seeding master data
-  
+
   # Helper function to generate a deterministic but scattered timestamp
   defp generate_scattered_timestamp(base_id, base_time \\ nil) do
     base = base_time || DateTime.utc_now()
-    
+
     # Use the ID as seed for deterministic but varied offsets
     # This ensures the same ID always gets the same timestamp
-    seed_hash = :erlang.phash2(base_id, 1000000)
-    
+    seed_hash = :erlang.phash2(base_id, 1_000_000)
+
     # Generate offsets within the past 6 months (roughly 180 days)
-    day_offset = rem(seed_hash, 180) + 1  # 1 to 180 days ago
-    hour_offset = rem(div(seed_hash, 180), 24)  # 0 to 23 hours
-    minute_offset = rem(div(seed_hash, 4320), 60)  # 0 to 59 minutes
-    
-    scattered_datetime = base
-                        |> DateTime.add(-day_offset * 24 * 60 * 60, :second)  # Subtract days
-                        |> DateTime.add(-hour_offset * 60 * 60, :second)      # Subtract hours
-                        |> DateTime.add(-minute_offset * 60, :second)         # Subtract minutes
-    
+    # 1 to 180 days ago
+    day_offset = rem(seed_hash, 180) + 1
+    # 0 to 23 hours
+    hour_offset = rem(div(seed_hash, 180), 24)
+    # 0 to 59 minutes
+    minute_offset = rem(div(seed_hash, 4320), 60)
+
+    scattered_datetime =
+      base
+      # Subtract days
+      |> DateTime.add(-day_offset * 24 * 60 * 60, :second)
+      # Subtract hours
+      |> DateTime.add(-hour_offset * 60 * 60, :second)
+      # Subtract minutes
+      |> DateTime.add(-minute_offset * 60, :second)
+
     # Convert to naive datetime for Ecto and truncate microseconds
     scattered_datetime
     |> DateTime.to_naive()
@@ -203,13 +225,14 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     SelectoNorthwind.Seeds.NorthwindData.customers_data()
     |> Enum.each(fn customer ->
       # Use a hash of the customer_id string for deterministic timestamps
-      id_hash = :erlang.phash2(customer.customer_id, 1000000)
+      id_hash = :erlang.phash2(customer.customer_id, 1_000_000)
       scattered_time = generate_scattered_timestamp(id_hash)
-      
-      customer_data_with_timestamps = customer
-                                    |> Map.put(:inserted_at, scattered_time)
-                                    |> Map.put(:updated_at, scattered_time)
-      
+
+      customer_data_with_timestamps =
+        customer
+        |> Map.put(:inserted_at, scattered_time)
+        |> Map.put(:updated_at, scattered_time)
+
       Repo.insert!(Customer.changeset(%Customer{}, customer_data_with_timestamps))
     end)
   end
@@ -218,33 +241,40 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     Logger.info("👨‍💼 Seeding Employees...")
 
     # Sort employees to insert managers first (those with nil reports_to)
-    employees_data = SelectoNorthwind.Seeds.NorthwindData.employees_data()
-    |> Enum.sort_by(fn emp ->
-      case Map.get(emp, :reports_to) do
-        nil -> 0  # Managers first
-        _ -> 1    # Employees second
-      end
-    end)
+    employees_data =
+      SelectoNorthwind.Seeds.NorthwindData.employees_data()
+      |> Enum.sort_by(fn emp ->
+        case Map.get(emp, :reports_to) do
+          # Managers first
+          nil -> 0
+          # Employees second
+          _ -> 1
+        end
+      end)
 
     # Step 1: Insert all employees without reports_to to avoid foreign key issues
-    employee_mappings = Enum.map(employees_data, fn employee_data ->
-      # Remove reports_to from the data for initial insert
-      employee_without_reports_to = Map.delete(employee_data, :reports_to)
-      
-      # Add scattered timestamps
-      scattered_time = generate_scattered_timestamp(employee_data.id)
-      employee_with_timestamps = employee_without_reports_to
-                               |> Map.put(:inserted_at, scattered_time)
-                               |> Map.put(:updated_at, scattered_time)
-      
-      # Insert the employee and get the new ID
-      changeset = Employee.changeset(%Employee{}, employee_with_timestamps)
-      changeset = Ecto.Changeset.put_change(changeset, :id, employee_data.id)
-      inserted_employee = Repo.insert!(changeset)
+    employee_mappings =
+      Enum.map(employees_data, fn employee_data ->
+        # Remove reports_to from the data for initial insert
+        employee_without_reports_to = Map.delete(employee_data, :reports_to)
 
-      # Return mapping of original ID to new database ID
-      {employee_data.id, inserted_employee.id}
-    end) |> Enum.into(%{})
+        # Add scattered timestamps
+        scattered_time = generate_scattered_timestamp(employee_data.id)
+
+        employee_with_timestamps =
+          employee_without_reports_to
+          |> Map.put(:inserted_at, scattered_time)
+          |> Map.put(:updated_at, scattered_time)
+
+        # Insert the employee and get the new ID
+        changeset = Employee.changeset(%Employee{}, employee_with_timestamps)
+        changeset = Ecto.Changeset.put_change(changeset, :id, employee_data.id)
+        inserted_employee = Repo.insert!(changeset)
+
+        # Return mapping of original ID to new database ID
+        {employee_data.id, inserted_employee.id}
+      end)
+      |> Enum.into(%{})
 
     # Step 2: Update reports_to references using the mapping
     Enum.each(employees_data, fn employee_data ->
@@ -252,6 +282,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
         nil ->
           # Manager, no update needed
           :ok
+
         original_manager_id ->
           # Employee with manager - update reports_to to use new database ID
           new_manager_id = Map.get(employee_mappings, original_manager_id)
@@ -274,7 +305,10 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     |> Enum.each(fn supplier ->
       Logger.debug("Inserting supplier: #{supplier.company_name} with ID: #{supplier.id}")
       inserted = insert_with_id(Supplier, supplier)
-      Logger.debug("Successfully inserted supplier: #{inserted.company_name} with database ID: #{inserted.id}")
+
+      Logger.debug(
+        "Successfully inserted supplier: #{inserted.company_name} with database ID: #{inserted.id}"
+      )
     end)
 
     # Verify suppliers were inserted
@@ -283,6 +317,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
     # Check if supplier ID 1 exists
     supplier_1 = Repo.get(Supplier, 1)
+
     if supplier_1 do
       Logger.info("✅ Supplier ID 1 exists: #{supplier_1.company_name}")
     else
@@ -295,7 +330,10 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
 
     SelectoNorthwind.Seeds.NorthwindData.products_data()
     |> Enum.each(fn product ->
-      Logger.debug("Inserting product: #{product.product_name} with supplier_id: #{product.supplier_id}")
+      Logger.debug(
+        "Inserting product: #{product.product_name} with supplier_id: #{product.supplier_id}"
+      )
+
       insert_with_id(Product, product)
     end)
   end
@@ -347,41 +385,51 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     # This creates an average of ~2 tags per tagged product
     # which gives us overall average of 1 tag per product
     tag_counts = [
-      {1, 40},  # 40% get 1 tag
-      {2, 35},  # 35% get 2 tags
-      {3, 15},  # 15% get 3 tags
-      {4, 10}   # 10% get 4 tags
+      # 40% get 1 tag
+      {1, 40},
+      # 35% get 2 tags
+      {2, 35},
+      # 15% get 3 tags
+      {3, 15},
+      # 10% get 4 tags
+      {4, 10}
     ]
 
     # Shuffle and select products that will get tags
     selected_products = Enum.shuffle(products) |> Enum.take(products_with_tags)
 
     # Assign tags to selected products based on distribution
-    {_remaining_products, total_tagged} = Enum.reduce(tag_counts, {selected_products, 0}, fn {num_tags, percentage}, {remaining, tagged_count} ->
-      # Calculate how many products should get this many tags
-      count = round(products_with_tags * percentage / 100)
-      products_for_this_count = Enum.take(remaining, count)
+    {_remaining_products, total_tagged} =
+      Enum.reduce(tag_counts, {selected_products, 0}, fn {num_tags, percentage},
+                                                         {remaining, tagged_count} ->
+        # Calculate how many products should get this many tags
+        count = round(products_with_tags * percentage / 100)
+        products_for_this_count = Enum.take(remaining, count)
 
-      # Assign tags to these products
-      Enum.each(products_for_this_count, fn product ->
-        # Select random tags
-        random_tags = Enum.take_random(Map.values(tags), num_tags)
+        # Assign tags to these products
+        Enum.each(products_for_this_count, fn product ->
+          # Select random tags
+          random_tags = Enum.take_random(Map.values(tags), num_tags)
 
-        Enum.each(random_tags, fn tag ->
-          %ProductTag{}
-          |> ProductTag.changeset(%{product_id: product.id, tag_id: tag.id})
-          |> Repo.insert!()
+          Enum.each(random_tags, fn tag ->
+            %ProductTag{}
+            |> ProductTag.changeset(%{product_id: product.id, tag_id: tag.id})
+            |> Repo.insert!()
+          end)
         end)
-      end)
 
-      {Enum.drop(remaining, count), tagged_count + length(products_for_this_count)}
-    end)
+        {Enum.drop(remaining, count), tagged_count + length(products_for_this_count)}
+      end)
 
     # Count total tag assignments
     total_tag_assignments = Repo.aggregate(ProductTag, :count)
-    avg_tags = if total_products > 0, do: Float.round(total_tag_assignments / total_products, 2), else: 0
 
-    Logger.info("✅ Tagged #{total_tagged} products with #{total_tag_assignments} total tag assignments (avg: #{avg_tags} tags/product)")
+    avg_tags =
+      if total_products > 0, do: Float.round(total_tag_assignments / total_products, 2), else: 0
+
+    Logger.info(
+      "✅ Tagged #{total_tagged} products with #{total_tag_assignments} total tag assignments (avg: #{avg_tags} tags/product)"
+    )
   end
 
   defp seed_shippers do
@@ -408,13 +456,14 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     SelectoNorthwind.Seeds.NorthwindData.territories_data()
     |> Enum.each(fn territory ->
       # Use a hash of the territory_id string for deterministic timestamps
-      id_hash = :erlang.phash2(territory.territory_id, 1000000)
+      id_hash = :erlang.phash2(territory.territory_id, 1_000_000)
       scattered_time = generate_scattered_timestamp(id_hash)
-      
-      territory_data_with_timestamps = territory
-                                     |> Map.put(:inserted_at, scattered_time)
-                                     |> Map.put(:updated_at, scattered_time)
-      
+
+      territory_data_with_timestamps =
+        territory
+        |> Map.put(:inserted_at, scattered_time)
+        |> Map.put(:updated_at, scattered_time)
+
       Repo.insert!(Territory.changeset(%Territory{}, territory_data_with_timestamps))
     end)
   end
@@ -425,13 +474,14 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     SelectoNorthwind.Seeds.NorthwindData.employee_territories_data()
     |> Enum.each(fn et ->
       # Use a combination of employee_id and territory_id for unique timestamps
-      id_hash = :erlang.phash2({et.employee_id, et.territory_id}, 1000000)
+      id_hash = :erlang.phash2({et.employee_id, et.territory_id}, 1_000_000)
       scattered_time = generate_scattered_timestamp(id_hash)
-      
-      et_data_with_timestamps = et
-                              |> Map.put(:inserted_at, scattered_time)
-                              |> Map.put(:updated_at, scattered_time)
-      
+
+      et_data_with_timestamps =
+        et
+        |> Map.put(:inserted_at, scattered_time)
+        |> Map.put(:updated_at, scattered_time)
+
       Repo.insert!(EmployeeTerritory.changeset(%EmployeeTerritory{}, et_data_with_timestamps))
     end)
   end
@@ -440,24 +490,27 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
   defp insert_with_id(schema_module, changeset_data) do
     base_time = DateTime.utc_now()
     scattered_time = generate_scattered_timestamp(changeset_data.id, base_time)
-    
+
     # Create changeset and explicitly set the ID and timestamps
     changeset = schema_module.changeset(struct(schema_module), changeset_data)
-    changeset = changeset
-                |> Ecto.Changeset.put_change(:id, changeset_data.id)
-                |> Ecto.Changeset.put_change(:inserted_at, scattered_time)
-                |> Ecto.Changeset.put_change(:updated_at, scattered_time)
-                
+
+    changeset =
+      changeset
+      |> Ecto.Changeset.put_change(:id, changeset_data.id)
+      |> Ecto.Changeset.put_change(:inserted_at, scattered_time)
+      |> Ecto.Changeset.put_change(:updated_at, scattered_time)
+
     Repo.insert!(changeset)
   end
 
   # Order generation functions
 
-  defp generate_orders(num_orders, customers, employees, products) when is_list(customers) and is_list(employees) and is_map(products) do
+  defp generate_orders(num_orders, customers, employees, products)
+       when is_list(customers) and is_list(employees) and is_map(products) do
     # Calculate date ranges for the past 3 months
     today = Date.utc_today()
     three_months_ago = Date.add(today, -90)
-    
+
     Enum.map(1..num_orders, fn order_num ->
       order_id = 20000 + order_num
 
@@ -469,13 +522,14 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       order_date = random_date_in_range(three_months_ago, today)
       required_date = Date.add(order_date, :rand.uniform(28) + 7)
 
-      shipped_date = if :rand.uniform(100) <= 85 do
-        ship_days = :rand.uniform(14) + 1
-        shipped = add_business_days(order_date, ship_days)
-        if Date.compare(shipped, Date.utc_today()) == :lt, do: shipped, else: nil
-      else
-        nil
-      end
+      shipped_date =
+        if :rand.uniform(100) <= 85 do
+          ship_days = :rand.uniform(14) + 1
+          shipped = add_business_days(order_date, ship_days)
+          if Date.compare(shipped, Date.utc_today()) == :lt, do: shipped, else: nil
+        else
+          nil
+        end
 
       freight = random_freight()
       customer = Repo.get!(Customer, customer_id)
@@ -525,22 +579,26 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       # Generate scattered timestamp based on order ID
       # Use the order_date as a base to keep timestamps somewhat realistic
       base_datetime = DateTime.new!(order_data.order_date, ~T[09:00:00])
-      
+
       # Add some variation within a few hours of the order date
       id_hash = :erlang.phash2(order_data.id, 1000)
-      hour_variation = rem(id_hash, 12)  # 0 to 12 hours
-      minute_variation = rem(div(id_hash, 12), 60)  # 0 to 59 minutes
-      
-      scattered_time = base_datetime
-                      |> DateTime.add(hour_variation * 60 * 60, :second)
-                      |> DateTime.add(minute_variation * 60, :second)
-                      |> DateTime.to_naive()
-                      |> NaiveDateTime.truncate(:second)
-      
-      order_data_with_timestamps = order_data
-                                 |> Map.put(:inserted_at, scattered_time)
-                                 |> Map.put(:updated_at, scattered_time)
-      
+      # 0 to 12 hours
+      hour_variation = rem(id_hash, 12)
+      # 0 to 59 minutes
+      minute_variation = rem(div(id_hash, 12), 60)
+
+      scattered_time =
+        base_datetime
+        |> DateTime.add(hour_variation * 60 * 60, :second)
+        |> DateTime.add(minute_variation * 60, :second)
+        |> DateTime.to_naive()
+        |> NaiveDateTime.truncate(:second)
+
+      order_data_with_timestamps =
+        order_data
+        |> Map.put(:inserted_at, scattered_time)
+        |> Map.put(:updated_at, scattered_time)
+
       Repo.insert!(Order.changeset(%Order{}, order_data_with_timestamps))
     end)
   end
@@ -549,20 +607,22 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     Enum.each(order_details_data, fn detail_data ->
       # Generate timestamp based on order_id and product_id combination
       id_hash = :erlang.phash2({detail_data.order_id, detail_data.product_id}, 1000)
-      
+
       # Get the order's timestamp as base
       order = Repo.get!(Order, detail_data.order_id)
       base_time = order.inserted_at
-      
+
       # Add small variation (within a few minutes of order creation)
-      minute_variation = rem(id_hash, 30)  # 0 to 30 minutes after order
-      
+      # 0 to 30 minutes after order
+      minute_variation = rem(id_hash, 30)
+
       scattered_time = NaiveDateTime.add(base_time, minute_variation * 60, :second)
-      
-      detail_data_with_timestamps = detail_data
-                                  |> Map.put(:inserted_at, scattered_time)
-                                  |> Map.put(:updated_at, scattered_time)
-      
+
+      detail_data_with_timestamps =
+        detail_data
+        |> Map.put(:inserted_at, scattered_time)
+        |> Map.put(:updated_at, scattered_time)
+
       Repo.insert!(OrderDetail.changeset(%OrderDetail{}, detail_data_with_timestamps))
     end)
   end
@@ -591,6 +651,7 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
   defp add_business_days(date, days) do
     Enum.reduce(1..days, date, fn _, acc_date ->
       next_date = Date.add(acc_date, 1)
+
       case Date.day_of_week(next_date) do
         day when day in [6, 7] -> Date.add(next_date, 8 - day)
         _ -> next_date
@@ -659,15 +720,16 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
     shipped_orders = Enum.count(orders_data, & &1.shipped_date)
     shipped_percentage = Float.round(shipped_orders / total_orders * 100, 1)
 
-    total_revenue = order_details_data
-    |> Enum.map(fn detail ->
-      price = Decimal.to_float(detail.unit_price)
-      quantity = detail.quantity
-      discount = detail.discount
-      price * quantity * (1 - discount)
-    end)
-    |> Enum.sum()
-    |> Float.round(2)
+    total_revenue =
+      order_details_data
+      |> Enum.map(fn detail ->
+        price = Decimal.to_float(detail.unit_price)
+        quantity = detail.quantity
+        discount = detail.discount
+        price * quantity * (1 - discount)
+      end)
+      |> Enum.sum()
+      |> Float.round(2)
 
     Logger.info("📊 Orders Summary:")
     Logger.info("  - Total Orders: #{total_orders}")
@@ -688,10 +750,25 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       %{name: "is_organic", label: "Organic", entity_type: "Product", data_type: "boolean"},
       %{name: "is_kosher", label: "Kosher", entity_type: "Product", data_type: "boolean"},
       %{name: "is_vegan", label: "Vegan", entity_type: "Product", data_type: "boolean"},
-      %{name: "is_gluten_free", label: "Gluten Free", entity_type: "Product", data_type: "boolean"},
+      %{
+        name: "is_gluten_free",
+        label: "Gluten Free",
+        entity_type: "Product",
+        data_type: "boolean"
+      },
       %{name: "is_dairy_free", label: "Dairy Free", entity_type: "Product", data_type: "boolean"},
-      %{name: "certification_level", label: "Certification Level", entity_type: "Product", data_type: "string"},
-      %{name: "origin_country", label: "Country of Origin", entity_type: "Product", data_type: "string"}
+      %{
+        name: "certification_level",
+        label: "Certification Level",
+        entity_type: "Product",
+        data_type: "string"
+      },
+      %{
+        name: "origin_country",
+        label: "Country of Origin",
+        entity_type: "Product",
+        data_type: "string"
+      }
     ]
 
     Enum.each(flag_types, fn attrs ->
@@ -770,17 +847,25 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
           %{
             commentable_type: "Product",
             commentable_id: to_string(product.id),
-            body: Enum.random([
-              "Excellent quality product!",
-              "Very satisfied with this purchase.",
-              "Would definitely recommend to others.",
-              "Great value for the price.",
-              "Product exceeded my expectations.",
-              "Good product, fast shipping.",
-              "Nice addition to our inventory.",
-              "Customers love this item!"
-            ]),
-            user_name: Enum.random(["Alice Johnson", "Bob Smith", "Carol Williams", "David Brown", "Emma Davis"])
+            body:
+              Enum.random([
+                "Excellent quality product!",
+                "Very satisfied with this purchase.",
+                "Would definitely recommend to others.",
+                "Great value for the price.",
+                "Product exceeded my expectations.",
+                "Good product, fast shipping.",
+                "Nice addition to our inventory.",
+                "Customers love this item!"
+              ]),
+            user_name:
+              Enum.random([
+                "Alice Johnson",
+                "Bob Smith",
+                "Carol Williams",
+                "David Brown",
+                "Emma Davis"
+              ])
           }
         end),
 
@@ -789,17 +874,25 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
           %{
             commentable_type: "Order",
             commentable_id: to_string(order.id),
-            body: Enum.random([
-              "Order processed quickly.",
-              "Shipment arrived on time.",
-              "Everything was packed well.",
-              "One item was missing from this order.",
-              "Customer requested rush delivery.",
-              "Payment received, ready to ship.",
-              "Delivered successfully to customer.",
-              "Follow-up call needed for this order."
-            ]),
-            user_name: Enum.random(["Warehouse Team", "Shipping Dept", "Customer Service", "Order Manager", "Sales Team"])
+            body:
+              Enum.random([
+                "Order processed quickly.",
+                "Shipment arrived on time.",
+                "Everything was packed well.",
+                "One item was missing from this order.",
+                "Customer requested rush delivery.",
+                "Payment received, ready to ship.",
+                "Delivered successfully to customer.",
+                "Follow-up call needed for this order."
+              ]),
+            user_name:
+              Enum.random([
+                "Warehouse Team",
+                "Shipping Dept",
+                "Customer Service",
+                "Order Manager",
+                "Sales Team"
+              ])
           }
         end),
 
@@ -808,17 +901,19 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
           %{
             commentable_type: "Customer",
             commentable_id: customer.customer_id,
-            body: Enum.random([
-              "VIP customer, priority service.",
-              "Payment history is excellent.",
-              "Requested bulk discount on next order.",
-              "Preferred shipping method: express.",
-              "Long-time customer since 2020.",
-              "Special dietary requirements noted.",
-              "Always orders on Mondays.",
-              "Prefers email communication."
-            ]),
-            user_name: Enum.random(["Account Manager", "Sales Rep", "Customer Success", "Support Team"])
+            body:
+              Enum.random([
+                "VIP customer, priority service.",
+                "Payment history is excellent.",
+                "Requested bulk discount on next order.",
+                "Preferred shipping method: express.",
+                "Long-time customer since 2020.",
+                "Special dietary requirements noted.",
+                "Always orders on Mondays.",
+                "Prefers email communication."
+              ]),
+            user_name:
+              Enum.random(["Account Manager", "Sales Rep", "Customer Success", "Support Team"])
           }
         end)
       ]
@@ -830,7 +925,9 @@ defmodule SelectoNorthwind.Seeds.NorthwindSeeder do
       |> Repo.insert!()
     end)
 
-    Logger.info("   ✓ Created #{length(comments)} comments (#{length(products)} on products, #{length(orders)} on orders, #{length(customers)} on customers)")
+    Logger.info(
+      "   ✓ Created #{length(comments)} comments (#{length(products)} on products, #{length(orders)} on orders, #{length(customers)} on customers)"
+    )
   end
 
   # Data is stored in SelectoNorthwind.Seeds.NorthwindData module
