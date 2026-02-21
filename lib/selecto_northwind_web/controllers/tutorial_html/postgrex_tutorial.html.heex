@@ -216,8 +216,8 @@
     # ... existing dependencies ...
 
     # Selecto libraries
-    <%= "{" %>:selecto, path: "./vendor/selecto"<%= "}" %>,
-    <%= "{" %>:selecto_components, path: "./vendor/selecto_components"<%= "}" %>,
+    <%= "{" %>:selecto, "~> 0.3.1"<%= "}" %>,
+    <%= "{" %>:selecto_components, "~> 0.3.1"<%= "}" %>,
     <%= "{" %>:selecto_postgrex_mix, path: "./vendor/selecto_postgrex_mix", only: [:dev, :test]<%= "}" %>
   ]
 end</code></pre>
@@ -235,7 +235,12 @@ end</code></pre>
                     </svg>
                     <div>
                       <strong>Note:</strong>
-                      These dependencies are referenced as local paths because they are included as git submodules in the vendor directory. In a production environment, you would typically reference them from Hex or GitHub.
+                      Use <code class="bg-base-300 px-1 rounded">selecto</code>
+                      and <code class="bg-base-300 px-1 rounded">selecto_components</code>
+                      from Hex (minimum <code class="bg-base-300 px-1 rounded">~&gt; 0.3.1</code>).
+                      In this tutorial,
+                      <code class="bg-base-300 px-1 rounded">selecto_postgrex_mix</code>
+                      remains a local path dependency.
                     </div>
                   </div>
                 </div>
@@ -977,7 +982,7 @@ end</code></pre>
                   </svg>
                   <div>
                     <strong>What this does:</strong>
-                    Adds Chart.js CDN, Alpine.js integration, SelectoComponents LiveView hooks, and updates Tailwind config to scan the vendor/selecto_components directory.
+                    Adds Chart.js CDN, Alpine.js integration, SelectoComponents LiveView hooks, and updates Tailwind config to scan the deps/selecto_components directory.
                   </div>
                 </div>
               </div>
@@ -1019,7 +1024,7 @@ end</code></pre>
                     <strong>🚨 Critical for AI Agents:</strong>
                     You <strong>MUST restart the Phoenix server</strong>
                     after this step! The server needs to restart so Tailwind can properly scan the
-                    <code class="bg-base-300 px-1 rounded">vendor/selecto_components</code>
+                    <code class="bg-base-300 px-1 rounded">deps/selecto_components</code>
                     directory and include the necessary CSS classes. Without restarting, the SelectoComponents UI will not render correctly.
                   </div>
                 </div>

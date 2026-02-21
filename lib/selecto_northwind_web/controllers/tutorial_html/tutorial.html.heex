@@ -244,9 +244,9 @@ mix ecto.reset</code></pre>
     # ... existing dependencies ...
 
     # Selecto libraries
-    <%= "{" %>:selecto, github: "seeken/selecto", override: true<%= "}" %>,
-    <%= "{" %>:selecto_components, github: "seeken/selecto_components"<%= "}" %>,
-    <%= "{" %>:selecto_mix, github: "seeken/selecto_mix", only: [:dev, :test]<%= "}" %>
+    <%= "{" %>:selecto, "~> 0.3.1"<%= "}" %>,
+    <%= "{" %>:selecto_components, "~> 0.3.1"<%= "}" %>,
+    <%= "{" %>:selecto_mix, "~> 0.3.1", only: [:dev, :test]<%= "}" %>
   ]
 end</code></pre>
             <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm mt-4">
@@ -261,8 +261,9 @@ end</code></pre>
               </svg>
               <div>
                 <strong>Note:</strong>
-                The <code class="bg-base-300 px-1 rounded">override: true</code>
-                option on selecto is required to resolve a dependency conflict with selecto_components.
+                Use matching versions of <code class="bg-base-300 px-1 rounded">selecto</code>
+                and <code class="bg-base-300 px-1 rounded">selecto_components</code>
+                from Hex (minimum <code class="bg-base-300 px-1 rounded">~&gt; 0.3.1</code>).
               </div>
             </div>
           </div>
@@ -814,7 +815,7 @@ end</code></pre>
               <div>
                 <strong>Critical:</strong>
                 You must restart the Phoenix server after this step. The server needs to restart so Tailwind can properly scan the
-                <code class="bg-base-300 px-1 rounded">vendor/selecto_components</code>
+                <code class="bg-base-300 px-1 rounded">deps/selecto_components</code>
                 directory and include the necessary CSS classes. Without restarting, the SelectoComponents UI will not render correctly.
               </div>
             </div>
