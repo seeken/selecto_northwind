@@ -34,7 +34,7 @@ defmodule SelectoNorthwindWeb.Layouts do
   def app(assigns) do
     ~H"""
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div class="w-full px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center py-4">
           <h1 class="text-xl font-semibold text-gray-900 dark:text-white">
             Selecto Northwind Demo
@@ -53,7 +53,7 @@ defmodule SelectoNorthwindWeb.Layouts do
     </header>
 
     <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
+      <div class="w-full space-y-4">
         {@inner_content}
       </div>
     </main>
