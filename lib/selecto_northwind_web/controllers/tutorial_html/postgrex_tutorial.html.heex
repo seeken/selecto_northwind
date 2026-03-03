@@ -36,7 +36,16 @@ end</code></pre>
       <pre><code class="language-bash">mix deps.get
 mix compile
 mix selecto.components.integrate
+cd assets && npm install
 mix assets.build</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+        <p class="font-medium">`mix selecto.components.integrate` output includes:</p>
+        <pre><code class="language-text">Run `cd assets && npm install` to install dependencies
+Next steps:
+  1. Run `cd assets && npm install`
+  2. Run `mix assets.build`</code></pre>
+      </div>
     </section>
 
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
@@ -69,6 +78,12 @@ children = [
   --expand-star supplier:company_name \
   --expand-tag tags:name \
   --live --saved-views --path /products_selecto --yes</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+        <p class="font-medium">Generator notice to keep:</p>
+        <pre><code class="language-text">Add this route to your router.ex:
+  live "/products_selecto", ProductLive, :index</code></pre>
+      </div>
 
       <p class="text-sm text-base-content/70">
         Then switch runtime execution from `SelectoNorthwind.Repo` to `SelectoNorthwind.Database`.

@@ -67,7 +67,19 @@ end</code></pre>
       <pre><code class="language-bash">mix deps.get
 mix compile
 mix selecto.components.integrate
+cd assets && npm install
 mix assets.build</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+        <p class="font-medium">
+          `mix selecto.components.integrate` prints required follow-up steps:
+        </p>
+        <pre><code class="language-text">✓ Created package.json with Chart.js and Alpine.js dependencies
+  Run `cd assets && npm install` to install dependencies
+Next steps:
+  1. Run `cd assets && npm install`
+  2. Run `mix assets.build`</code></pre>
+      </div>
     </section>
 
     <section id="step-2" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
@@ -86,9 +98,26 @@ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
   --expand-tag tags:name \
   --live --saved-views --path /products_selecto --yes</code></pre>
 
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+        <p class="font-medium">`mix selecto.gen.saved_views` output includes:</p>
+        <pre><code class="language-text">Next steps:
+  1. Run: mix ecto.migrate
+  2. Add 'use SelectoNorthwind.SavedViewContext' to your domain modules
+  3. Set saved_view_context assign in your LiveViews</code></pre>
+      </div>
+
       <p class="text-sm text-base-content/70">
         Keep association names lowercase (`supplier`, `category`, `order_details`).
       </p>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+        <p class="font-medium">`mix selecto.gen.domain ... --live --saved-views` also prints:</p>
+        <pre><code class="language-text">To integrate SelectoComponents assets (if not already done), run:
+  mix selecto.components.integrate
+
+Add this route to your router.ex:
+  live "/products_selecto", ProductLive, :index</code></pre>
+      </div>
 
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/router.ex
 scope "/", SelectoNorthwindWeb do
@@ -137,8 +166,12 @@ mix selecto.gen.domain SelectoNorthwind.Hr.Employee \
   --live --saved-views --path /employees_selecto --yes</code></pre>
 
       <p class="text-sm text-base-content/70">
-        Add each generated LiveView route in `lib/selecto_northwind_web/router.ex`.
+        Each command prints the exact route to add in `lib/selecto_northwind_web/router.ex`:
       </p>
+
+      <pre><code class="language-text">live "/customers_selecto", CustomerLive, :index
+live "/orders_selecto", OrderLive, :index
+live "/employees_selecto", EmployeeLive, :index</code></pre>
     </section>
 
     <section id="branches" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
