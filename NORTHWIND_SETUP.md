@@ -181,7 +181,7 @@ This project demonstrates three special join modes (`lookup`, `star`, `tag`) tha
 **Generated automatically with**:
 ```bash
 mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-lookup Category:category_name
+  --expand-lookup category:category_name
 ```
 
 ### Star Mode (Medium-Sized Lookup Tables)
@@ -212,7 +212,7 @@ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
 **Generated automatically with**:
 ```bash
 mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-star Supplier:company_name
+  --expand-star supplier:company_name
 ```
 
 ### Tag Mode (Many-to-Many Relationships)
@@ -242,8 +242,10 @@ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
 **Generated automatically with**:
 ```bash
 mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-tag Tags:name
+  --expand-tag tags:name
 ```
+
+Expected SQL joins use the junction table (`product_tags`) when tag mode is generated from many-to-many metadata.
 
 ### Key Metadata Fields
 

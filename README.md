@@ -2,7 +2,7 @@
 
 A sample Phoenix application demonstrating the **Selecto ecosystem** -- a suite of Elixir libraries for building interactive data exploration interfaces in Phoenix LiveView. It uses the classic Northwind sample database as a realistic, multi-context dataset.
 
-This project also serves as the primary development sandbox for [selecto_mix](https://github.com/yourorg/selecto_mix), with the ability to make complementary changes to [selecto](https://github.com/yourorg/selecto) and [selecto_components](https://github.com/yourorg/selecto_components) as needed.
+This project also serves as the primary development sandbox for [selecto_mix](https://github.com/seeken/selecto_mix), with the ability to make complementary changes to [selecto](https://github.com/seeken/selecto) and [selecto_components](https://github.com/seeken/selecto_components) as needed.
 
 ## The Selecto Ecosystem
 
@@ -18,26 +18,26 @@ The ecosystem has three packages:
 
 ### Typical workflow
 
-```bash
-# 0. Make sure Igniter is available (choose one)
-# Option A (project-local): add {:igniter, "~> 0.6", only: [:dev, :test]} to mix.exs, then:
-mix deps.get
-# Option B (global archive):
-mix archive.install hex igniter_new
-
-# 1. Install selecto_mix and apply installer patches
-mix igniter.install selecto_mix
-
-# 2. Generate a domain from an Ecto schema
-mix selecto.gen.domain MyApp.Catalog.Product --expand-schemas category,supplier --live --saved-views
-
-# 3. Add the generated route to your router
-live "/product", MyAppWeb.ProductLive, :index
-
-# 4. Run migrations and start the server
-mix ecto.migrate
-mix phx.server
+```elixir
+# mix.exs
+defp deps do
+  [
+    # ...existing deps...
+    {:selecto, github: "seeken/selecto", branch: "main", override: true},
+    {:selecto_components, github: "seeken/selecto_components", branch: "main"},
+    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]}
+  ]
+end
 ```
+
+```bash
+mix deps.get
+mix selecto.components.integrate
+mix selecto.gen.saved_views MyApp --yes
+mix selecto.gen.domain MyApp.Catalog.Product --expand-schemas category,supplier --live --saved-views --yes
+```
+
+Tag-mode many-to-many joins are supported in current `main` for `seeken/selecto` + `seeken/selecto_mix`; use `--expand-tag tags:name` when generating product domains.
 
 You get an interactive data explorer with filtering, sorting, multiple view types, and saved queries -- no hand-written SQL required.
 

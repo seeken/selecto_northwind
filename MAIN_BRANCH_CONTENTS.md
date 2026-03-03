@@ -73,9 +73,9 @@ mix setup  # Creates DB, runs migrations, seeds data
 ### Step 1: Add Selecto Dependencies
 ```bash
 # User edits mix.exs to add:
-{:selecto, path: "./vendor/selecto"},
-{:selecto_components, path: "./vendor/selecto_components"},
-{:selecto_mix, path: "./vendor/selecto_mix", only: [:dev, :test]}
+{:selecto, github: "seeken/selecto", branch: "main", override: true}
+{:selecto_components, github: "seeken/selecto_components", branch: "main"}
+{:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]}
 
 mix deps.get
 ```
@@ -84,9 +84,9 @@ mix deps.get
 ```bash
 # Products with special join modes
 mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-lookup Category:category_name \
-  --expand-star Supplier:company_name \
-  --expand-tag Tags:name \
+  --expand-lookup category:category_name \
+  --expand-star supplier:company_name \
+  --expand-tag tags:name \
   --live --saved-views --path products_selecto
 
 # Polymorphic comments (auto-detects commentable_type + commentable_id)
