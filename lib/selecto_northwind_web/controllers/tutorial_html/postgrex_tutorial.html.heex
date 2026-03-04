@@ -5,7 +5,7 @@
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold mb-2">Selecto + Postgrex Tutorial</h1>
       <p class="text-secondary-content/85">
-        Run Selecto against a named Postgrex connection while still using `seeken/selecto`, `seeken/selecto_components`, and `seeken/selecto_mix`
+        Run Selecto against a named Postgrex connection using `seeken/selecto`, `seeken/selecto_components`, and `seeken/selecto_postgrex_mix`
       </p>
     </div>
   </div>
@@ -22,7 +22,7 @@
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
       <h2 class="text-2xl font-bold">1) Dependencies</h2>
       <p class="text-base-content/75">
-        Use the same GitHub dependencies as the Ecto tutorial.
+        Use the Postgrex Mix package (not `selecto_mix`) so generator commands match this flow.
       </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
 defp deps do
@@ -30,17 +30,17 @@ defp deps do
     # ...existing deps...
     {:selecto, github: "seeken/selecto", branch: "main", override: true},
     {:selecto_components, github: "seeken/selecto_components", branch: "main"},
-    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]}
+    {:selecto_postgrex_mix, github: "seeken/selecto_postgrex_mix", branch: "main", only: [:dev, :test]}
   ]
 end</code></pre>
       <pre><code class="language-bash">mix deps.get
 mix compile
-mix selecto.components.integrate
+mix selecto_postgrex.components.integrate
 cd assets && npm install
 mix assets.build</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
-        <p class="font-medium">`mix selecto.components.integrate` output includes:</p>
+        <p class="font-medium">`mix selecto_postgrex.components.integrate` output includes:</p>
         <pre><code class="language-text">Run `cd assets && npm install` to install dependencies
 Next steps:
   1. Run `cd assets && npm install`
@@ -69,15 +69,28 @@ children = [
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
       <h2 class="text-2xl font-bold">3) Generate or Reuse a Domain</h2>
       <p class="text-base-content/75">
-        `selecto_mix` still handles domain generation. Use the Ecto tutorial command (or your own schema) to generate a domain module.
+        `selecto_postgrex_mix` handles saved views and domain generation from table introspection.
       </p>
 
-      <pre><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
-  --expand-schemas supplier,category,order_details \
-  --expand-star category:category_name \
-  --expand-star supplier:company_name \
+      <pre><code class="language-bash"># Optional if DATABASE_URL is not already set
+export DATABASE_URL="postgres://postgres:postgres@localhost:5432/selecto_northwind_dev"</code></pre>
+
+      <pre><code class="language-bash">mix selecto_postgrex.gen.saved_views SelectoNorthwind --connection-name SelectoNorthwind.Database --yes
+mix selecto_postgrex.setup --sql-dir priv/sql
+
+mix selecto_postgrex.gen.domain \
+  --table products \
+  --database-url "$DATABASE_URL" \
+  --expand \
+  --expand-schemas suppliers,categories,order_details \
+  --expand-star categories:category_name \
+  --expand-star suppliers:company_name \
   --expand-tag tags:name \
   --live --saved-views --path /products_selecto --yes</code></pre>
+
+      <p class="text-sm text-base-content/70">
+        Note the table names are plural (`products`, `suppliers`, `categories`, `order_details`).
+      </p>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
         <p class="font-medium">Generator notice to keep:</p>
@@ -86,7 +99,7 @@ children = [
       </div>
 
       <p class="text-sm text-base-content/70">
-        Then switch runtime execution from `SelectoNorthwind.Repo` to `SelectoNorthwind.Database`.
+        Runtime execution should use `SelectoNorthwind.Database` (not `SelectoNorthwind.Repo`).
       </p>
     </section>
 
