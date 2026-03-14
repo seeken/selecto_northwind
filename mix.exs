@@ -60,7 +60,14 @@ defmodule SelectoNorthwind.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:tidewave, "~> 0.5.5", only: :dev}
+      {:tidewave, "~> 0.5.5", only: :dev},
+      {:selecto_db_adapter,
+       github: "seeken/selecto_db_adapter", branch: "init-shared-contract", override: true},
+      {:selecto, github: "seeken/selecto", branch: "main", override: true},
+      {:selecto_db_postgresql,
+       github: "seeken/selecto_db_postgresql", branch: "postgresql-extraction", override: true},
+      {:selecto_components, github: "seeken/selecto_components", branch: "main"},
+      {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]}
     ]
   end
 

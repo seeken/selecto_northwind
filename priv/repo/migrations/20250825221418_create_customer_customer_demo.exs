@@ -12,7 +12,8 @@ defmodule SelectoNorthwind.Repo.Migrations.CreateCustomerCustomerDemo do
             column: :customer_type_id,
             type: :string,
             on_delete: :delete_all
-          ), primary_key: true
+          ),
+          primary_key: true
 
       timestamps()
     end
