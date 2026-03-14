@@ -5,7 +5,8 @@
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold mb-2">Selecto Ecto Tutorial</h1>
       <p class="text-primary-content/85">
-        Clean step-by-step setup using `seeken/selecto`, `seeken/selecto_components`, and `seeken/selecto_mix`
+        Clean step-by-step setup using `seeken/selecto`, `seeken/selecto_db_adapter`,
+        `seeken/selecto_db_postgresql`, `seeken/selecto_components`, and `seeken/selecto_mix`
       </p>
     </div>
   </div>
@@ -47,21 +48,33 @@ mix setup</code></pre>
     <section id="step-1" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Step 1: Add Selecto Dependencies</h2>
       <p class="text-base-content/75">
-        Use GitHub sources directly so the tutorial tracks the latest `seeken/*` updates.
+        Use GitHub sources directly so the tutorial tracks the latest `seeken/*`
+        updates, and add the PostgreSQL adapter packages explicitly because
+        `selecto` no longer bundles database adapters.
       </p>
 
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
 defp deps do
   [
     # ...existing deps...
+    {:selecto_db_adapter, github: "seeken/selecto_db_adapter", branch: "init-shared-contract", override: true},
     {:selecto, github: "seeken/selecto", branch: "main", override: true},
+    {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "postgresql-extraction", override: true},
     {:selecto_components, github: "seeken/selecto_components", branch: "main"},
     {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]}
   ]
 end</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
-        `override: true` on `:selecto` avoids dependency resolution conflicts with transitive Hex constraints.
+        `override: true` keeps the Selecto ecosystem packages aligned while you
+        follow the current adapter-extraction branches.
+      </div>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
+        Keep your existing PostgreSQL driver dependency in the app. The Ecto
+        tutorial runs Selecto through `SelectoNorthwind.Repo`, but the external
+        adapter package still needs to be present so Selecto can resolve the
+        PostgreSQL adapter module at runtime.
       </div>
 
       <pre><code class="language-bash">mix deps.get
