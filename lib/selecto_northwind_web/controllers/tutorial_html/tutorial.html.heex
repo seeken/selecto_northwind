@@ -57,7 +57,6 @@ mix setup</code></pre>
 defp deps do
   [
     # ...existing deps...
-    {:selecto_db_adapter, github: "seeken/selecto_db_adapter", branch: "init-shared-contract", override: true},
     {:selecto, github: "seeken/selecto", branch: "main", override: true},
     {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "postgresql-extraction", override: true},
     {:selecto_components, github: "seeken/selecto_components", branch: "main"},
@@ -67,7 +66,8 @@ end</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
         `override: true` keeps the Selecto ecosystem packages aligned while you
-        follow the current adapter-extraction branches.
+        follow the current adapter-extraction branches. Add the adapter package
+        itself, not `selecto_db_adapter`.
       </div>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">

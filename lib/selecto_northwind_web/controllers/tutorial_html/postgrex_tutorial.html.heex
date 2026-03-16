@@ -29,6 +29,7 @@ defp deps do
   [
     # ...existing deps...
     {:selecto, github: "seeken/selecto", branch: "main", override: true},
+    {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "postgresql-extraction", override: true},
     {:selecto_components, github: "seeken/selecto_components", branch: "main"},
     {:selecto_postgrex_mix, github: "seeken/selecto_postgrex_mix", branch: "main", only: [:dev, :test]}
   ]
@@ -40,6 +41,10 @@ cd assets && npm install
 mix assets.build</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+        <p>
+          `selecto` no longer bundles adapters, so direct Postgrex usage should
+          add `selecto_db_postgresql` next to `selecto`.
+        </p>
         <p class="font-medium">`mix selecto_postgrex.components.integrate` output includes:</p>
         <pre><code class="language-text">Run `cd assets && npm install` to install dependencies
 Next steps:
