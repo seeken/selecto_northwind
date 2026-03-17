@@ -79,7 +79,7 @@ mix phx.server
 
 Visit [localhost:4000](http://localhost:4000) to see the app. The built-in tutorial at [localhost:4000/tutorial](http://localhost:4000/tutorial) walks through generating Selecto domains for each Northwind context step by step.
 
-There is also a [Postgrex tutorial](http://localhost:4000/postgrex_tutorial) demonstrating how to use Selecto without Ecto, connecting directly to a database; it now recommends adding `selecto_db_postgresql` alongside `selecto`.
+There is also a [Postgrex tutorial](http://localhost:4000/postgrex_tutorial) demonstrating how to use Selecto without Ecto, connecting directly to a database with the shared `mix selecto.gen.domain --adapter postgresql ...` flow and `selecto_db_postgresql`.
 
 ## Development
 

@@ -5,7 +5,7 @@
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold mb-2">Selecto + Postgrex Tutorial</h1>
       <p class="text-secondary-content/85">
-        Run Selecto against a named Postgrex connection using `seeken/selecto`, `seeken/selecto_components`, and `seeken/selecto_postgrex_mix`
+        Run Selecto against a named Postgrex connection using shared `selecto_mix` generators with `selecto_db_postgresql`
       </p>
     </div>
   </div>
@@ -22,7 +22,7 @@
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
       <h2 class="text-2xl font-bold">1) Dependencies</h2>
       <p class="text-base-content/75">
-        Use the Postgrex Mix package (not `selecto_mix`) so generator commands match this flow.
+        Use the shared generator flow. Keep `selecto_postgrex_mix` only if you still want compatibility wrappers while the consolidation finishes.
       </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
 defp deps do
@@ -31,21 +31,23 @@ defp deps do
     {:selecto, github: "seeken/selecto", branch: "main", override: true},
     {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "postgresql-extraction", override: true},
     {:selecto_components, github: "seeken/selecto_components", branch: "main"},
+    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]},
+    # Optional compatibility wrappers while old commands are being retired
     {:selecto_postgrex_mix, github: "seeken/selecto_postgrex_mix", branch: "main", only: [:dev, :test]}
   ]
 end</code></pre>
       <pre><code class="language-bash">mix deps.get
 mix compile
-mix selecto_postgrex.components.integrate
+mix selecto.components.integrate
 cd assets && npm install
 mix assets.build</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
         <p>
           `selecto` no longer bundles adapters, so direct Postgrex usage should
-          add `selecto_db_postgresql` next to `selecto`.
+          add `selecto_db_postgresql` next to `selecto`. The main generator entrypoint is now `mix selecto.gen.domain --adapter postgresql ...`.
         </p>
-        <p class="font-medium">`mix selecto_postgrex.components.integrate` output includes:</p>
+        <p class="font-medium">`mix selecto.components.integrate` output includes:</p>
         <pre><code class="language-text">Run `cd assets && npm install` to install dependencies
 Next steps:
   1. Run `cd assets && npm install`
@@ -74,16 +76,21 @@ children = [
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
       <h2 class="text-2xl font-bold">3) Generate or Reuse a Domain</h2>
       <p class="text-base-content/75">
-        `selecto_postgrex_mix` handles saved views and domain generation from table introspection.
+        Use the shared adapter-backed generators. The old `selecto_postgrex.*` commands now act as compatibility wrappers.
       </p>
 
       <pre><code class="language-bash"># Optional if DATABASE_URL is not already set
 export DATABASE_URL="postgres://postgres:postgres@localhost:5432/selecto_northwind_dev"</code></pre>
 
-      <pre><code class="language-bash">mix selecto_postgrex.gen.saved_views SelectoNorthwind --connection-name SelectoNorthwind.Database --yes
+      <pre><code class="language-bash">mix selecto.gen.saved_views SelectoNorthwind \
+  --adapter postgresql \
+  --connection-name SelectoNorthwind.Database \
+  --yes
+
 mix selecto_postgrex.setup --sql-dir priv/sql
 
-mix selecto_postgrex.gen.domain \
+mix selecto.gen.domain \
+  --adapter postgresql \
   --table products \
   --database-url "$DATABASE_URL" \
   --expand \
@@ -106,6 +113,13 @@ mix selecto_postgrex.gen.domain \
       <p class="text-sm text-base-content/70">
         Runtime execution should use `SelectoNorthwind.Database` (not `SelectoNorthwind.Repo`).
       </p>
+
+      <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm space-y-2">
+        <p class="font-medium">Compatibility note</p>
+        <p>
+          `mix selecto_postgrex.gen.domain` still works today, but it delegates to the shared `selecto_mix` flow first. Prefer the `mix selecto.gen.domain --adapter postgresql ...` form for new docs and scripts.
+        </p>
+      </div>
     </section>
 
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
