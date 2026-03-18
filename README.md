@@ -23,9 +23,10 @@ The ecosystem has three packages:
 defp deps do
   [
     # ...existing deps...
-    {:selecto, github: "seeken/selecto", branch: "main", override: true},
-    {:selecto_components, github: "seeken/selecto_components", branch: "main"},
-    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]}
+    {:selecto, "~> 0.4.0", override: true},
+    {:selecto_db_postgresql, "~> 0.4.0", override: true},
+    {:selecto_components, "~> 0.4.0"},
+    {:selecto_mix, "~> 0.4.0", only: [:dev, :test]}
   ]
 end
 ```
@@ -37,7 +38,7 @@ mix selecto.gen.saved_views MyApp --yes
 mix selecto.gen.domain MyApp.Catalog.Product --expand-schemas category,supplier --live --saved-views --yes
 ```
 
-Tag-mode many-to-many joins are supported in current `main` for `seeken/selecto` + `seeken/selecto_mix`; use `--expand-tag tags:name` when generating product domains.
+Tag-mode many-to-many joins are supported in the 0.4.0 releases; use `--expand-tag tags:name` when generating product domains.
 
 You get an interactive data explorer with filtering, sorting, multiple view types, and saved queries -- no hand-written SQL required.
 

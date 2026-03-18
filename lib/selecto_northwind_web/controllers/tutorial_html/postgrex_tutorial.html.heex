@@ -22,18 +22,19 @@
     <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
       <h2 class="text-2xl font-bold">1) Dependencies</h2>
       <p class="text-base-content/75">
-        Use the shared generator flow. Keep `selecto_postgrex_mix` only if you still want compatibility wrappers while the consolidation finishes.
+        Use the shared generator flow with the published 0.4.0 packages. Keep
+        `selecto_postgrex_mix` only if you still want compatibility wrappers.
       </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
 defp deps do
   [
     # ...existing deps...
-    {:selecto, github: "seeken/selecto", branch: "main", override: true},
-    {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "postgresql-extraction", override: true},
-    {:selecto_components, github: "seeken/selecto_components", branch: "main"},
-    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test]},
+    {:selecto, "~> 0.4.0", override: true},
+    {:selecto_db_postgresql, "~> 0.4.0", override: true},
+    {:selecto_components, "~> 0.4.0"},
+    {:selecto_mix, "~> 0.4.0", only: [:dev, :test]},
     # Optional compatibility wrappers while old commands are being retired
-    {:selecto_postgrex_mix, github: "seeken/selecto_postgrex_mix", branch: "main", only: [:dev, :test]}
+    {:selecto_postgrex_mix, ">= 0.1.2", only: [:dev, :test]}
   ]
 end</code></pre>
       <pre><code class="language-bash">mix deps.get
