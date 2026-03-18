@@ -2,32 +2,30 @@ defmodule SelectoNorthwindWeb.Router do
   use SelectoNorthwindWeb, :router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :put_root_layout, html: {SelectoNorthwindWeb.Layouts, :root}
-    plug :put_layout, html: {SelectoNorthwindWeb.Layouts, :app}
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, html: {SelectoNorthwindWeb.Layouts, :root})
+    plug(:put_layout, html: {SelectoNorthwindWeb.Layouts, :app})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
   end
 
   pipeline :api do
-    plug :accepts, ["json"]
+    plug(:accepts, ["json"])
   end
 
   scope "/", SelectoNorthwindWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :home
-    get "/tutorial", TutorialController, :index
-    get "/postgrex_tutorial", TutorialController, :postgrex_tutorial
-
+    get("/", PageController, :home)
+    get("/tutorial", TutorialController, :index)
     # Note: These placeholder routes will be replaced with LiveView routes
     # during the tutorial as you generate Selecto domains for each section
-    get "/customers_selecto", PageController, :customers_selecto
-    get "/products_selecto", PageController, :products_selecto
-    get "/orders_selecto", PageController, :orders_selecto
-    get "/analytics", PageController, :analytics
+    get("/customers_selecto", PageController, :customers_selecto)
+    get("/products_selecto", PageController, :products_selecto)
+    get("/orders_selecto", PageController, :orders_selecto)
+    get("/analytics", PageController, :analytics)
   end
 
   # Other scopes may use custom stacks.
@@ -45,10 +43,10 @@ defmodule SelectoNorthwindWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/dev" do
-      pipe_through :browser
+      pipe_through(:browser)
 
-      live_dashboard "/dashboard", metrics: SelectoNorthwindWeb.Telemetry
-      forward "/mailbox", Plug.Swoosh.MailboxPreview
+      live_dashboard("/dashboard", metrics: SelectoNorthwindWeb.Telemetry)
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end
 end
