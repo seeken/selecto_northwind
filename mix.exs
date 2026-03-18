@@ -60,11 +60,7 @@ defmodule SelectoNorthwind.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.2.0"},
       {:bandit, "~> 1.5"},
-      {:tidewave, "~> 0.5.5", only: :dev},
-      {:selecto, "~> 0.4.0", override: true},
-      {:selecto_db_postgresql, "~> 0.4.0", override: true},
-      {:selecto_components, "~> 0.4.0", override: true},
-      {:selecto_mix, "~> 0.4.0", only: [:dev, :test]}
+      {:tidewave, "~> 0.5.5", only: :dev}
     ]
   end
 
