@@ -1,116 +1,45 @@
 # SelectoNorthwind
 
-A sample Phoenix application demonstrating the **Selecto ecosystem** -- a suite of Elixir libraries for building interactive data exploration interfaces in Phoenix LiveView. It uses the classic Northwind sample database as a realistic, multi-context dataset.
+`selecto_northwind` is a Phoenix demo app for the Selecto ecosystem, using the classic Northwind dataset to show generated data exploration UIs in action.
 
-This project also serves as the primary development sandbox for [selecto_mix](https://github.com/seeken/selecto_mix), with the ability to make complementary changes to [selecto](https://github.com/seeken/selecto) and [selecto_components](https://github.com/seeken/selecto_components) as needed.
+## Quick Start
 
-## The Selecto Ecosystem
+Prerequisites:
 
-**Selecto** lets you point a code generator at your Ecto schemas (or a raw Postgrex connection) and get a working, interactive data explorer out of the box -- with filtering, sorting, aggregation, charts, and saved views -- then customize from there.
-
-The ecosystem has three packages:
-
-| Package | Purpose |
-|---------|---------|
-| **selecto** | Core query builder. Constructs complex, fully-parameterized SQL from a domain configuration. Handles dynamic filters, joins (including star schemas, hierarchies, many-to-many), CTEs, window functions, and more. |
-| **selecto_mix** | Mix tasks that introspect your Ecto schemas and generate complete Selecto domain configs, query helpers, and optionally full LiveView pages. Regeneration preserves your customizations. |
-| **selecto_components** | Phoenix LiveView components: drag-and-drop query builder, sortable paginated tables, aggregate views, Chart.js graphs, and saved views. Pre-styled with Tailwind CSS. |
-
-### Typical workflow
-
-```elixir
-# mix.exs
-defp deps do
-  [
-    # ...existing deps...
-    {:selecto, "~> 0.4.0", override: true},
-    {:selecto_db_postgresql, "~> 0.4.0", override: true},
-    {:selecto_components, "~> 0.4.0"},
-    {:selecto_mix, "~> 0.4.0", only: [:dev, :test]}
-  ]
-end
-```
-
-```bash
-mix deps.get
-mix selecto.components.integrate
-mix selecto.gen.saved_views MyApp --yes
-mix selecto.gen.domain MyApp.Catalog.Product --expand-schemas category,supplier --live --saved-views --yes
-```
-
-Tag-mode many-to-many joins are supported in the 0.4.0 releases; use `--expand-tag tags:name` when generating product domains.
-
-You get an interactive data explorer with filtering, sorting, multiple view types, and saved queries -- no hand-written SQL required.
-
-## The Northwind Database
-
-The classic Northwind dataset is organized into domain contexts that exercise different schema patterns:
-
-- **Catalog** -- Products, Categories, Suppliers, Tags (many-to-many, JSONB attributes)
-- **Sales** -- Customers, Orders, OrderDetails, Shippers (complex order hierarchies)
-- **HR** -- Employees, EmployeeTerritories (self-referential manager/subordinate relationships)
-- **Geography** -- Regions, Territories, US States (hierarchical locations)
-
-This gives Selecto a realistic workout across joins, aggregations, and relationship patterns.
-
-## Getting Started
-
-### Prerequisites
-
-- Elixir ~> 1.15
+- Elixir `~> 1.18`
 - PostgreSQL 12+
-- Node.js (for asset building)
+- Node.js
 
-### Setup
+Set up and run the app:
 
 ```bash
-# Clone with submodules
-git clone --recurse-submodules <repo-url>
+git clone <repo-url>
 cd selecto_northwind
-
-# Or if already cloned:
-git submodule update --init --recursive
-
-# Install dependencies, create database, seed data, build assets
 mix setup
-
-# Start the server
 mix phx.server
 ```
 
-Visit [localhost:4000](http://localhost:4000) to see the app. The built-in tutorial at [localhost:4000/tutorial](http://localhost:4000/tutorial) walks through generating Selecto domains for each Northwind context step by step.
+Then open:
 
-## Development
+- `http://localhost:4000` for the demo app
+- `http://localhost:4000/tutorial` for the step-by-step tutorial
 
-### Common commands
+`mix setup` installs dependencies, creates the database, runs migrations, seeds Northwind data, and builds assets.
+
+## What You Get
+
+The tutorial walks through generating Selecto domains and LiveViews over a realistic sample dataset, including:
+
+- catalog data such as products, suppliers, categories, and tags
+- sales data such as customers, orders, and shippers
+- HR and geography relationships for more complex join patterns
+
+## Useful Commands
 
 ```bash
-mix phx.server                  # Start the server
-iex -S mix phx.server           # Start with IEx shell
-mix test                        # Run tests
-mix precommit                   # Compile (warnings-as-errors), format, test
-mix ecto.reset                  # Drop and recreate database with seed data
+mix phx.server
+iex -S mix phx.server
+mix test
+mix precommit
+mix ecto.reset
 ```
-
-### Submodule management
-
-The three Selecto packages live in `vendor/` as git submodules:
-
-```bash
-git submodule update --remote                      # Update all to latest
-git submodule update --remote vendor/selecto_mix   # Update one
-git submodule foreach git pull origin main          # Pull latest for all
-```
-
-## Contributing
-
-Contributions to any part of the Selecto ecosystem are welcome. Areas where help is especially appreciated:
-
-- Trying Selecto against your own schemas and reporting rough edges
-- UI/UX feedback on the LiveView components
-- Additional view types and visualizations
-- Documentation and examples
-- Testing across different Postgres versions and schema patterns
-- Accessibility improvements in the component library
-
-See the individual package repos for contribution guidelines, or open an issue here to discuss.
