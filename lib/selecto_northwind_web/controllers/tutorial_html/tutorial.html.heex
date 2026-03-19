@@ -26,7 +26,13 @@
         <a href="#step-1" class="link link-hover">Step 1: Dependencies</a>
         <a href="#step-2" class="link link-hover">Step 2: Products Domain</a>
         <a href="#tags-bug" class="link link-hover">Tags Regression Check</a>
-        <a href="#step-3" class="link link-hover">Step 3: More Domains</a>
+        <a href="#step-3" class="link link-hover">Step 3: Overlay Click Handler</a>
+        <a href="#step-4" class="link link-hover">Step 4: Saved Filter Sets</a>
+        <a href="#step-5" class="link link-hover">Step 5: Documentation</a>
+        <a href="#step-6" class="link link-hover">Step 6: Live Dashboard</a>
+        <a href="#step-7" class="link link-hover">Step 7: Saved View Configs</a>
+        <a href="#step-8" class="link link-hover">Step 8: Parameterized Joins</a>
+        <a href="#step-9" class="link link-hover">Step 9: More Domains</a>
         <a href="#branches" class="link link-hover">Branch Workflow</a>
         <a href="#verify" class="link link-hover">Verification</a>
       </div>
@@ -58,7 +64,7 @@ defp deps do
     # ...existing deps...
     {:selecto, "~> 0.4.0", override: true},
     {:selecto_db_postgresql, "~> 0.4.0", override: true},
-    {:selecto_components, "~> 0.4.0"},
+    {:selecto_components, "~> 0.4.1"},
     {:selecto_mix, "~> 0.4.0", only: [:dev, :test]}
   ]
 end</code></pre>
@@ -80,6 +86,16 @@ mix compile
 mix selecto.components.integrate
 cd assets && npm install
 mix assets.build</code></pre>
+
+      <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm space-y-2">
+        <p class="font-medium">Backup point:</p>
+        <p>
+          After `npm install`, make a copy of the app directory so you can get back to the
+          asset-integrated baseline quickly if a later tutorial step goes sideways.
+        </p>
+        <pre><code class="language-bash">cd ..
+cp -a selecto_northwind selecto_northwind_after_npm_install_backup</code></pre>
+      </div>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
         <p class="font-medium">
@@ -107,7 +123,7 @@ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
   --expand-star category:category_name \
   --expand-star supplier:company_name \
   --expand-tag tags:name \
-  --live --saved-views --path /products_selecto --yes</code></pre>
+  --live --saved-views --enable-modal --path /products_selecto --yes</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
         <p class="font-medium">`mix selecto.gen.saved_views` output includes:</p>
@@ -141,6 +157,7 @@ end</code></pre>
         Generated files to check:
         <ul class="mt-2 space-y-1">
           <li>- `lib/selecto_northwind/selecto_domains/product_domain.ex`</li>
+          <li>- `lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex`</li>
           <li>- `lib/selecto_northwind_web/product_live.ex`</li>
           <li>- `lib/selecto_northwind_web/live/product_live.html.heex`</li>
         </ul>
@@ -161,7 +178,160 @@ end</code></pre>
     </section>
 
     <section id="step-3" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
-      <h2 class="text-2xl font-bold">Step 3: Generate Additional Domains</h2>
+      <h2 class="text-2xl font-bold">Step 3: Add a Detail View Click Handler in the Overlay</h2>
+      <p class="text-base-content/75">
+        Keep the popup definition in the overlay so regeneration stays safe, then set the
+        detail view row-click action in the generated LiveView state.
+      </p>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex
+defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
+  use Selecto.Config.OverlayDSL
+
+  defpopup :product_overview do
+    name("Product Overview")
+    description("Open the selected product in the built-in detail modal.")
+    required_fields([:id, :product_name, :unit_price])
+
+    payload(%{
+      title: ~S(Product #{{id}} - {{product_name}}),
+      size: :xl,
+      navigation_enabled: true
+    })
+  end
+end</code></pre>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/product_live.ex
+state =
+  get_initial_state(views, selecto)
+  |> put_in([:view_config, :views, :detail, :row_click_action], "product_overview")</code></pre>
+
+      <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
+        With `--enable-modal`, detail rows can open the overlay immediately. Keeping the
+        popup in `product_domain_overlay.ex` means a later `mix selecto.gen.domain` run
+        can refresh the base domain without wiping your click handler behavior.
+      </div>
+    </section>
+
+    <section id="step-4" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 4: Add Saved Filter Sets</h2>
+      <p class="text-base-content/75">
+        Filter sets are separate from saved views: they let the tutorial persist reusable
+        filter combinations in the Filters tab.
+      </p>
+
+      <pre><code class="language-bash">mix selecto.gen.filter_sets SelectoNorthwind --yes
+mix ecto.migrate</code></pre>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/product_live.ex
+demo_user_id = "northwind-demo"
+
+socket =
+  assign(socket,
+    filter_sets_adapter: SelectoNorthwind.FilterSets,
+    user_id: demo_user_id,
+    current_user_id: demo_user_id
+  )</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
+        Once `filter_sets_adapter` is assigned, `SelectoComponents.Form` renders the
+        built-in filter-set manager automatically. Use a stable demo user id in Northwind
+        until the tutorial grows an authentication layer.
+      </div>
+    </section>
+
+    <section id="step-5" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 5: Document the Generated Workflow</h2>
+      <p class="text-base-content/75">
+        Capture the new generator outputs while the changes are fresh. The tutorial is much
+        easier to follow when the app README mirrors the generated files and routes.
+      </p>
+
+      <pre><code class="language-markdown">## Tutorial Extensions
+
+- Product overlay popup lives in `lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex`
+- Filter set persistence lives in `lib/selecto_northwind/filter_sets.ex`
+- Saved view configs live in `lib/selecto_northwind/saved_view_config_context.ex`
+- Selecto metrics appear in `/dev/dashboard` after the dashboard step</code></pre>
+
+      <p class="text-sm text-base-content/70">
+        Also update any handoff notes you keep for the repo so future tutorial runs know
+        which files are generated and which files are safe customization points.
+      </p>
+    </section>
+
+    <section id="step-6" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 6: Add a Live Dashboard Page</h2>
+      <p class="text-base-content/75">
+        Generate the Selecto LiveDashboard page so the tutorial also shows runtime health
+        for saved views, filter sets, and query activity.
+      </p>
+
+      <pre><code class="language-bash">mix selecto.gen.live_dashboard</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
+        The generator updates the existing LiveDashboard route so `/dev/dashboard` gets a
+        `Selecto` tab. Restart the Phoenix server after generation and confirm the tab loads.
+      </div>
+    </section>
+
+    <section id="step-7" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 7: Add Saved View Configs for Column Sets</h2>
+      <p class="text-base-content/75">
+        `saved_views` stores the whole query state. `saved_view_configs` is the lighter-weight
+        companion for per-view presets such as selected columns, detail layouts, and graph options.
+      </p>
+
+      <pre><code class="language-bash">mix selecto.gen.saved_view_configs SelectoNorthwind --yes
+mix ecto.migrate</code></pre>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind/selecto_domains/product_domain.ex
+use SelectoNorthwind.SavedViewContext
+use SelectoNorthwind.SavedViewConfigContext
+
+# lib/selecto_northwind_web/product_live.ex
+saved_views = SelectoNorthwind.SelectoDomains.ProductDomain.get_view_names(path)
+
+socket =
+  assign(socket,
+    saved_view_module: SelectoNorthwind.SelectoDomains.ProductDomain,
+    saved_view_context: path,
+    saved_view_config_module: SelectoNorthwind.SelectoDomains.ProductDomain,
+    available_saved_views: saved_views
+  )</code></pre>
+
+      <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
+        After this wiring, the built-in View Configuration manager can save reusable column
+        sets for aggregate, detail, and graph modes without replacing the full saved-view flow.
+      </div>
+    </section>
+
+    <section id="step-8" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 8: Add a Parameterized Join</h2>
+      <p class="text-base-content/75">
+        After Step 9 generates `order_domain.ex`, add a parameterized join when you want a
+        domain path whose SQL depends on a runtime value such as ship country, freight threshold,
+        or tenant scope.
+      </p>
+
+      <pre><code class="language-bash">mix selecto.gen.parameterized_join freight_band ship_country:string min_freight:number \
+  --fields ship_name:string,freight:number
+
+# paste the generated join template into:
+# lib/selecto_northwind/selecto_domains/order_domain.ex
+
+mix selecto.validate.parameterized_joins \
+  lib/selecto_northwind/selecto_domains/order_domain.ex \
+  --test-references "freight_band:USA:10.ship_name,freight_band:USA:10.freight"</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
+        Keep the validation command in the tutorial. It proves the join definition, parameter
+        types, and field references all match before you wire the new path into a UI.
+      </div>
+    </section>
+
+    <section id="step-9" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 9: Generate Additional Domains</h2>
       <p class="text-base-content/75">After Products is working, add other Northwind contexts.</p>
 
       <pre><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Sales.Customer \
@@ -197,7 +367,16 @@ live "/employees_selecto", EmployeeLive, :index</code></pre>
 git switch -c tutorial/step-2-products
 # generate product domain + route + verify
 
-git switch -c tutorial/step-3-more-domains
+git switch -c tutorial/step-3-product-overlay
+# add popup overlay + detail row click behavior
+
+git switch -c tutorial/step-4-persistence
+# add filter sets + saved view configs
+
+git switch -c tutorial/step-5-dashboard
+# add docs + dashboard + parameterized join notes
+
+git switch -c tutorial/step-9-more-domains
 # generate customer/order/employee domains</code></pre>
     </section>
 
@@ -208,12 +387,13 @@ git switch -c tutorial/step-3-more-domains
 # http://localhost:4000/products_selecto
 # http://localhost:4000/customers_selecto
 # http://localhost:4000/orders_selecto
-# http://localhost:4000/employees_selecto</code></pre>
+# http://localhost:4000/employees_selecto
+# http://localhost:4000/dev/dashboard</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
-        Final quality check before sharing changes: <code class="ml-1">mix precommit</code>
+        Final quality check before sharing changes:
+        <code class="ml-1">mix compile && mix precommit</code>
       </div>
-
     </section>
   </div>
 </div>

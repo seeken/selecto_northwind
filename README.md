@@ -33,6 +33,8 @@ The tutorial walks through generating Selecto domains and LiveViews over a reali
 - catalog data such as products, suppliers, categories, and tags
 - sales data such as customers, orders, and shippers
 - HR and geography relationships for more complex join patterns
+- overlay-driven detail modals, saved filter sets, and saved view column presets
+- LiveDashboard integration, saved_view_configs, and parameterized join validation
 
 ## Useful Commands
 
