@@ -41,7 +41,11 @@
     <section id="step-0" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Step 0: Setup</h2>
       <p class="text-base-content/75">
-        Start from a clean clone and initialize the Northwind app.
+        Start from a clean clone and initialize the Northwind app. This gives you the seeded
+        Northwind database and a working Phoenix baseline before any Selecto-specific changes.
+      </p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
       </p>
       <pre><code class="language-bash">git clone &lt;repo-url&gt;
 cd selecto_northwind
@@ -55,7 +59,12 @@ mix setup</code></pre>
       <h2 class="text-2xl font-bold">Step 1: Add Selecto Dependencies</h2>
       <p class="text-base-content/75">
         Use the published 0.4.0 packages, and add the PostgreSQL adapter package
-        explicitly because `selecto` no longer bundles database adapters.
+        explicitly because `selecto` no longer bundles database adapters. This step upgrades the
+        app from a plain Phoenix/Northwind sample into a Selecto-capable project.
+      </p>
+
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `mix.exs`
       </p>
 
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
@@ -81,6 +90,9 @@ end</code></pre>
         PostgreSQL adapter module at runtime.
       </div>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix deps.get
 mix compile
 mix selecto.components.integrate
@@ -91,7 +103,8 @@ mix assets.build</code></pre>
         <p class="font-medium">Backup point:</p>
         <p>
           After `npm install`, make a copy of the app directory so you can get back to the
-          asset-integrated baseline quickly if a later tutorial step goes sideways.
+          asset-integrated baseline quickly if a later tutorial step goes sideways. This is the
+          first good checkpoint because dependencies and frontend assets are both in place.
         </p>
         <pre><code class="language-bash">cd ..
 cp -a selecto_northwind selecto_northwind_after_npm_install_backup</code></pre>
@@ -112,7 +125,13 @@ Next steps:
     <section id="step-2" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Step 2: Generate the Products Domain</h2>
       <p class="text-base-content/75">
-        Generate saved views once, then generate the Product domain and LiveView.
+        Generate saved views once, then generate the Product domain and LiveView. This is the
+        first full Selecto example in the tutorial, so it creates the persistence layer, the
+        domain config, and the interactive UI entry point.
+      </p>
+
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
       </p>
 
       <pre><code class="language-bash">mix selecto.gen.saved_views SelectoNorthwind --yes
@@ -131,6 +150,9 @@ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
   1. Run: mix ecto.migrate
   2. Add 'use SelectoNorthwind.SavedViewContext' to your domain modules
   3. Set saved_view_context assign in your LiveViews</code></pre>
+        <p class="text-base-content/70">
+          This generator creates the database-backed saved-view support that later steps reuse.
+        </p>
       </div>
 
       <p class="text-sm text-base-content/70">
@@ -146,6 +168,9 @@ Add this route to your router.ex:
   live "/products_selecto", ProductLive, :index</code></pre>
       </div>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `lib/selecto_northwind_web/router.ex`
+      </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/router.ex
 scope "/", SelectoNorthwindWeb do
   pipe_through :browser
@@ -167,9 +192,13 @@ end</code></pre>
     <section id="tags-bug" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Tag Join Verification</h2>
       <p class="text-base-content/75">
-        Verify tag-mode join SQL after generation.
+        Verify tag-mode join SQL after generation. This is a quick regression check that proves
+        the generated tag expansion is using the expected join path before you keep building.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix run -e 'alias SelectoNorthwind.Repo; s = SelectoNorthwind.SelectoDomains.ProductDomain.domain() |> Selecto.configure(Repo) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(s))'</code></pre>
 
       <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
@@ -181,9 +210,13 @@ end</code></pre>
       <h2 class="text-2xl font-bold">Step 3: Add a Detail View Click Handler in the Overlay</h2>
       <p class="text-base-content/75">
         Keep the popup definition in the overlay so regeneration stays safe, then set the
-        detail view row-click action in the generated LiveView state.
+        detail view row-click action in the generated LiveView state. This is the first tutorial
+        step that shows the split between generated code and your long-lived customizations.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex`
+      </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex
 defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
   use Selecto.Config.OverlayDSL
@@ -201,6 +234,9 @@ defmodule SelectoNorthwind.SelectoDomains.Overlays.ProductDomainOverlay do
   end
 end</code></pre>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `lib/selecto_northwind_web/product_live.ex`
+      </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/product_live.ex
 state =
   get_initial_state(views, selecto)
@@ -217,12 +253,19 @@ state =
       <h2 class="text-2xl font-bold">Step 4: Add Saved Filter Sets</h2>
       <p class="text-base-content/75">
         Filter sets are separate from saved views: they let the tutorial persist reusable
-        filter combinations in the Filters tab.
+        filter combinations in the Filters tab. This step gives users a lighter-weight way to
+        save just the filtering logic without saving the whole view.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix selecto.gen.filter_sets SelectoNorthwind --yes
 mix ecto.migrate</code></pre>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `lib/selecto_northwind_web/product_live.ex`
+      </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/product_live.ex
 demo_user_id = "northwind-demo"
 
@@ -244,9 +287,13 @@ socket =
       <h2 class="text-2xl font-bold">Step 5: Document the Generated Workflow</h2>
       <p class="text-base-content/75">
         Capture the new generator outputs while the changes are fresh. The tutorial is much
-        easier to follow when the app README mirrors the generated files and routes.
+        easier to follow when the app README mirrors the generated files and routes. This step is
+        about making the project teachable, not just functional.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `README.md` or your project notes
+      </p>
       <pre><code class="language-markdown">## Tutorial Extensions
 
 - Product overlay popup lives in `lib/selecto_northwind/selecto_domains/overlays/product_domain_overlay.ex`
@@ -264,9 +311,13 @@ socket =
       <h2 class="text-2xl font-bold">Step 6: Add a Live Dashboard Page</h2>
       <p class="text-base-content/75">
         Generate the Selecto LiveDashboard page so the tutorial also shows runtime health
-        for saved views, filter sets, and query activity.
+        for saved views, filter sets, and query activity. This gives you a fast operational view
+        into whether the persistence and telemetry pieces are present.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix selecto.gen.live_dashboard</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
@@ -280,11 +331,18 @@ socket =
       <p class="text-base-content/75">
         `saved_views` stores the whole query state. `saved_view_configs` is the lighter-weight
         companion for per-view presets such as selected columns, detail layouts, and graph options.
+        This is the step that makes "saved column sets" concrete in the UI.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix selecto.gen.saved_view_configs SelectoNorthwind --yes
 mix ecto.migrate</code></pre>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into the generated domain and LiveView
+      </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind/selecto_domains/product_domain.ex
 use SelectoNorthwind.SavedViewContext
 use SelectoNorthwind.SavedViewConfigContext
@@ -311,9 +369,13 @@ socket =
       <p class="text-base-content/75">
         After Step 9 generates `order_domain.ex`, add a parameterized join when you want a
         domain path whose SQL depends on a runtime value such as ship country, freight threshold,
-        or tenant scope.
+        or tenant scope. This step introduces one of the more advanced Selecto patterns: keeping
+        the domain shape stable while letting part of the join logic vary at runtime.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix selecto.gen.parameterized_join freight_band ship_country:string min_freight:number \
   --fields ship_name:string,freight:number
 
@@ -332,8 +394,14 @@ mix selecto.validate.parameterized_joins \
 
     <section id="step-9" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Step 9: Generate Additional Domains</h2>
-      <p class="text-base-content/75">After Products is working, add other Northwind contexts.</p>
+      <p class="text-base-content/75">
+        After Products is working, add other Northwind contexts. This broadens the tutorial from
+        one happy-path example into a small multi-domain app with different join shapes.
+      </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Sales.Customer \
   --expand-schemas orders,customer_demographics \
   --live --saved-views --path /customers_selecto --yes
@@ -358,9 +426,14 @@ live "/employees_selecto", EmployeeLive, :index</code></pre>
     <section id="branches" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Optional: Branch Workflow</h2>
       <p class="text-base-content/75">
-        Use small tutorial branches so each step can be validated or rolled back quickly.
+        Use small tutorial branches so each step can be validated or rolled back quickly. This is
+        especially helpful when you are teaching from the repo or want to compare generated output
+        between milestones.
       </p>
 
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">git switch -c tutorial/step-1-deps
 # add deps + integrate assets
 
@@ -382,6 +455,13 @@ git switch -c tutorial/step-9-more-domains
 
     <section id="verify" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Verification</h2>
+      <p class="text-base-content/75">
+        End by checking the generated pages and the dashboard together. This confirms routing,
+        assets, persistence wiring, and dashboard integration all survived the full tutorial.
+      </p>
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
       <pre><code class="language-bash">mix phx.server
 # visit:
 # http://localhost:4000/products_selecto
