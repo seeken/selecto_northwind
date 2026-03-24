@@ -5,8 +5,9 @@
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold mb-2">Selecto Ecto Tutorial</h1>
       <p class="text-primary-content/85">
-        Clean step-by-step setup using the Selecto 0.4.0 releases for `selecto`,
-        `selecto_db_postgresql`, `selecto_components`, and `selecto_mix`
+        Clean step-by-step setup using the latest `main` branches from the
+        `seeken/selecto*` repos for `selecto`, `selecto_db_postgresql`,
+        `selecto_components`, and `selecto_mix`
       </p>
     </div>
   </div>
@@ -58,9 +59,10 @@ mix setup</code></pre>
     <section id="step-1" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Step 1: Add Selecto Dependencies</h2>
       <p class="text-base-content/75">
-        Use the published 0.4.0 packages, and add the PostgreSQL adapter package
-        explicitly because `selecto` no longer bundles database adapters. This step upgrades the
-        app from a plain Phoenix/Northwind sample into a Selecto-capable project.
+        Use the latest `main` branches from the `seeken` Selecto repos, and add
+        the PostgreSQL adapter package explicitly because `selecto` no longer
+        bundles database adapters. This step upgrades the app from a plain
+        Phoenix/Northwind sample into a Selecto-capable project.
       </p>
 
       <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
@@ -71,16 +73,17 @@ mix setup</code></pre>
 defp deps do
   [
     # ...existing deps...
-    {:selecto, "~> 0.4.0", override: true},
-    {:selecto_db_postgresql, "~> 0.4.0", override: true},
-    {:selecto_components, "~> 0.4.1"},
-    {:selecto_mix, "~> 0.4.0", only: [:dev, :test]}
+    {:selecto, github: "seeken/selecto", branch: "main", override: true},
+    {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "main", override: true},
+    {:selecto_components, github: "seeken/selecto_components", branch: "main", override: true},
+    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test], override: true}
   ]
 end</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
         `override: true` keeps the Selecto ecosystem packages aligned on the
-        0.4.x line. Add the adapter package itself, not `selecto_db_adapter`.
+        same GitHub `main` branch flow. Add the adapter package itself, not
+        `selecto_db_adapter`.
       </div>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
