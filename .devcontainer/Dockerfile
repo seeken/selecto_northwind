@@ -1,4 +1,4 @@
-FROM elixir:1.16.2-slim
+FROM elixir:1.18-slim
 
 # Install dependencies
 RUN apt-get update && \
