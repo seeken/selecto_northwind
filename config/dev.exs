@@ -1,5 +1,8 @@
 import Config
 
+dev_hostname = System.get_env("PHX_DEV_HOSTNAME") || "localhost"
+dev_port = String.to_integer(System.get_env("PORT") || "4118")
+
 # Configure your database
 config :selecto_northwind, SelectoNorthwind.Repo,
   username: "postgres",
@@ -21,9 +24,9 @@ config :selecto_northwind, SelectoNorthwindWeb.Endpoint,
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [
     ip: if(System.get_env("BIND_ALL"), do: {0, 0, 0, 0}, else: {127, 0, 0, 1}),
-    port: String.to_integer(System.get_env("PORT") || "4000")
+    port: dev_port
   ],
-  url: [host: System.get_env("PHX_DEV_HOSTNAME") || "localhost"],
+  url: [host: dev_hostname, port: dev_port, scheme: "http"],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
