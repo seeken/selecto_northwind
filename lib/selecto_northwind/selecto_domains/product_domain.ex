@@ -103,8 +103,6 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
   def base_domain do
     %{
       # Generated from: SelectoNorthwind.Catalog.Product
-      # Last updated: 2026-05-07T04:56:03.567162Z
-
       # Canonical Selecto domain schema version
       schema_version: 1,
       source: %{
@@ -135,9 +133,9 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
         # Field type definitions (contains the same info as fields above)
         columns: %{
           :attributes => %{type: :jsonb, schema: :stub},
-          :id => %{type: :integer},
           :category_id => %{type: :integer},
           :discontinued => %{type: :boolean},
+          :id => %{type: :integer},
           :inserted_at => %{type: :naive_datetime},
           :product_name => %{type: :string},
           :quantity_per_unit => %{type: :string},
