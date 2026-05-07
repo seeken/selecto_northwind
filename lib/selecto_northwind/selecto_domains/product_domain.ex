@@ -18,7 +18,7 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
   - Define write contracts, actions, and capabilities
   - Add domain-specific validations (future)
 
-  Your overlay customizations are preserved when you regenerate this file.
+  Overlay customizations are preserved when you regenerate this file.
 
   ## Usage
 
@@ -31,12 +31,6 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
       # Execute queries
       {:ok, {rows, columns, aliases}} = Selecto.execute(selecto)
 
-
-  ## Legacy Customization (Deprecated)
-
-  Fields, filters, and joins marked with "# CUSTOM" comments will still be
-  preserved when this file is regenerated, but we recommend using the
-  overlay file instead for a cleaner separation of generated vs. custom code.
 
   ## Parameterized Joins
 
@@ -71,7 +65,7 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
       
   Additional options:
 
-      # Force regenerate (overwrites customizations)
+      # Force regenerate the generated base file
       mix selecto.gen.domain SelectoNorthwind.Catalog.Product --force
       
       # Preview changes without writing files
@@ -89,7 +83,8 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
       # Expand specific associated schemas with full columns/associations
       mix selecto.gen.domain SelectoNorthwind.Catalog.Product --expand-schemas categories,tags
       
-  Your customizations will be preserved during regeneration (unless --force is used).
+  Keep app-specific customizations in the overlay module so regeneration can
+  replace this generated base file intentionally.
   """
 
   @doc """
@@ -108,7 +103,7 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
   def base_domain do
     %{
       # Generated from: SelectoNorthwind.Catalog.Product
-      # Last updated: 2026-05-07T04:39:05.879909Z
+      # Last updated: 2026-05-07T04:56:03.567162Z
 
       # Canonical Selecto domain schema version
       schema_version: 1,
@@ -141,16 +136,16 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
         columns: %{
           :attributes => %{type: :jsonb, schema: :stub},
           :id => %{type: :integer},
+          :category_id => %{type: :integer},
+          :discontinued => %{type: :boolean},
           :inserted_at => %{type: :naive_datetime},
           :product_name => %{type: :string},
           :quantity_per_unit => %{type: :string},
+          :reorder_level => %{type: :integer},
+          :supplier_id => %{type: :integer},
           :unit_price => %{type: :decimal},
           :units_in_stock => %{type: :integer},
           :units_on_order => %{type: :integer},
-          :reorder_level => %{type: :integer},
-          :discontinued => %{type: :boolean},
-          :supplier_id => %{type: :integer},
-          :category_id => %{type: :integer},
           :updated_at => %{type: :naive_datetime}
         },
 
@@ -162,19 +157,13 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
             owner_key: :category_id,
             related_key: :id
           },
-          :tags => %{
-            queryable: :tag,
-            field: :tags,
+          :flag_types => %{
+            queryable: :flag_type,
+            field: :flag_types,
             owner_key: :id,
             related_key: :id,
-            join_through: "product_tags",
-            join_keys: [product_id: :id, tag_id: :id]
-          },
-          :supplier => %{
-            queryable: :supplier,
-            field: :supplier,
-            owner_key: :supplier_id,
-            related_key: :id
+            join_through: "product_flags",
+            join_keys: [product_id: :id, flag_type_id: :id]
           },
           :order_details => %{
             queryable: :order_detail,
@@ -188,13 +177,19 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
             owner_key: :id,
             related_key: :product_id
           },
-          :flag_types => %{
-            queryable: :flag_type,
-            field: :flag_types,
+          :supplier => %{
+            queryable: :supplier,
+            field: :supplier,
+            owner_key: :supplier_id,
+            related_key: :id
+          },
+          :tags => %{
+            queryable: :tag,
+            field: :tags,
             owner_key: :id,
             related_key: :id,
-            join_through: "product_flags",
-            join_keys: [product_id: :id, flag_type_id: :id]
+            join_through: "product_tags",
+            join_keys: [product_id: :id, tag_id: :id]
           }
         }
       },
@@ -212,27 +207,14 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
           columns: %{},
           associations: %{}
         },
-        :tag => %{
-          # TODO: Add proper schema configuration for SelectoNorthwind.Catalog.Tag
+        :flag_type => %{
+          # TODO: Add proper schema configuration for SelectoNorthwind.Support.FlagType
           # This will be auto-generated when you run:
-          # mix selecto.gen.domain SelectoNorthwind.Catalog.Tag
-          # Or use --expand-schemas tag to expand automatically
-          source_table: "tags",
+          # mix selecto.gen.domain SelectoNorthwind.Support.FlagType
+          # Or use --expand-schemas flag_type to expand automatically
+          source_table: "flag_types",
           primary_key: :id,
-          # Add fields for SelectoNorthwind.Catalog.Tag
-          fields: [],
-          redact_fields: [],
-          columns: %{},
-          associations: %{}
-        },
-        :supplier => %{
-          # TODO: Add proper schema configuration for SelectoNorthwind.Catalog.Supplier
-          # This will be auto-generated when you run:
-          # mix selecto.gen.domain SelectoNorthwind.Catalog.Supplier
-          # Or use --expand-schemas supplier to expand automatically
-          source_table: "suppliers",
-          primary_key: :id,
-          # Add fields for SelectoNorthwind.Catalog.Supplier
+          # Add fields for SelectoNorthwind.Support.FlagType
           fields: [],
           redact_fields: [],
           columns: %{},
@@ -264,14 +246,27 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
           columns: %{},
           associations: %{}
         },
-        :flag_type => %{
-          # TODO: Add proper schema configuration for SelectoNorthwind.Support.FlagType
+        :supplier => %{
+          # TODO: Add proper schema configuration for SelectoNorthwind.Catalog.Supplier
           # This will be auto-generated when you run:
-          # mix selecto.gen.domain SelectoNorthwind.Support.FlagType
-          # Or use --expand-schemas flag_type to expand automatically
-          source_table: "flag_types",
+          # mix selecto.gen.domain SelectoNorthwind.Catalog.Supplier
+          # Or use --expand-schemas supplier to expand automatically
+          source_table: "suppliers",
           primary_key: :id,
-          # Add fields for SelectoNorthwind.Support.FlagType
+          # Add fields for SelectoNorthwind.Catalog.Supplier
+          fields: [],
+          redact_fields: [],
+          columns: %{},
+          associations: %{}
+        },
+        :tag => %{
+          # TODO: Add proper schema configuration for SelectoNorthwind.Catalog.Tag
+          # This will be auto-generated when you run:
+          # mix selecto.gen.domain SelectoNorthwind.Catalog.Tag
+          # Or use --expand-schemas tag to expand automatically
+          source_table: "tags",
+          primary_key: :id,
+          # Add fields for SelectoNorthwind.Catalog.Tag
           fields: [],
           redact_fields: [],
           columns: %{},
@@ -323,24 +318,18 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
           source: :categorys,
           on: [%{left: "category_id", right: "id"}]
         },
-        :tags => %{
-          name: "Tags",
+        :flag_types => %{
+          name: "Flag Types",
           type: :left,
-          source: :tags,
+          source: :flag_types,
           on: [%{left: "id", right: "id"}],
-          join_table: "product_tags",
-          join_through: "product_tags",
-          join_keys: [product_id: :id, tag_id: :id],
+          join_table: "product_flags",
+          join_through: "product_flags",
+          join_keys: [product_id: :id, flag_type_id: :id],
           main_foreign_key: "product_id",
-          tag_foreign_key: "tag_id",
+          tag_foreign_key: "flag_type_id",
           owner_key: :id,
           assoc_key: :id
-        },
-        :supplier => %{
-          name: "Supplier",
-          type: :inner,
-          source: :suppliers,
-          on: [%{left: "supplier_id", right: "id"}]
         },
         :order_details => %{
           name: "Order Details",
@@ -354,16 +343,22 @@ defmodule SelectoNorthwind.SelectoDomains.ProductDomain do
           source: :product_flags,
           on: [%{left: "id", right: "product_id"}]
         },
-        :flag_types => %{
-          name: "Flag Types",
+        :supplier => %{
+          name: "Supplier",
+          type: :inner,
+          source: :suppliers,
+          on: [%{left: "supplier_id", right: "id"}]
+        },
+        :tags => %{
+          name: "Tags",
           type: :left,
-          source: :flag_types,
+          source: :tags,
           on: [%{left: "id", right: "id"}],
-          join_table: "product_flags",
-          join_through: "product_flags",
-          join_keys: [product_id: :id, flag_type_id: :id],
+          join_table: "product_tags",
+          join_through: "product_tags",
+          join_keys: [product_id: :id, tag_id: :id],
           main_foreign_key: "product_id",
-          tag_foreign_key: "flag_type_id",
+          tag_foreign_key: "tag_id",
           owner_key: :id,
           assoc_key: :id
         }
