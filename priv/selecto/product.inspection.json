@@ -1,0 +1,210 @@
+{
+  "diagnostics": {
+    "canonical_sections": [
+      "default_selected",
+      "filters",
+      "functions",
+      "joins",
+      "name",
+      "query_members",
+      "schema_version",
+      "schemas",
+      "source"
+    ],
+    "errors": [],
+    "projection_sections": [
+      "columns",
+      "pagination",
+      "retarget",
+      "subfilters",
+      "window_functions"
+    ],
+    "proposed_sections": [],
+    "schema_version": 1,
+    "schema_version_inferred": false,
+    "sections": {
+      "canonical": [
+        "default_selected",
+        "filters",
+        "functions",
+        "joins",
+        "name",
+        "query_members",
+        "schema_version",
+        "schemas",
+        "source"
+      ],
+      "projection": [
+        "columns",
+        "pagination",
+        "retarget",
+        "subfilters",
+        "window_functions"
+      ],
+      "proposed": [],
+      "unknown": []
+    },
+    "unknown_sections": [],
+    "warnings": [
+      {
+        "code": "projection_sections",
+        "message": "projection or implementation-facing domain sections are present",
+        "sections": [
+          "columns",
+          "pagination",
+          "retarget",
+          "subfilters",
+          "window_functions"
+        ]
+      }
+    ]
+  },
+  "format": "selecto.domain_inspection",
+  "format_version": 1,
+  "inspection": {
+    "actions": [],
+    "capabilities": [],
+    "capability_usage": [],
+    "choice_sources": [],
+    "counts": {
+      "actions": 0,
+      "capabilities": 0,
+      "capability_usages": 0,
+      "choice_sources": 0,
+      "custom_columns": 0,
+      "errors": 0,
+      "field_choice_bindings": 0,
+      "filters": 2,
+      "functions": 0,
+      "joins": 6,
+      "query_members": 0,
+      "schemas": 6,
+      "source_fields": 13,
+      "source_relationships": 0,
+      "warnings": 1,
+      "writes": {
+        "constraints": 0,
+        "fields": 0,
+        "operations": 0,
+        "transitions": 0,
+        "validations": 0
+      }
+    },
+    "diagnostics": {
+      "error_codes": [],
+      "error_count": 0,
+      "schema_version_inferred": false,
+      "warning_codes": [
+        "projection_sections"
+      ],
+      "warning_count": 1
+    },
+    "field_choice_bindings": [],
+    "name": "Product Domain",
+    "projections": [
+      "query",
+      "write",
+      "ui",
+      "api",
+      "query_contract"
+    ],
+    "registries": {
+      "actions": [],
+      "capabilities": [],
+      "choice_sources": [],
+      "custom_columns": [],
+      "filters": [
+        "category_id",
+        "discontinued"
+      ],
+      "functions": [],
+      "joins": [
+        "category",
+        "flag_types",
+        "order_details",
+        "product_flags",
+        "supplier",
+        "tags"
+      ],
+      "query_members": {
+        "ctes": [],
+        "laterals": [],
+        "subqueries": [],
+        "unnests": [],
+        "values": []
+      },
+      "schema_fields": {
+        "category": [],
+        "flag_type": [],
+        "order_detail": [],
+        "product_flag": [],
+        "supplier": [],
+        "tag": []
+      },
+      "schemas": [
+        "category",
+        "flag_type",
+        "order_detail",
+        "product_flag",
+        "supplier",
+        "tag"
+      ],
+      "source_fields": [
+        "attributes",
+        "category_id",
+        "discontinued",
+        "id",
+        "inserted_at",
+        "product_name",
+        "quantity_per_unit",
+        "reorder_level",
+        "supplier_id",
+        "unit_price",
+        "units_in_stock",
+        "units_on_order",
+        "updated_at"
+      ],
+      "source_relationships": []
+    },
+    "schema_version": 1,
+    "sections": {
+      "canonical": [
+        "default_selected",
+        "filters",
+        "functions",
+        "joins",
+        "name",
+        "query_members",
+        "schema_version",
+        "schemas",
+        "source"
+      ],
+      "projection": [
+        "columns",
+        "pagination",
+        "retarget",
+        "subfilters",
+        "window_functions"
+      ],
+      "proposed": [],
+      "unknown": []
+    },
+    "security_review": [],
+    "source_relationships": [],
+    "writes": {
+      "constraints_count": 0,
+      "fields": [],
+      "operations": [],
+      "transitions": [],
+      "validations_count": 0
+    }
+  },
+  "source": {
+    "artifact_format": "selecto.normalized_domain",
+    "artifact_format_version": 1,
+    "domain_module": "SelectoNorthwind.SelectoDomains.ProductDomain",
+    "name": "Product Domain",
+    "path": "priv/selecto/product.normalized.json",
+    "schema_version": 1
+  }
+}

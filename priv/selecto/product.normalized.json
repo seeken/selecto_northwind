@@ -1,0 +1,377 @@
+{
+  "diagnostics": {
+    "canonical_sections": [
+      "default_selected",
+      "filters",
+      "functions",
+      "joins",
+      "name",
+      "query_members",
+      "schema_version",
+      "schemas",
+      "source"
+    ],
+    "errors": [],
+    "projection_sections": [
+      "pagination",
+      "retarget",
+      "subfilters",
+      "window_functions"
+    ],
+    "proposed_sections": [],
+    "schema_version": 1,
+    "schema_version_inferred": false,
+    "sections": {
+      "canonical": [
+        "default_selected",
+        "filters",
+        "functions",
+        "joins",
+        "name",
+        "query_members",
+        "schema_version",
+        "schemas",
+        "source"
+      ],
+      "projection": [
+        "pagination",
+        "retarget",
+        "subfilters",
+        "window_functions"
+      ],
+      "proposed": [],
+      "unknown": []
+    },
+    "unknown_sections": [],
+    "warnings": [
+      {
+        "code": "projection_sections",
+        "message": "projection or implementation-facing domain sections are present",
+        "sections": [
+          "pagination",
+          "retarget",
+          "subfilters",
+          "window_functions"
+        ]
+      }
+    ]
+  },
+  "domain": {
+    "columns": {},
+    "default_selected": [
+      "id",
+      "product_name",
+      "supplier_id",
+      "category_id"
+    ],
+    "filters": {
+      "category_id": {
+        "name": "Category Id",
+        "type": "integer"
+      },
+      "discontinued": {
+        "default": true,
+        "name": "Discontinued",
+        "type": "boolean"
+      }
+    },
+    "functions": {},
+    "joins": {
+      "category": {
+        "name": "Category",
+        "on": [
+          {
+            "left": "category_id",
+            "right": "id"
+          }
+        ],
+        "source": "categorys",
+        "type": "inner"
+      },
+      "flag_types": {
+        "assoc_key": "id",
+        "join_keys": [
+          [
+            "product_id",
+            "id"
+          ],
+          [
+            "flag_type_id",
+            "id"
+          ]
+        ],
+        "join_table": "product_flags",
+        "join_through": "product_flags",
+        "main_foreign_key": "product_id",
+        "name": "Flag Types",
+        "on": [
+          {
+            "left": "id",
+            "right": "id"
+          }
+        ],
+        "owner_key": "id",
+        "source": "flag_types",
+        "tag_foreign_key": "flag_type_id",
+        "type": "left"
+      },
+      "order_details": {
+        "name": "Order Details",
+        "on": [
+          {
+            "left": "id",
+            "right": "product_id"
+          }
+        ],
+        "source": "order_details",
+        "type": "left"
+      },
+      "product_flags": {
+        "name": "Product Flags",
+        "on": [
+          {
+            "left": "id",
+            "right": "product_id"
+          }
+        ],
+        "source": "product_flags",
+        "type": "left"
+      },
+      "supplier": {
+        "name": "Supplier",
+        "on": [
+          {
+            "left": "supplier_id",
+            "right": "id"
+          }
+        ],
+        "source": "suppliers",
+        "type": "inner"
+      },
+      "tags": {
+        "assoc_key": "id",
+        "join_keys": [
+          [
+            "product_id",
+            "id"
+          ],
+          [
+            "tag_id",
+            "id"
+          ]
+        ],
+        "join_table": "product_tags",
+        "join_through": "product_tags",
+        "main_foreign_key": "product_id",
+        "name": "Tags",
+        "on": [
+          {
+            "left": "id",
+            "right": "id"
+          }
+        ],
+        "owner_key": "id",
+        "source": "tags",
+        "tag_foreign_key": "tag_id",
+        "type": "left"
+      }
+    },
+    "name": "Product Domain",
+    "pagination": {
+      "allow_offset": true,
+      "cursor_fields": [
+        "id"
+      ],
+      "default_limit": 50,
+      "max_limit": 1000,
+      "require_limit": false
+    },
+    "query_members": {
+      "ctes": {},
+      "laterals": {},
+      "subqueries": {},
+      "unnests": {},
+      "values": {}
+    },
+    "retarget": {},
+    "schema_version": 1,
+    "schemas": {
+      "category": {
+        "associations": {},
+        "columns": {},
+        "fields": [],
+        "primary_key": "id",
+        "redact_fields": [],
+        "source_table": "categorys"
+      },
+      "flag_type": {
+        "associations": {},
+        "columns": {},
+        "fields": [],
+        "primary_key": "id",
+        "redact_fields": [],
+        "source_table": "flag_types"
+      },
+      "order_detail": {
+        "associations": {},
+        "columns": {},
+        "fields": [],
+        "primary_key": "id",
+        "redact_fields": [],
+        "source_table": "order_details"
+      },
+      "product_flag": {
+        "associations": {},
+        "columns": {},
+        "fields": [],
+        "primary_key": "id",
+        "redact_fields": [],
+        "source_table": "product_flags"
+      },
+      "supplier": {
+        "associations": {},
+        "columns": {},
+        "fields": [],
+        "primary_key": "id",
+        "redact_fields": [],
+        "source_table": "suppliers"
+      },
+      "tag": {
+        "associations": {},
+        "columns": {},
+        "fields": [],
+        "primary_key": "id",
+        "redact_fields": [],
+        "source_table": "tags"
+      }
+    },
+    "source": {
+      "associations": {
+        "category": {
+          "field": "category",
+          "owner_key": "category_id",
+          "queryable": "category",
+          "related_key": "id"
+        },
+        "flag_types": {
+          "field": "flag_types",
+          "join_keys": [
+            [
+              "product_id",
+              "id"
+            ],
+            [
+              "flag_type_id",
+              "id"
+            ]
+          ],
+          "join_through": "product_flags",
+          "owner_key": "id",
+          "queryable": "flag_type",
+          "related_key": "id"
+        },
+        "order_details": {
+          "field": "order_details",
+          "owner_key": "id",
+          "queryable": "order_detail",
+          "related_key": "product_id"
+        },
+        "product_flags": {
+          "field": "product_flags",
+          "owner_key": "id",
+          "queryable": "product_flag",
+          "related_key": "product_id"
+        },
+        "supplier": {
+          "field": "supplier",
+          "owner_key": "supplier_id",
+          "queryable": "supplier",
+          "related_key": "id"
+        },
+        "tags": {
+          "field": "tags",
+          "join_keys": [
+            [
+              "product_id",
+              "id"
+            ],
+            [
+              "tag_id",
+              "id"
+            ]
+          ],
+          "join_through": "product_tags",
+          "owner_key": "id",
+          "queryable": "tag",
+          "related_key": "id"
+        }
+      },
+      "columns": {
+        "attributes": {
+          "schema": "stub",
+          "type": "jsonb"
+        },
+        "category_id": {
+          "type": "integer"
+        },
+        "discontinued": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "integer"
+        },
+        "inserted_at": {
+          "type": "naive_datetime"
+        },
+        "product_name": {
+          "type": "string"
+        },
+        "quantity_per_unit": {
+          "type": "string"
+        },
+        "reorder_level": {
+          "type": "integer"
+        },
+        "supplier_id": {
+          "type": "integer"
+        },
+        "unit_price": {
+          "type": "decimal"
+        },
+        "units_in_stock": {
+          "type": "integer"
+        },
+        "units_on_order": {
+          "type": "integer"
+        },
+        "updated_at": {
+          "type": "naive_datetime"
+        }
+      },
+      "fields": [
+        "id",
+        "product_name",
+        "quantity_per_unit",
+        "unit_price",
+        "units_in_stock",
+        "units_on_order",
+        "reorder_level",
+        "discontinued",
+        "attributes",
+        "supplier_id",
+        "category_id",
+        "inserted_at",
+        "updated_at"
+      ],
+      "primary_key": "id",
+      "redact_fields": [],
+      "source_table": "products"
+    },
+    "subfilters": {},
+    "window_functions": {}
+  },
+  "domain_module": "SelectoNorthwind.SelectoDomains.ProductDomain",
+  "format": "selecto.normalized_domain",
+  "format_version": 1,
+  "schema_version": 1
+}

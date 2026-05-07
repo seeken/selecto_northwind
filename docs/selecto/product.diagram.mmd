@@ -1,0 +1,13 @@
+flowchart LR
+  domain["Domain: Product Domain\nschema v1"]
+  source["Source fields\nattributes, category_id, discontinued, id, inserted_at, product_name, quantity_per_unit, reorder_level, supplier_id, unit_price, units_in_stock, units_on_order, updated_at"]
+  domain --> source
+  classDef domain fill:#f4f4f4,stroke:#555,color:#222
+  classDef source fill:#e8f3ff,stroke:#3d6f9f,color:#222
+  classDef relationship fill:#fff4d6,stroke:#9f7a24,color:#222
+  classDef choice fill:#e9f8ef,stroke:#3f8f5b,color:#222
+  classDef binding fill:#f4ecff,stroke:#7a4fb3,color:#222
+  classDef capability fill:#f8e8ed,stroke:#9b3954,color:#222
+  classDef usage fill:#f5f5f5,stroke:#777,color:#222
+  class domain domain
+  class source source
