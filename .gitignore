@@ -46,3 +46,4 @@ npm-debug.log
 
 
 .expert/
+.DS_Store
