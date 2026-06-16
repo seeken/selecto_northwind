@@ -69,9 +69,10 @@ The Northwind database is organized into domain contexts:
 - Ecto/PostgreSQL for database
 - LiveView for real-time UI
 - Tailwind CSS for styling
-- selecto - Core Selecto library (GitHub: seeken/selecto)
-- selecto_components - Phoenix LiveView components (GitHub: seeken/selecto_components)
-- selecto_mix - Mix tasks and generators (GitHub: seeken/selecto_mix)
+
+Selecto ecosystem dependencies are intentionally not committed to `main`.
+The tutorial walks users through adding `selecto`, `selecto_components`, and
+`selecto_mix` themselves before generating domains and LiveViews.
 
 ## Development Guidelines
 
