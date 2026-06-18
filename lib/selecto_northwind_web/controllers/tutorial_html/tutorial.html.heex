@@ -99,15 +99,16 @@ end</code></pre>
       <pre><code class="language-bash">mix deps.get
 mix compile
 mix selecto.components.integrate
-cd assets && npm install
+(cd assets && npm install)
 mix assets.build</code></pre>
 
       <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm space-y-2">
         <p class="font-medium">Backup point:</p>
         <p>
-          After `npm install`, make a copy of the app directory so you can get back to the
-          asset-integrated baseline quickly if a later tutorial step goes sideways. This is the
-          first good checkpoint because dependencies and frontend assets are both in place.
+          After `npm install` and `mix assets.build`, make a copy of the app directory so you can
+          get back to the asset-integrated baseline quickly if a later tutorial step goes sideways.
+          This is the first good checkpoint because dependencies and frontend assets are both in
+          place.
         </p>
         <pre><code class="language-bash">cd ..
 cp -a selecto_northwind selecto_northwind_after_npm_install_backup</code></pre>
@@ -117,10 +118,10 @@ cp -a selecto_northwind selecto_northwind_after_npm_install_backup</code></pre>
         <p class="font-medium">
           `mix selecto.components.integrate` prints required follow-up steps:
         </p>
-        <pre><code class="language-text">✓ Created package.json with Chart.js and Alpine.js dependencies
-  Run `cd assets && npm install` to install dependencies
+        <pre><code class="language-text">✓ Created package.json with Chart.js dependency
+  Run `(cd assets && npm install)` to install dependencies
 Next steps:
-  1. Run `cd assets && npm install`
+  1. Run `(cd assets && npm install)`
   2. Run `mix assets.build`</code></pre>
       </div>
     </section>
