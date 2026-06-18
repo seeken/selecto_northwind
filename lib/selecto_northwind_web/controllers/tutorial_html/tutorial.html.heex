@@ -32,8 +32,8 @@
         <a href="#step-5" class="link link-hover">Step 5: Documentation</a>
         <a href="#step-6" class="link link-hover">Step 6: Live Dashboard</a>
         <a href="#step-7" class="link link-hover">Step 7: Saved View Configs</a>
-        <a href="#step-8" class="link link-hover">Step 8: Parameterized Joins</a>
-        <a href="#step-9" class="link link-hover">Step 9: More Domains</a>
+        <a href="#step-8" class="link link-hover">Step 8: More Domains</a>
+        <a href="#step-9" class="link link-hover">Step 9: Parameterized Joins</a>
         <a href="#branches" class="link link-hover">Branch Workflow</a>
         <a href="#verify" class="link link-hover">Verification</a>
       </div>
@@ -368,35 +368,7 @@ socket =
     </section>
 
     <section id="step-8" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
-      <h2 class="text-2xl font-bold">Step 8: Add a Parameterized Join</h2>
-      <p class="text-base-content/75">
-        After Step 9 generates `order_domain.ex`, add a parameterized join when you want a
-        domain path whose SQL depends on a runtime value such as ship country, freight threshold,
-        or tenant scope. This step introduces one of the more advanced Selecto patterns: keeping
-        the domain shape stable while letting part of the join logic vary at runtime.
-      </p>
-
-      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
-        Copy/paste in your terminal
-      </p>
-      <pre><code class="language-bash">mix selecto.gen.parameterized_join freight_band ship_country:string min_freight:number \
-  --fields ship_name:string,freight:number
-
-# paste the generated join template into:
-# lib/selecto_northwind/selecto_domains/order_domain.ex
-
-mix selecto.validate.parameterized_joins \
-  lib/selecto_northwind/selecto_domains/order_domain.ex \
-  --test-references "freight_band:USA:10.ship_name,freight_band:USA:10.freight"</code></pre>
-
-      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
-        Keep the validation command in the tutorial. It proves the join definition, parameter
-        types, and field references all match before you wire the new path into a UI.
-      </div>
-    </section>
-
-    <section id="step-9" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
-      <h2 class="text-2xl font-bold">Step 9: Generate Additional Domains</h2>
+      <h2 class="text-2xl font-bold">Step 8: Generate Additional Domains</h2>
       <p class="text-base-content/75">
         After Products is working, add other Northwind contexts. This broadens the tutorial from
         one happy-path example into a small multi-domain app with different join shapes.
@@ -426,6 +398,61 @@ live "/orders_selecto", OrderLive, :index
 live "/employees_selecto", EmployeeLive, :index</code></pre>
     </section>
 
+    <section id="step-9" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
+      <h2 class="text-2xl font-bold">Step 9: Add a Parameterized Customer Join</h2>
+      <p class="text-base-content/75">
+        Add runtime parameters to the existing `:customer` join in `order_domain.ex` when you
+        want the same association joined more than once with different filters. This keeps the
+        domain shape association-based while letting part of the join logic vary at runtime.
+      </p>
+
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste in your terminal
+      </p>
+      <pre><code class="language-bash">mix selecto.gen.parameterized_join customer country:string,required \
+  --fields company_name:string,country:string
+
+# copy the generated parameters, filters, and fields keys into the existing
+# :customer join in lib/selecto_northwind/selecto_domains/order_domain.ex
+
+mix selecto.validate.parameterized_joins \
+  lib/selecto_northwind/selecto_domains/order_domain.ex
+
+mix selecto.validate.parameterized_joins \
+  --test-references "customer:USA.company_name,customer:Germany.country"</code></pre>
+
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into the existing `:customer` join in `order_domain.ex`
+      </p>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation>:customer => %{
+  name: "Customer",
+  type: :inner,
+  source: :customers,
+  on: [%{left: "customer_id", right: "customer_id"}],
+
+  parameters: [
+    %{name: :country, type: :string, required: true}
+  ],
+
+  filters: %{
+    "country" => %{name: "Country", type: :string}
+  },
+
+  fields: %{
+    company_name: %{type: :string},
+    country: %{type: :string}
+  }
+}</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
+        Keep both validation commands in the tutorial. The first checks the domain file's
+        parameter definitions, and the second checks the parameterized field-reference syntax
+        before you use `Selecto.join_parameterize(:customer, "USA", country: "USA")` in
+        application code.
+      </div>
+    </section>
+
     <section id="branches" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Optional: Branch Workflow</h2>
       <p class="text-base-content/75">
@@ -450,10 +477,13 @@ git switch -c tutorial/step-4-persistence
 # add filter sets + saved view configs
 
 git switch -c tutorial/step-5-dashboard
-# add docs + dashboard + parameterized join notes
+# add docs + dashboard
 
-git switch -c tutorial/step-9-more-domains
-# generate customer/order/employee domains</code></pre>
+git switch -c tutorial/step-8-more-domains
+# generate customer/order/employee domains
+
+git switch -c tutorial/step-9-parameterized-customer
+# add customer join parameterization</code></pre>
     </section>
 
     <section id="verify" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
