@@ -1,16 +1,17 @@
 <Layouts.flash_group flash={@flash} />
 
 <div class="min-h-screen bg-base-200">
-  <div class="bg-secondary text-secondary-content py-8">
+  <div class="bg-secondary py-8 text-secondary-content">
     <div class="w-full px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold mb-2">Selecto + Postgrex Tutorial</h1>
+      <h1 class="mb-2 text-3xl font-bold">Selecto without Ecto Schemas</h1>
       <p class="text-secondary-content/85">
-        Run Selecto against a named Postgrex connection using shared `selecto_mix` generators with `selecto_db_postgresql`
+        Introspect Northwind directly, run through a named Postgrex connection, and generate the
+        complete SelectoComponents LiveView.
       </p>
     </div>
   </div>
 
-  <div class="w-full px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+  <div class="w-full space-y-8 px-4 py-10 sm:px-6 lg:px-8">
     <div class="breadcrumbs text-sm">
       <ul>
         <li><a href="/" class="link link-hover">Home</a></li>
@@ -19,13 +20,38 @@
       </ul>
     </div>
 
-    <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
-      <h2 class="text-2xl font-bold">1) Dependencies</h2>
+    <nav class="rounded-lg bg-base-100 p-4 shadow">
+      <h2 class="mb-3 text-lg font-semibold">Contents</h2>
+      <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <a href="#scope" class="link link-hover">What “without Ecto” means</a>
+        <a href="#dependencies" class="link link-hover">1: Dependencies</a>
+        <a href="#connection" class="link link-hover">2: Postgrex connection</a>
+        <a href="#generate" class="link link-hover">3: Generate</a>
+        <a href="#routes" class="link link-hover">4: Routes</a>
+        <a href="#generated-code" class="link link-hover">5: Generated code</a>
+        <a href="#verify" class="link link-hover">6: Verify</a>
+      </div>
+    </nav>
+
+    <section id="scope" class="scroll-mt-6 rounded-lg bg-base-100 p-6 shadow">
+      <h2 class="mb-3 text-2xl font-bold">What “without Ecto” means here</h2>
       <p class="text-base-content/75">
-        Use the shared generator flow with the latest `main` branches from the
-        `seeken` Selecto repos. Keep `selecto_postgrex_mix` only if you still
-        want compatibility wrappers.
+        The Northwind sample still uses its existing Repo for migrations and seed data. Selecto
+        does not use an Ecto schema or execute through that Repo in this walkthrough: the generator
+        reads PostgreSQL catalogs, produces a map-based domain, and the LiveView executes through
+        `SelectoNorthwind.Database`.
       </p>
+    </section>
+
+    <section
+      id="dependencies"
+      class="scroll-mt-6 space-y-4 rounded-lg bg-base-100 p-6 shadow"
+    >
+      <h2 class="text-2xl font-bold">1) Add the Selecto Packages</h2>
+      <p class="text-base-content/75">
+        Start after the baseline `mix setup`, then add the four current packages.
+      </p>
+
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
 defp deps do
   [
@@ -33,125 +59,187 @@ defp deps do
     {:selecto, github: "seeken/selecto", branch: "main", override: true},
     {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "main", override: true},
     {:selecto_components, github: "seeken/selecto_components", branch: "main", override: true},
-    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test], override: true},
-    # Optional compatibility wrappers while old commands are being retired
-    {:selecto_postgrex_mix, github: "seeken/selecto_postgrex_mix", branch: "main", only: [:dev, :test], override: true}
+    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test], override: true}
   ]
 end</code></pre>
+
       <pre><code class="language-bash">mix deps.get
 mix compile
 mix selecto.components.integrate
-cd assets && npm install
+(cd assets && npm install)
 mix assets.build</code></pre>
 
-      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
+      <div class="space-y-2 rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
         <p>
-          `selecto` no longer bundles adapters, so direct Postgrex usage should
-          add `selecto_db_postgresql` next to `selecto`. The main generator entrypoint is now `mix selecto.gen.domain --adapter postgresql ...`.
+          `selecto_db_postgresql` owns the PostgreSQL adapter. `selecto_mix` supplies the shared
+          generator and is only needed in development and test.
         </p>
-        <p class="font-medium">`mix selecto.components.integrate` output includes:</p>
-        <pre><code class="language-text">Run `cd assets && npm install` to install dependencies
-Next steps:
-  1. Run `cd assets && npm install`
-  2. Run `mix assets.build`</code></pre>
+        <p>
+          The integration task prints the required npm and asset commands; run both before opening
+          the generated LiveView.
+        </p>
       </div>
     </section>
 
-    <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
-      <h2 class="text-2xl font-bold">2) Add a Named Postgrex Connection</h2>
+    <section id="connection" class="scroll-mt-6 space-y-4 rounded-lg bg-base-100 p-6 shadow">
+      <h2 class="text-2xl font-bold">2) Supervise a Named Postgrex Connection</h2>
       <p class="text-base-content/75">
-        Start a dedicated Postgrex connection in your supervision tree. Reusing Repo config keeps credentials in one place.
+        Reuse the sample app's database settings, but start a separate connection under the name
+        that the generated LiveView will use.
       </p>
 
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind/application.ex
-children = [
-  SelectoNorthwind.Repo,
-  {Postgrex,
-   Application.get_env(:selecto_northwind, SelectoNorthwind.Repo)
-   |> Keyword.take([:hostname, :port, :database, :username, :password])
-   |> Keyword.put(:name, SelectoNorthwind.Database)
-   |> Keyword.put(:pool_size, 5)},
-  SelectoNorthwindWeb.Endpoint
-]</code></pre>
+def start(_type, _args) do
+  postgrex_options =
+    Application.fetch_env!(:selecto_northwind, SelectoNorthwind.Repo)
+    |> Keyword.take([:hostname, :port, :database, :username, :password])
+    |> Keyword.put(:name, SelectoNorthwind.Database)
+    |> Keyword.put(:pool_size, 5)
+
+  children = [
+    SelectoNorthwindWeb.Telemetry,
+    SelectoNorthwind.Repo,
+    {Postgrex, postgrex_options},
+    {DNSCluster, query: Application.get_env(:selecto_northwind, :dns_cluster_query) || :ignore},
+    {Phoenix.PubSub, name: SelectoNorthwind.PubSub},
+    SelectoNorthwindWeb.Endpoint
+  ]
+
+  Supervisor.start_link(children, strategy: :one_for_one, name: SelectoNorthwind.Supervisor)
+end</code></pre>
     </section>
 
-    <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
-      <h2 class="text-2xl font-bold">3) Generate or Reuse a Domain</h2>
+    <section id="generate" class="scroll-mt-6 space-y-4 rounded-lg bg-base-100 p-6 shadow">
+      <h2 class="text-2xl font-bold">3) Generate the Domain, LiveView, and Saved Views</h2>
       <p class="text-base-content/75">
-        Use the shared adapter-backed generators. The old `selecto_postgrex.*` commands now act as compatibility wrappers.
+        One `selecto.gen.domain` call now creates the table-backed domain, overlay, complete
+        SelectoComponents LiveView, and PostgreSQL saved-view implementation. Apply its generated
+        SQL with the shared setup task afterward.
       </p>
 
-      <pre><code class="language-bash"># Optional if DATABASE_URL is not already set
-export DATABASE_URL="postgres://postgres:postgres@localhost:5432/selecto_northwind_dev"</code></pre>
-
-      <pre><code class="language-bash">mix selecto.gen.saved_views SelectoNorthwind \
-  --adapter postgresql \
-  --connection-name SelectoNorthwind.Database \
-  --yes
-
-mix selecto_postgrex.setup --sql-dir priv/sql
+      <pre><code class="language-bash">export DATABASE_URL="postgres://postgres:postgres@localhost:5432/selecto_northwind_dev"
 
 mix selecto.gen.domain \
   --adapter postgresql \
   --table products \
   --database-url "$DATABASE_URL" \
+  --connection-name SelectoNorthwind.Database \
   --expand \
   --expand-schemas suppliers,categories,order_details \
   --expand-star categories:category_name \
   --expand-star suppliers:company_name \
   --expand-tag tags:name \
-  --live --saved-views --path /products_selecto --yes</code></pre>
+  --live \
+  --saved-views \
+  --path /products_selecto \
+  --yes
 
-      <p class="text-sm text-base-content/70">
-        Note the table names are plural (`products`, `suppliers`, `categories`, `order_details`).
-      </p>
-
-      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm space-y-2">
-        <p class="font-medium">Generator notice to keep:</p>
-        <pre><code class="language-text">Add this route to your router.ex:
-  live "/products_selecto", ProductLive, :index</code></pre>
-      </div>
-
-      <p class="text-sm text-base-content/70">
-        Runtime execution should use `SelectoNorthwind.Database` (not `SelectoNorthwind.Repo`).
-      </p>
-
-      <div class="rounded-lg border border-warning/30 bg-warning/10 p-4 text-sm space-y-2">
-        <p class="font-medium">Compatibility note</p>
-        <p>
-          `mix selecto_postgrex.gen.domain` still works today, but it delegates to the shared `selecto_mix` flow first. Prefer the `mix selecto.gen.domain --adapter postgresql ...` form for new docs and scripts.
-        </p>
-      </div>
-    </section>
-
-    <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
-      <h2 class="text-2xl font-bold">4) Use Postgrex in LiveView</h2>
-      <p class="text-base-content/75">Configure Selecto with the named connection.</p>
-
-      <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/product_live.ex
-domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain()
-selecto = Selecto.configure(domain, SelectoNorthwind.Database)</code></pre>
+mix selecto.setup \
+  --adapter postgresql \
+  --database-url "$DATABASE_URL" \
+  --sql-dir priv/sql</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
-        This keeps LiveView/UI code the same while query execution goes directly through Postgrex.
+        Keep the database table names plural. `--connection-name` is the runtime process name;
+        connection flags such as `--database-url` are used only while generating.
       </div>
     </section>
 
-    <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
-      <h2 class="text-2xl font-bold">5) Verify</h2>
-      <pre><code class="language-bash">mix phx.server
-# visit http://localhost:4000/products_selecto</code></pre>
-      <pre><code class="language-bash">mix run -e 'domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain(); selecto = Selecto.configure(domain, SelectoNorthwind.Database) |> Selecto.select(["id", "product_name"]) ; IO.inspect(Selecto.to_sql(selecto))'</code></pre>
+    <section id="routes" class="scroll-mt-6 space-y-4 rounded-lg bg-base-100 p-6 shadow">
+      <h2 class="text-2xl font-bold">4) Install the Generated Routes</h2>
+      <p class="text-base-content/75">
+        Replace the placeholder Products controller route with the LiveView. Keep the external
+        query-contract plugs in a non-aliased scope so Phoenix does not prefix them with
+        `SelectoNorthwindWeb`.
+      </p>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation># Inside scope "/", SelectoNorthwindWeb do
+live "/products_selecto", ProductLive, :index
+
+# Outside the SelectoNorthwindWeb scope
+scope "/" do
+  pipe_through :browser
+
+  forward "/products_selecto/query-contract.json",
+          SelectoComponents.QueryContract.Plug,
+          domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+          domain_id: "product",
+          domain_path: "/products_selecto",
+          query_contract_url: "/products_selecto/query-contract.json",
+          query_guide_url: "/products_selecto/query-guide.md"
+
+  forward "/products_selecto/query-guide.md",
+          SelectoComponents.QueryContract.Guide.Plug,
+          domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+          domain_id: "product",
+          domain_path: "/products_selecto",
+          query_contract_url: "/products_selecto/query-contract.json",
+          query_guide_url: "/products_selecto/query-guide.md"
+
+  forward "/products_selecto/query-intent/validate",
+          SelectoComponents.QueryContract.IntentValidator.Plug,
+          domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+          domain_id: "product",
+          domain_path: "/products_selecto",
+          query_contract_url: "/products_selecto/query-contract.json",
+          query_guide_url: "/products_selecto/query-guide.md"
+end</code></pre>
     </section>
 
-    <section class="bg-base-100 rounded-lg shadow p-6 space-y-4">
-      <h2 class="text-2xl font-bold">Tag Join Verification</h2>
+    <section
+      id="generated-code"
+      class="scroll-mt-6 space-y-4 rounded-lg bg-base-100 p-6 shadow"
+    >
+      <h2 class="text-2xl font-bold">5) Check the Generated Boundary</h2>
       <p class="text-base-content/75">
-        Tag-mode generation should resolve the many-to-many join table as `product_tags`.
+        The generated LiveView already configures Selecto with the named Postgrex connection. You
+        should not need to hand-edit it.
       </p>
-      <pre><code class="language-bash">mix run -e 'domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain(); selecto = Selecto.configure(domain, SelectoNorthwind.Database) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(selecto))'</code></pre>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation>domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain()
+selecto = Selecto.configure(domain, SelectoNorthwind.Database)</code></pre>
+
       <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
-        Expected SQL includes `LEFT JOIN product_tags` and excludes `tag_tags`.
+        Generated files to check:
+        <ul class="mt-2 space-y-1">
+          <li>- `lib/selecto_northwind/selecto_domains/products_domain.ex`</li>
+          <li>- `lib/selecto_northwind/selecto_domains/overlays/products_domain_overlay.ex`</li>
+          <li>- `lib/selecto_northwind_web/product_live.ex`</li>
+          <li>- `lib/selecto_northwind_web/product_live.html.heex`</li>
+          <li>- `lib/selecto_northwind/saved_view_context.ex`</li>
+          <li>- `priv/sql/create_saved_views.sql`</li>
+        </ul>
+      </div>
+
+      <p class="text-sm text-base-content/70">
+        Put application-specific columns, filters, query members, and other customizations in the
+        overlay; regeneration replaces the generated base domain intentionally.
+      </p>
+    </section>
+
+    <section id="verify" class="scroll-mt-6 space-y-4 rounded-lg bg-base-100 p-6 shadow">
+      <h2 class="text-2xl font-bold">6) Compile, Run, and Exercise the UI</h2>
+
+      <pre><code class="language-bash">mix compile --warnings-as-errors
+mix test
+mix phx.server
+
+# Open the generated UI
+open http://localhost:4000/products_selecto
+
+# Inspect the published query contract
+curl http://localhost:4000/products_selecto/query-contract.json</code></pre>
+
+      <p class="text-base-content/75">
+        Expand the View Controller, choose Detail View, and submit the default four columns. The
+        result table should contain Northwind product rows.
+      </p>
+
+      <h3 class="text-xl font-semibold">Tag join regression check</h3>
+      <pre><code class="language-bash">mix run -e 'domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain(); selecto = Selecto.configure(domain, SelectoNorthwind.Database) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(selecto))'</code></pre>
+
+      <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
+        Expected SQL includes `LEFT JOIN product_tags` and does not include `tag_tags`.
       </div>
     </section>
   </div>
