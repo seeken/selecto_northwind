@@ -49,17 +49,17 @@
     >
       <h2 class="text-2xl font-bold">1) Add the Selecto Packages</h2>
       <p class="text-base-content/75">
-        Start after the baseline `mix setup`, then add the four current packages.
+        Start after the baseline `mix setup`, then add the released Selecto packages from Hex.pm.
       </p>
 
       <pre><code class="language-elixir" phx-no-curly-interpolation># mix.exs
 defp deps do
   [
     # ...existing deps...
-    {:selecto, github: "seeken/selecto", branch: "main", override: true},
-    {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "main", override: true},
-    {:selecto_components, github: "seeken/selecto_components", branch: "main", override: true},
-    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test], override: true}
+    {:selecto, "~> 0.4.8"},
+    {:selecto_db_postgresql, "~> 0.4.5"},
+    {:selecto_components, "~> 0.4.9"},
+    {:selecto_mix, "~> 0.4.7", only: [:dev, :test]}
   ]
 end</code></pre>
 

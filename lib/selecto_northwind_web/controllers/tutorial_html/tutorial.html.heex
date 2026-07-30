@@ -5,9 +5,8 @@
     <div class="w-full px-4 sm:px-6 lg:px-8">
       <h1 class="text-3xl font-bold mb-2">Selecto Ecto Tutorial</h1>
       <p class="text-primary-content/85">
-        Clean step-by-step setup using the latest `main` branches from the
-        `seeken/selecto*` repos for `selecto`, `selecto_db_postgresql`,
-        `selecto_components`, and `selecto_mix`
+        Clean step-by-step setup using released Hex.pm packages for `selecto`,
+        `selecto_db_postgresql`, `selecto_components`, and `selecto_mix`
       </p>
     </div>
   </div>
@@ -62,10 +61,10 @@ mix setup</code></pre>
     <section id="step-1" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
       <h2 class="text-2xl font-bold">Step 1: Add Selecto Dependencies</h2>
       <p class="text-base-content/75">
-        Use the latest `main` branches from the `seeken` Selecto repos, and add
-        the PostgreSQL adapter package explicitly because `selecto` no longer
-        bundles database adapters. This step upgrades the app from a plain
-        Phoenix/Northwind sample into a Selecto-capable project.
+        Use the released Selecto packages from Hex.pm, and add the PostgreSQL
+        adapter package explicitly because `selecto` no longer bundles database
+        adapters. This step upgrades the app from a plain Phoenix/Northwind
+        sample into a Selecto-capable project.
       </p>
 
       <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
@@ -76,17 +75,16 @@ mix setup</code></pre>
 defp deps do
   [
     # ...existing deps...
-    {:selecto, github: "seeken/selecto", branch: "main", override: true},
-    {:selecto_db_postgresql, github: "seeken/selecto_db_postgresql", branch: "main", override: true},
-    {:selecto_components, github: "seeken/selecto_components", branch: "main", override: true},
-    {:selecto_mix, github: "seeken/selecto_mix", branch: "main", only: [:dev, :test], override: true}
+    {:selecto, "~> 0.4.8"},
+    {:selecto_db_postgresql, "~> 0.4.5"},
+    {:selecto_components, "~> 0.4.9"},
+    {:selecto_mix, "~> 0.4.7", only: [:dev, :test]}
   ]
 end</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
-        `override: true` keeps the Selecto ecosystem packages aligned on the
-        same GitHub `main` branch flow. Add the adapter package itself, not
-        `selecto_db_adapter`.
+        Pin these tutorial dependencies to the released 0.4 line so Mix resolves
+        them from Hex.pm. Add the adapter package itself, not `selecto_db_adapter`.
       </div>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
@@ -172,7 +170,10 @@ mix selecto.gen.domain SelectoNorthwind.Catalog.Product \
   mix selecto.components.integrate
 
 Add this route to your router.ex:
-  live "/products_selecto", ProductLive, :index</code></pre>
+  live "/products_selecto", ProductLive, :index
+
+Add the query-contract endpoints in a non-aliased scope so Phoenix does not
+prefix the SelectoComponents plug modules with your app's web namespace.</code></pre>
       </div>
 
       <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
@@ -180,9 +181,43 @@ Add this route to your router.ex:
       </p>
       <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/router.ex
 scope "/", SelectoNorthwindWeb do
-  pipe_through :browser
+  pipe_through(:browser)
 
-  live "/products_selecto", ProductLive, :index
+  live("/products_selecto", ProductLive, :index)
+end
+
+scope "/" do
+  pipe_through(:browser)
+
+  forward(
+    "/products_selecto/query-contract.json",
+    SelectoComponents.QueryContract.Plug,
+    domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+    domain_id: "product",
+    domain_path: "/products_selecto",
+    query_contract_url: "/products_selecto/query-contract.json",
+    query_guide_url: "/products_selecto/query-guide.md"
+  )
+
+  forward(
+    "/products_selecto/query-guide.md",
+    SelectoComponents.QueryContract.Guide.Plug,
+    domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+    domain_id: "product",
+    domain_path: "/products_selecto",
+    query_contract_url: "/products_selecto/query-contract.json",
+    query_guide_url: "/products_selecto/query-guide.md"
+  )
+
+  forward(
+    "/products_selecto/query-intent/validate",
+    SelectoComponents.QueryContract.IntentValidator.Plug,
+    domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+    domain_id: "product",
+    domain_path: "/products_selecto",
+    query_contract_url: "/products_selecto/query-contract.json",
+    query_guide_url: "/products_selecto/query-guide.md"
+  )
 end</code></pre>
 
       <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
@@ -382,7 +417,7 @@ socket =
         Copy/paste in your terminal
       </p>
       <pre><code class="language-bash">mix selecto.gen.domain SelectoNorthwind.Sales.Customer \
-  --expand-schemas orders,customer_demographics \
+  --expand-schemas orders,customer_types \
   --live --saved-views --path /customers_selecto --yes
 
 mix selecto.gen.domain SelectoNorthwind.Sales.Order \
@@ -390,16 +425,117 @@ mix selecto.gen.domain SelectoNorthwind.Sales.Order \
   --live --saved-views --path /orders_selecto --yes
 
 mix selecto.gen.domain SelectoNorthwind.Hr.Employee \
-  --expand-schemas employee_territories,territories,orders \
+  --expand-schemas territories,orders \
   --live --saved-views --path /employees_selecto --yes</code></pre>
 
       <p class="text-sm text-base-content/70">
-        Each command prints the exact route to add in `lib/selecto_northwind_web/router.ex`:
+        Each command prints a LiveView route and query-contract endpoints. Add the LiveView routes
+        in the aliased web scope, then add the query-contract forwards in the non-aliased scope you
+        created for Products.
       </p>
 
-      <pre><code class="language-text">live "/customers_selecto", CustomerLive, :index
-live "/orders_selecto", OrderLive, :index
-live "/employees_selecto", EmployeeLive, :index</code></pre>
+      <pre><code class="language-elixir" phx-no-curly-interpolation># lib/selecto_northwind_web/router.ex
+scope "/", SelectoNorthwindWeb do
+  pipe_through(:browser)
+
+  live("/customers_selecto", CustomerLive, :index)
+  live("/orders_selecto", OrderLive, :index)
+  live("/employees_selecto", EmployeeLive, :index)
+end
+
+scope "/" do
+  pipe_through(:browser)
+
+  forward(
+    "/customers_selecto/query-contract.json",
+    SelectoComponents.QueryContract.Plug,
+    domain: SelectoNorthwind.SelectoDomains.CustomerDomain.domain(),
+    domain_id: "customer",
+    domain_path: "/customers_selecto",
+    query_contract_url: "/customers_selecto/query-contract.json",
+    query_guide_url: "/customers_selecto/query-guide.md"
+  )
+
+  forward(
+    "/customers_selecto/query-guide.md",
+    SelectoComponents.QueryContract.Guide.Plug,
+    domain: SelectoNorthwind.SelectoDomains.CustomerDomain.domain(),
+    domain_id: "customer",
+    domain_path: "/customers_selecto",
+    query_contract_url: "/customers_selecto/query-contract.json",
+    query_guide_url: "/customers_selecto/query-guide.md"
+  )
+
+  forward(
+    "/customers_selecto/query-intent/validate",
+    SelectoComponents.QueryContract.IntentValidator.Plug,
+    domain: SelectoNorthwind.SelectoDomains.CustomerDomain.domain(),
+    domain_id: "customer",
+    domain_path: "/customers_selecto",
+    query_contract_url: "/customers_selecto/query-contract.json",
+    query_guide_url: "/customers_selecto/query-guide.md"
+  )
+
+  forward(
+    "/orders_selecto/query-contract.json",
+    SelectoComponents.QueryContract.Plug,
+    domain: SelectoNorthwind.SelectoDomains.OrderDomain.domain(),
+    domain_id: "order",
+    domain_path: "/orders_selecto",
+    query_contract_url: "/orders_selecto/query-contract.json",
+    query_guide_url: "/orders_selecto/query-guide.md"
+  )
+
+  forward(
+    "/orders_selecto/query-guide.md",
+    SelectoComponents.QueryContract.Guide.Plug,
+    domain: SelectoNorthwind.SelectoDomains.OrderDomain.domain(),
+    domain_id: "order",
+    domain_path: "/orders_selecto",
+    query_contract_url: "/orders_selecto/query-contract.json",
+    query_guide_url: "/orders_selecto/query-guide.md"
+  )
+
+  forward(
+    "/orders_selecto/query-intent/validate",
+    SelectoComponents.QueryContract.IntentValidator.Plug,
+    domain: SelectoNorthwind.SelectoDomains.OrderDomain.domain(),
+    domain_id: "order",
+    domain_path: "/orders_selecto",
+    query_contract_url: "/orders_selecto/query-contract.json",
+    query_guide_url: "/orders_selecto/query-guide.md"
+  )
+
+  forward(
+    "/employees_selecto/query-contract.json",
+    SelectoComponents.QueryContract.Plug,
+    domain: SelectoNorthwind.SelectoDomains.EmployeeDomain.domain(),
+    domain_id: "employee",
+    domain_path: "/employees_selecto",
+    query_contract_url: "/employees_selecto/query-contract.json",
+    query_guide_url: "/employees_selecto/query-guide.md"
+  )
+
+  forward(
+    "/employees_selecto/query-guide.md",
+    SelectoComponents.QueryContract.Guide.Plug,
+    domain: SelectoNorthwind.SelectoDomains.EmployeeDomain.domain(),
+    domain_id: "employee",
+    domain_path: "/employees_selecto",
+    query_contract_url: "/employees_selecto/query-contract.json",
+    query_guide_url: "/employees_selecto/query-guide.md"
+  )
+
+  forward(
+    "/employees_selecto/query-intent/validate",
+    SelectoComponents.QueryContract.IntentValidator.Plug,
+    domain: SelectoNorthwind.SelectoDomains.EmployeeDomain.domain(),
+    domain_id: "employee",
+    domain_path: "/employees_selecto",
+    query_contract_url: "/employees_selecto/query-contract.json",
+    query_guide_url: "/employees_selecto/query-guide.md"
+  )
+end</code></pre>
     </section>
 
     <section id="step-9" class="bg-base-100 rounded-lg shadow p-6 space-y-4 scroll-mt-6">
@@ -505,7 +641,13 @@ git switch -c tutorial/step-9-parameterized-customer
 # http://localhost:4000/customers_selecto
 # http://localhost:4000/orders_selecto
 # http://localhost:4000/employees_selecto
-# http://localhost:4000/dev/dashboard</code></pre>
+# http://localhost:4000/dev/dashboard
+
+# query contracts:
+# http://localhost:4000/products_selecto/query-contract.json
+# http://localhost:4000/customers_selecto/query-contract.json
+# http://localhost:4000/orders_selecto/query-contract.json
+# http://localhost:4000/employees_selecto/query-contract.json</code></pre>
 
       <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
         Final quality check before sharing changes:
