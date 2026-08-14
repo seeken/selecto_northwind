@@ -56,10 +56,10 @@
 defp deps do
   [
     # ...existing deps...
-    {:selecto, "~> 0.4.9"},
-    {:selecto_db_postgresql, "~> 0.4.6"},
-    {:selecto_components, "~> 0.4.10"},
-    {:selecto_mix, "~> 0.4.8", only: [:dev, :test]}
+    {:selecto, "~> 0.4.8"},
+    {:selecto_db_postgresql, "~> 0.4.5"},
+    {:selecto_components, "~> 0.4.9"},
+    {:selecto_mix, "~> 0.4.7", only: [:dev, :test]}
   ]
 end</code></pre>
 
@@ -197,7 +197,11 @@ end</code></pre>
       </p>
 
       <pre><code class="language-elixir" phx-no-curly-interpolation>domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain()
-selecto = Selecto.configure(domain, SelectoNorthwind.Database)</code></pre>
+
+selecto =
+  Selecto.configure(domain, SelectoNorthwind.Database,
+    adapter: SelectoDBPostgreSQL.Adapter
+  )</code></pre>
 
       <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
         Generated files to check:
@@ -236,7 +240,7 @@ curl http://localhost:4000/products_selecto/query-contract.json</code></pre>
       </p>
 
       <h3 class="text-xl font-semibold">Tag join regression check</h3>
-      <pre><code class="language-bash">mix run -e 'domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain(); selecto = Selecto.configure(domain, SelectoNorthwind.Database) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(selecto))'</code></pre>
+      <pre><code class="language-bash">mix run -e 'domain = SelectoNorthwind.SelectoDomains.ProductDomain.domain(); selecto = Selecto.configure(domain, SelectoNorthwind.Database, adapter: SelectoDBPostgreSQL.Adapter) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(selecto))'</code></pre>
 
       <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
         Expected SQL includes `LEFT JOIN product_tags` and does not include `tag_tags`.

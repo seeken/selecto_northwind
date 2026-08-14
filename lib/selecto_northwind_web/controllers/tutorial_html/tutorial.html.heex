@@ -75,10 +75,10 @@ mix setup</code></pre>
 defp deps do
   [
     # ...existing deps...
-    {:selecto, "~> 0.4.9"},
-    {:selecto_db_postgresql, "~> 0.4.6"},
-    {:selecto_components, "~> 0.4.10"},
-    {:selecto_mix, "~> 0.4.8", only: [:dev, :test]}
+    {:selecto, "~> 0.4.8"},
+    {:selecto_db_postgresql, "~> 0.4.5"},
+    {:selecto_components, "~> 0.4.9"},
+    {:selecto_mix, "~> 0.4.7", only: [:dev, :test]}
   ]
 end</code></pre>
 
@@ -92,6 +92,18 @@ end</code></pre>
         tutorial runs Selecto through `SelectoNorthwind.Repo`, but the external
         adapter package still needs to be present so Selecto can resolve the
         PostgreSQL adapter module at runtime.
+      </div>
+
+      <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
+        Copy/paste into `config/config.exs`
+      </p>
+
+      <pre><code class="language-elixir" phx-no-curly-interpolation># config/config.exs
+config :selecto_northwind, :selecto_adapter, SelectoDBPostgreSQL.Adapter</code></pre>
+
+      <div class="rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
+        The generated Ecto-backed LiveViews read this setting when they configure Selecto through
+        `SelectoNorthwind.Repo`.
       </div>
 
       <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
@@ -241,7 +253,7 @@ end</code></pre>
       <p class="text-sm font-semibold uppercase tracking-wide text-base-content/60">
         Copy/paste in your terminal
       </p>
-      <pre><code class="language-bash">mix run -e 'alias SelectoNorthwind.Repo; s = SelectoNorthwind.SelectoDomains.ProductDomain.domain() |> Selecto.configure(Repo) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(s))'</code></pre>
+      <pre><code class="language-bash">mix run -e 'alias SelectoNorthwind.Repo; s = SelectoNorthwind.SelectoDomains.ProductDomain.domain() |> Selecto.configure(Repo, adapter: SelectoDBPostgreSQL.Adapter) |> Selecto.select(["id", "tags.name"]); IO.inspect(Selecto.to_sql(s))'</code></pre>
 
       <div class="rounded-lg border border-success/30 bg-success/10 p-4 text-sm">
         Expected output includes `LEFT JOIN product_tags` and does not include `tag_tags`.
