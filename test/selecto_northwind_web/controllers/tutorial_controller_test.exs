@@ -10,7 +10,9 @@ defmodule SelectoNorthwindWeb.TutorialControllerTest do
     assert response =~ ~s({:selecto_db_postgresql, "~> 0.4.5"})
     assert response =~ ~s({:selecto_components, "~> 0.4.9"})
     assert response =~ ~s({:selecto_mix, "~> 0.4.7")
+    assert response =~ "config :selecto, default_adapter: SelectoDBPostgreSQL.Adapter"
     assert response =~ "config :selecto_northwind, :selecto_adapter, SelectoDBPostgreSQL.Adapter"
+    assert response =~ "mix selecto.components.integrate\nmix assets.setup\nmix assets.build"
 
     assert response =~
              "Selecto.configure(Repo, adapter: SelectoDBPostgreSQL.Adapter)"
@@ -29,6 +31,8 @@ defmodule SelectoNorthwindWeb.TutorialControllerTest do
     assert response =~ ~s({:selecto_db_postgresql, "~> 0.4.5"})
     assert response =~ ~s({:selecto_components, "~> 0.4.9"})
     assert response =~ ~s({:selecto_mix, "~> 0.4.7")
+    assert response =~ "config :selecto, default_adapter: SelectoDBPostgreSQL.Adapter"
+    assert response =~ "mix selecto.components.integrate\nmix assets.setup\nmix assets.build"
 
     assert response =~
              "Selecto.configure(domain, SelectoNorthwind.Database, adapter: SelectoDBPostgreSQL.Adapter)"

@@ -63,10 +63,13 @@ defp deps do
   ]
 end</code></pre>
 
+      <pre><code class="language-elixir" phx-no-curly-interpolation># config/config.exs
+config :selecto, default_adapter: SelectoDBPostgreSQL.Adapter</code></pre>
+
       <pre><code class="language-bash">mix deps.get
 mix compile
 mix selecto.components.integrate
-(cd assets && npm install)
+mix assets.setup
 mix assets.build</code></pre>
 
       <div class="space-y-2 rounded-lg border border-info/30 bg-info/10 p-4 text-sm">
@@ -75,8 +78,9 @@ mix assets.build</code></pre>
           generator and is only needed in development and test.
         </p>
         <p>
-          The integration task prints the required npm and asset commands; run both before opening
-          the generated LiveView.
+          The default adapter also keeps released-generator output compatible with Selecto 0.5's
+          fail-closed adapter resolution. `mix assets.setup` runs npm automatically after the
+          integration task creates `assets/package.json`.
         </p>
       </div>
     </section>

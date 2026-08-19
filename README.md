@@ -24,7 +24,8 @@ Then open:
 - `http://localhost:4000` for the demo app
 - `http://localhost:4000/tutorial` for the step-by-step tutorial
 
-`mix setup` installs dependencies, creates the database, runs migrations, seeds Northwind data, and builds assets.
+`mix setup` installs dependencies, creates the database, runs migrations, seeds Northwind data,
+installs npm packages when `assets/package.json` is present, and builds assets.
 
 ## What You Get
 

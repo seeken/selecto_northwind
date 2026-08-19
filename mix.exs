@@ -76,7 +76,11 @@ defmodule SelectoNorthwind.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.setup": [
+        "tailwind.install --if-missing",
+        "esbuild.install --if-missing",
+        &install_asset_dependencies/1
+      ],
       "assets.build": ["tailwind selecto_northwind", "esbuild selecto_northwind"],
       "assets.deploy": [
         "tailwind selecto_northwind --minify",
@@ -85,5 +89,16 @@ defmodule SelectoNorthwind.MixProject do
       ],
       precommit: ["compile --warning-as-errors", "deps.unlock --unused", "format", "test"]
     ]
+  end
+
+  defp install_asset_dependencies(_args) do
+    assets_dir = Path.join(__DIR__, "assets")
+
+    if File.exists?(Path.join(assets_dir, "package.json")) do
+      case Mix.shell().cmd("npm install", cd: assets_dir) do
+        0 -> :ok
+        status -> Mix.raise("npm install failed with exit status #{status}")
+      end
+    end
   end
 end
