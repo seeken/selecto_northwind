@@ -5,7 +5,7 @@ config :selecto_northwind, SelectoNorthwind.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "selecto_northwind_dev",
+  database: "selecto_northwind_tutorial_20260909_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

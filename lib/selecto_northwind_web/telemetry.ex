@@ -75,7 +75,32 @@ defmodule SelectoNorthwindWeb.Telemetry do
           "The time the connection spent waiting before being checked out for the query"
       ),
 
+      # Selecto Metrics
+      summary("selecto.query.complete.duration",
+        unit: {:native, :millisecond},
+        description: "Selecto query execution time"
+      ),
+      summary("selecto.query.complete.execution_time",
+        unit: {:native, :millisecond},
+        description: "Time spent executing the query"
+      ),
+      counter("selecto.cache.hit.count",
+        description: "Number of cache hits"
+      ),
+      counter("selecto.cache.miss.count",
+        description: "Number of cache misses"
+      ),
+      counter("selecto.query.error.count",
+        description: "Number of query errors"
+      ),
+      distribution("selecto.cache.ratio",
+        buckets: [0, 0.25, 0.5, 0.75, 1.0],
+        unit: :percent,
+        description: "Cache hit ratio"
+      ),
+
       # VM Metrics
+
       summary("vm.memory.total", unit: {:byte, :kilobyte}),
       summary("vm.total_run_queue_lengths.total"),
       summary("vm.total_run_queue_lengths.cpu"),

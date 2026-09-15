@@ -7,6 +7,9 @@
 # General application configuration
 import Config
 
+config :selecto, default_adapter: SelectoDBPostgreSQL.Adapter
+config :selecto_northwind, :selecto_adapter, SelectoDBPostgreSQL.Adapter
+
 config :selecto_northwind,
   ecto_repos: [SelectoNorthwind.Repo],
   generators: [timestamp_type: :utc_datetime]

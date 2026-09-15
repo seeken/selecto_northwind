@@ -23,10 +23,139 @@ defmodule SelectoNorthwindWeb.Router do
     get("/tutorial/postgrex", TutorialController, :postgrex_tutorial)
     # Note: These placeholder routes will be replaced with LiveView routes
     # during the tutorial as you generate Selecto domains for each section
-    get("/customers_selecto", PageController, :customers_selecto)
-    get("/products_selecto", PageController, :products_selecto)
-    get("/orders_selecto", PageController, :orders_selecto)
+    live("/customers_selecto", CustomerLive, :index)
+    live("/products_selecto", ProductLive, :index)
+    live("/orders_selecto", OrderLive, :index)
+    live("/employees_selecto", EmployeeLive, :index)
     get("/analytics", PageController, :analytics)
+  end
+
+  scope "/" do
+    pipe_through(:browser)
+
+    forward(
+      "/products_selecto/query-contract.json",
+      SelectoComponents.QueryContract.Plug,
+      domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+      domain_id: "product",
+      domain_path: "/products_selecto",
+      query_contract_url: "/products_selecto/query-contract.json",
+      query_guide_url: "/products_selecto/query-guide.md"
+    )
+
+    forward(
+      "/products_selecto/query-guide.md",
+      SelectoComponents.QueryContract.Guide.Plug,
+      domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+      domain_id: "product",
+      domain_path: "/products_selecto",
+      query_contract_url: "/products_selecto/query-contract.json",
+      query_guide_url: "/products_selecto/query-guide.md"
+    )
+
+    forward(
+      "/products_selecto/query-intent/validate",
+      SelectoComponents.QueryContract.IntentValidator.Plug,
+      domain: SelectoNorthwind.SelectoDomains.ProductDomain.domain(),
+      domain_id: "product",
+      domain_path: "/products_selecto",
+      query_contract_url: "/products_selecto/query-contract.json",
+      query_guide_url: "/products_selecto/query-guide.md"
+    )
+  end
+
+  scope "/" do
+    pipe_through(:browser)
+
+    forward(
+      "/customers_selecto/query-contract.json",
+      SelectoComponents.QueryContract.Plug,
+      domain: SelectoNorthwind.SelectoDomains.CustomerDomain.domain(),
+      domain_id: "customer",
+      domain_path: "/customers_selecto",
+      query_contract_url: "/customers_selecto/query-contract.json",
+      query_guide_url: "/customers_selecto/query-guide.md"
+    )
+
+    forward(
+      "/customers_selecto/query-guide.md",
+      SelectoComponents.QueryContract.Guide.Plug,
+      domain: SelectoNorthwind.SelectoDomains.CustomerDomain.domain(),
+      domain_id: "customer",
+      domain_path: "/customers_selecto",
+      query_contract_url: "/customers_selecto/query-contract.json",
+      query_guide_url: "/customers_selecto/query-guide.md"
+    )
+
+    forward(
+      "/customers_selecto/query-intent/validate",
+      SelectoComponents.QueryContract.IntentValidator.Plug,
+      domain: SelectoNorthwind.SelectoDomains.CustomerDomain.domain(),
+      domain_id: "customer",
+      domain_path: "/customers_selecto",
+      query_contract_url: "/customers_selecto/query-contract.json",
+      query_guide_url: "/customers_selecto/query-guide.md"
+    )
+
+    forward(
+      "/orders_selecto/query-contract.json",
+      SelectoComponents.QueryContract.Plug,
+      domain: SelectoNorthwind.SelectoDomains.OrderDomain.domain(),
+      domain_id: "order",
+      domain_path: "/orders_selecto",
+      query_contract_url: "/orders_selecto/query-contract.json",
+      query_guide_url: "/orders_selecto/query-guide.md"
+    )
+
+    forward(
+      "/orders_selecto/query-guide.md",
+      SelectoComponents.QueryContract.Guide.Plug,
+      domain: SelectoNorthwind.SelectoDomains.OrderDomain.domain(),
+      domain_id: "order",
+      domain_path: "/orders_selecto",
+      query_contract_url: "/orders_selecto/query-contract.json",
+      query_guide_url: "/orders_selecto/query-guide.md"
+    )
+
+    forward(
+      "/orders_selecto/query-intent/validate",
+      SelectoComponents.QueryContract.IntentValidator.Plug,
+      domain: SelectoNorthwind.SelectoDomains.OrderDomain.domain(),
+      domain_id: "order",
+      domain_path: "/orders_selecto",
+      query_contract_url: "/orders_selecto/query-contract.json",
+      query_guide_url: "/orders_selecto/query-guide.md"
+    )
+
+    forward(
+      "/employees_selecto/query-contract.json",
+      SelectoComponents.QueryContract.Plug,
+      domain: SelectoNorthwind.SelectoDomains.EmployeeDomain.domain(),
+      domain_id: "employee",
+      domain_path: "/employees_selecto",
+      query_contract_url: "/employees_selecto/query-contract.json",
+      query_guide_url: "/employees_selecto/query-guide.md"
+    )
+
+    forward(
+      "/employees_selecto/query-guide.md",
+      SelectoComponents.QueryContract.Guide.Plug,
+      domain: SelectoNorthwind.SelectoDomains.EmployeeDomain.domain(),
+      domain_id: "employee",
+      domain_path: "/employees_selecto",
+      query_contract_url: "/employees_selecto/query-contract.json",
+      query_guide_url: "/employees_selecto/query-guide.md"
+    )
+
+    forward(
+      "/employees_selecto/query-intent/validate",
+      SelectoComponents.QueryContract.IntentValidator.Plug,
+      domain: SelectoNorthwind.SelectoDomains.EmployeeDomain.domain(),
+      domain_id: "employee",
+      domain_path: "/employees_selecto",
+      query_contract_url: "/employees_selecto/query-contract.json",
+      query_guide_url: "/employees_selecto/query-guide.md"
+    )
   end
 
   # Other scopes may use custom stacks.
@@ -46,7 +175,13 @@ defmodule SelectoNorthwindWeb.Router do
     scope "/dev" do
       pipe_through(:browser)
 
-      live_dashboard("/dashboard", metrics: SelectoNorthwindWeb.Telemetry)
+      live_dashboard("/dashboard",
+        metrics: SelectoNorthwindWeb.Telemetry,
+        additional_pages: [
+          selecto: SelectoNorthwindWeb.LiveDashboard.SelectoPage
+        ]
+      )
+
       forward("/mailbox", Plug.Swoosh.MailboxPreview)
     end
   end

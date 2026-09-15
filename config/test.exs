@@ -9,7 +9,7 @@ config :selecto_northwind, SelectoNorthwind.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "selecto_northwind_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "selecto_northwind_tutorial_20260909_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
