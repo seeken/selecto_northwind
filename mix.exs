@@ -41,7 +41,7 @@ defmodule SelectoNorthwind.MixProject do
   defp deps do
     [
       ecosystem_dep(:selecto, "selecto",
-        ref: "377492dd2e6e1fedfc22599d5c0f66eb82413a73",
+        ref: "7c2e82952d4f626ffae4138971f6bc7794365bca",
         override: true
       ),
       ecosystem_dep(:selecto_db_postgresql, "selecto_db_postgresql",
