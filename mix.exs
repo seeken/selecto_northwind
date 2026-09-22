@@ -49,7 +49,7 @@ defmodule SelectoNorthwind.MixProject do
         override: true
       ),
       ecosystem_dep(:selecto_components, "selecto_components",
-        ref: "b4ccd955f34b38eeab8093122eb640a5c5d6531b",
+        ref: "1a3d6cc4313cea9900df86ecb979a013af426a93",
         override: true
       ),
       ecosystem_dep(:selecto_mix, "selecto_mix",
