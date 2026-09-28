@@ -25,6 +25,8 @@ defmodule SelectoNorthwindWeb.Router do
     # during the tutorial as you generate Selecto domains for each section
     live("/customers_selecto", CustomerLive, :index)
     live("/products_selecto", ProductLive, :index)
+    live("/pages/products", ProductSearchLive, :index)
+    live("/pages/products/:id", ProductSearchLive, :show)
     live("/orders_selecto", OrderLive, :index)
     live("/employees_selecto", EmployeeLive, :index)
     get("/analytics", PageController, :analytics)

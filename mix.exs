@@ -40,6 +40,10 @@ defmodule SelectoNorthwind.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      ecosystem_dep(:selecto_views, "selecto_views",
+        ref: "6bf860fb2169b167e55fa139f51c5e0f38b9fa9a",
+        override: true
+      ),
       ecosystem_dep(:selecto, "selecto",
         ref: "0d514115afac992203b49cb027c93d5ece97abd2",
         override: true

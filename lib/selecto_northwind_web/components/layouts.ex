@@ -31,6 +31,9 @@ defmodule SelectoNorthwindWeb.Layouts do
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
 
+  attr :inner_content, :any, default: nil
+  slot :inner_block
+
   def app(assigns) do
     ~H"""
     <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
@@ -54,7 +57,7 @@ defmodule SelectoNorthwindWeb.Layouts do
 
     <main class="px-4 py-20 sm:px-6 lg:px-8">
       <div class="w-full space-y-4">
-        {@inner_content}
+        {if @inner_block == [], do: @inner_content, else: render_slot(@inner_block)}
       </div>
     </main>
 

@@ -95,3 +95,16 @@ runtime results above apply to the released Hex packages only.
 The failure originates in `selecto/lib/selecto/domain/contract/relations.ex`,
 which requires a scalar primary key, while the tutorial's generated relation
 preserves the Northwind composite key. No sibling repository code was changed.
+
+## Local tutorial verification — 2026-09-27
+
+With sibling dependencies and the composite-key validation/projection repair in
+`selecto`, `mix precommit` passes 13 tests and the assets build. The existing
+completed tutorial checkout passes all 17 routes in `scripts/verify_tutorial.exs`,
+including Products/Orders contract and guide endpoints. Its database checks
+execute the tag join (114 rows), parameterized join (800 rows), and saved-view,
+column-preset, and filter-set persistence inside a rolled-back transaction.
+Both documented Product generator invocations (Ecto and PostgreSQL introspection)
+also pass `--dry-run`; existing generated files were not overwritten. This is
+verification of the completed tutorial checkout, not a fresh-clone setup rerun.
+The repair remains local until its core publication is approved.
